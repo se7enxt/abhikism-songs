@@ -2237,6 +2237,9 @@
       const isSongsRoot = pathSegments.length === 0 || (pathSegments.length === 1 && (pathSegments[0] === 'songs' || pathSegments[0] === 'index.html'));
 
       if (view === 'hub' || rawHash === 'discography' || rawHash === 'hub' || (isSongsRoot && !songSlug)) {
+        if (!currentTrack) {
+          resolveActiveSong('daakbaksher-gaan');
+        }
         switchView('hub', false);
       } else {
         switchView('single', false);
@@ -2298,6 +2301,9 @@
           history.replaceState(null, '', '#discography');
         }
       } else {
+        if (!currentTrack) {
+          resolveActiveSong('daakbaksher-gaan');
+        }
         appViewport.classList.remove('hub-mode');
         singleView.style.display = 'flex';
         hubView.style.display = 'none';
