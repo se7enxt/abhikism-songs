@@ -2749,6 +2749,9 @@
 
     function resolveActiveRoute() {
       const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('wix_embed') === '1' || urlParams.get('embed') === 'wix') {
+        document.body.classList.add('wix-embedded');
+      }
       const rawHash = (window.location.hash || '').replace(/^#\/?/, '').trim();
       let songSlug = rawHash || urlParams.get('song') || urlParams.get('track');
       const view = urlParams.get('view');
