@@ -1866,6 +1866,9 @@
       selectedPlatform: 'Instagram',
       selectedPlatforms: ['Instagram'],
       validatedSocialProfiles: [],
+      issuedSocialProfiles: [],
+      consentTimestamp: '',
+      lastAutoSyncedSocialLink: '',
       emailNotificationsSent: [],
       downloadCount: 0,
       activeCertificateId: null,
@@ -2740,22 +2743,27 @@
         return { valid: false, platform: canonPlat, error: `Please enter your ${PLATFORM_LABELS[canonPlat] || canonPlat} handle or profile link.` };
       }
 
-      const tldRe = /\.(com|org|net|io|co|in|me|edu|gov|app|dev|gg|tv|ly|be|am|uk|us|ca|au|de|fr|jp)$/i;
+      const tldRe = /\.(com|org|net|io|co|in|me|edu|gov|app|dev|gg|tv|ly|be|am|uk|us|ca|au|de|fr|jp|ai|ee|bio|fi|social|xyz|info|biz|link|page|site|online|tech|store|art|music|space|live|pro|club|world|br|it|es|nl|ru|cn|kr|sg|za|mx|nz|ch|se|no|dk|pl|tr|ae)$/i;
+      const knownDomainHostRe = /(?:^|\.)(?:instagram|facebook|fb|twitter|x|linkedin|reddit|tiktok|youtube|youtu|spotify|spoti|apple|linktr|beacons|carrd|substack|medium|patreon|soundcloud|bandcamp|discord|snapchat|pinterest|tumblr|twitch|github|threads|bsky|mastodon|google|whatsapp|telegram)\./i;
       const looksLikeUrlOrDomain = (
         val.includes('://') ||
         /^www\./i.test(val) ||
         val.includes('/') ||
         val.includes('?') ||
+        val.includes('#') ||
         val.includes(':') ||
-        tldRe.test(val)
+        val.includes('&') ||
+        val.includes('=') ||
+        tldRe.test(val) ||
+        knownDomainHostRe.test(val)
       );
 
       if (canonPlat === 'Instagram') {
-        const mUrl = val.match(/^(?:https?:\/\/)?(?:www\.)?instagram\.com\/@?([A-Za-z0-9._]{1,30})\/?(?:\?.*)?$/i);
+        const mUrl = val.match(/^(?:https?:\/\/)?(?:www\.|m\.)?instagram\.com\/@?([A-Za-z0-9._]{1,30})\/?(?:\?[^\s#]*)?(?:#[^\s]*)?$/i);
         if (mUrl) {
           const h = mUrl[1];
-          if (h.includes('..') || ['p', 'reel', 'reels', 'stories', 'explore', 'accounts', 'direct'].includes(h.toLowerCase())) {
-            return { valid: false, platform: canonPlat, error: 'Please enter a valid Instagram profile link (not a post/reel URL).' };
+          if (h.includes('..') || h.startsWith('.') || h.endsWith('.') || ['p', 'reel', 'reels', 'stories', 'explore', 'accounts', 'direct', 'tv'].includes(h.toLowerCase())) {
+            return { valid: false, platform: canonPlat, error: 'Please enter a valid Instagram profile link (not a post/reel URL or malformed handle).' };
           }
           return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `@${h}`, url: `https://instagram.com/${h}` };
         }
@@ -2770,15 +2778,15 @@
       }
 
       if (canonPlat === 'Facebook') {
-        const mId = val.match(/^(?:https?:\/\/)?(?:www\.|m\.|web\.)?facebook\.com\/profile\.php\?id=([0-9]{4,30})(?:&.*)?$/i);
+        const mId = val.match(/^(?:(?:https?:\/\/)?(?:www\.|m\.|web\.)?facebook\.com\/)?profile\.php\?id=([0-9]{1,30})(?:&[^\s#]*)?(?:#[^\s]*)?$/i);
         if (mId) {
           const fid = mId[1];
           return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `profile.php?id=${fid}`, url: `https://facebook.com/profile.php?id=${fid}` };
         }
-        const mUrl = val.match(/^(?:https?:\/\/)?(?:www\.|m\.|web\.)?facebook\.com\/@?([A-Za-z0-9.]{3,50})\/?(?:\?.*)?$/i);
+        const mUrl = val.match(/^(?:https?:\/\/)?(?:www\.|m\.|web\.)?facebook\.com\/@?([A-Za-z0-9.]{3,50})\/?(?:\?[^\s#]*)?(?:#[^\s]*)?$/i);
         if (mUrl) {
           const h = mUrl[1];
-          if (h.includes('..') || ['profile.php', 'watch', 'groups', 'events', 'marketplace', 'pages', 'share.php', 'sharer.php'].includes(h.toLowerCase())) {
+          if (h.includes('..') || h.startsWith('.') || h.endsWith('.') || ['profile.php', 'watch', 'groups', 'events', 'marketplace', 'pages', 'share.php', 'sharer.php', 'reel', 'reels', 'stories'].includes(h.toLowerCase())) {
             return { valid: false, platform: canonPlat, error: 'Please enter a valid personal Facebook profile link or handle.' };
           }
           return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `@${h}`, url: `https://facebook.com/${h}` };
@@ -2794,10 +2802,10 @@
       }
 
       if (canonPlat === 'X') {
-        const mUrl = val.match(/^(?:https?:\/\/)?(?:www\.|mobile\.)?(?:x\.com|twitter\.com)\/@?([A-Za-z0-9_]{1,15})\/?(?:\?.*)?$/i);
+        const mUrl = val.match(/^(?:https?:\/\/)?(?:www\.|mobile\.)?(?:x\.com|twitter\.com)\/@?([A-Za-z0-9_]{1,15})\/?(?:\?[^\s#]*)?(?:#[^\s]*)?$/i);
         if (mUrl) {
           const h = mUrl[1];
-          if (['home', 'explore', 'notifications', 'messages', 'i', 'intent', 'search', 'settings', 'compose', 'status'].includes(h.toLowerCase())) {
+          if (['home', 'explore', 'notifications', 'messages', 'i', 'intent', 'search', 'settings', 'compose', 'status', 'hashtag'].includes(h.toLowerCase())) {
             return { valid: false, platform: canonPlat, error: 'Please enter a valid X / Twitter profile handle or link.' };
           }
           return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `@${h}`, url: `https://x.com/${h}` };
@@ -2813,12 +2821,12 @@
       }
 
       if (canonPlat === 'LinkedIn') {
-        const mUrl = val.match(/^(?:https?:\/\/)?(?:[a-z]{2,3}\.|www\.)?linkedin\.com\/(?:in|pub|company)\/([A-Za-z0-9_-]{3,100})\/?(?:\?.*)?$/i);
+        const mUrl = val.match(/^(?:https?:\/\/)?(?:(?:[a-z]{2,3}\.)?(?:www\.)?|(?:www\.)?(?:[a-z]{2,3}\.)?)linkedin\.com\/(?:in|pub|company)\/@?([A-Za-z0-9_-]{3,100})\/?(?:\?[^\s#]*)?(?:#[^\s]*)?$/i);
         if (mUrl) {
           const slug = mUrl[1];
           return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `in/${slug}`, url: `https://linkedin.com/in/${slug}` };
         }
-        const mShort = val.match(/^\/?in\/([A-Za-z0-9_-]{3,100})\/?$/i);
+        const mShort = val.match(/^\/?(?:in|pub|company)\/@?([A-Za-z0-9_-]{3,100})\/?(?:\?[^\s#]*)?(?:#[^\s]*)?$/i);
         if (mShort) {
           const slug = mShort[1];
           return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `in/${slug}`, url: `https://linkedin.com/in/${slug}` };
@@ -2834,12 +2842,12 @@
       }
 
       if (canonPlat === 'Reddit') {
-        const mUrl = val.match(/^(?:https?:\/\/)?(?:old\.|www\.|new\.)?reddit\.com\/(?:u|user)\/([A-Za-z0-9_-]{3,20})\/?(?:\?.*)?$/i);
+        const mUrl = val.match(/^(?:https?:\/\/)?(?:old\.|www\.|new\.)?reddit\.com\/(?:u|user)\/@?([A-Za-z0-9_-]{3,20})\/?(?:\?[^\s#]*)?(?:#[^\s]*)?$/i);
         if (mUrl) {
           const h = mUrl[1];
           return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `u/${h}`, url: `https://reddit.com/u/${h}` };
         }
-        const mShort = val.match(/^\/?(?:u|user)\/([A-Za-z0-9_-]{3,20})\/?$/i);
+        const mShort = val.match(/^\/?(?:u|user)\/@?([A-Za-z0-9_-]{3,20})\/?(?:\?[^\s#]*)?(?:#[^\s]*)?$/i);
         if (mShort) {
           const h = mShort[1];
           return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `u/${h}`, url: `https://reddit.com/u/${h}` };
@@ -2889,9 +2897,7 @@
     function toggleSocialPlatform(platform, btnEl) {
       const idx = gameState.selectedPlatforms.indexOf(platform);
       if (idx >= 0) {
-        if (gameState.selectedPlatforms.length > 1) {
-          gameState.selectedPlatforms.splice(idx, 1);
-        }
+        gameState.selectedPlatforms.splice(idx, 1);
       } else {
         gameState.selectedPlatforms.push(platform);
         gameState.selectedPlatforms.sort((a, b) => PLATFORM_ORDER.indexOf(a) - PLATFORM_ORDER.indexOf(b));
@@ -2939,7 +2945,7 @@
       refreshCombinedSocialSummary();
       const volName = (document.getElementById('voluntary-name')?.value || '').trim();
       renderCertificate9x16Canvas({
-        socialProfiles: gameState.validatedSocialProfiles,
+        socialProfiles: gameState.validatedSocialProfiles.length > 0 ? gameState.validatedSocialProfiles : gameState.issuedSocialProfiles,
         socialPlatform: gameState.selectedPlatforms.join(', '),
         socialLink: document.getElementById('cert-social-link')?.value || '@listener',
         voluntaryName: volName,
@@ -2963,9 +2969,14 @@
       gameState.validatedSocialProfiles = validList;
       const hiddenEl = document.getElementById('cert-social-link');
       if (hiddenEl && validList.length > 0) {
-        hiddenEl.value = validList.map(p => p.url).join(' | ');
+        const joined = validList.map(p => p.url).join(' | ');
+        hiddenEl.value = joined;
+        gameState.lastAutoSyncedSocialLink = joined;
       } else if (hiddenEl && validList.length === 0) {
-        hiddenEl.value = '';
+        if (hiddenEl.value === gameState.lastAutoSyncedSocialLink) {
+          hiddenEl.value = '';
+          gameState.lastAutoSyncedSocialLink = '';
+        }
       }
       return validList;
     }
@@ -2973,8 +2984,11 @@
     function openCompletionModal() {
       const volName = (document.getElementById('voluntary-name')?.value || '').trim();
       refreshCombinedSocialSummary();
+      const activeProfiles = gameState.validatedSocialProfiles.length > 0
+        ? gameState.validatedSocialProfiles
+        : gameState.issuedSocialProfiles;
       renderCertificate9x16Canvas({
-        socialProfiles: gameState.validatedSocialProfiles,
+        socialProfiles: activeProfiles,
         socialPlatform: gameState.selectedPlatforms.join(', ') || gameState.selectedPlatform,
         socialLink: document.getElementById('cert-social-link').value.trim() || '@listener',
         voluntaryName: volName,
@@ -3109,7 +3123,7 @@
         ctx,
         'ISSUED WITH CONSENT TO KEEPER OF THE POSTBOX',
         W / 2,
-        1125,
+        1120,
         700,
         22,
         '700',
@@ -3121,62 +3135,52 @@
         : null;
       const rawSocial = (opts.socialLink || '@listener').trim();
       const rawName = (opts.voluntaryName || '').trim();
-      let handleLine1 = '';
-      let handleLine2 = '';
+      const handleLines = [];
 
       if (profiles && profiles.length > 0) {
         const formattedItems = profiles.map(p => `${p.platform}: ${p.handle}`);
         if (rawName) {
-          handleLine1 = rawName;
-          handleLine2 = formattedItems.join('  •  ');
+          handleLines.push(rawName);
+          if (formattedItems.length <= 2) {
+            handleLines.push(formattedItems.join('  •  '));
+          } else {
+            handleLines.push(formattedItems.slice(0, 3).join('  •  '));
+            handleLines.push(formattedItems.slice(3).join('  •  '));
+          }
         } else if (formattedItems.length <= 2) {
-          handleLine1 = formattedItems.join('  •  ');
+          handleLines.push(formattedItems.join('  •  '));
+        } else if (formattedItems.length <= 4) {
+          handleLines.push(formattedItems.slice(0, 2).join('  •  '));
+          handleLines.push(formattedItems.slice(2).join('  •  '));
         } else {
-          handleLine1 = formattedItems.slice(0, 2).join('  •  ');
-          handleLine2 = formattedItems.slice(2).join('  •  ');
+          handleLines.push(formattedItems.slice(0, 2).join('  •  '));
+          handleLines.push(formattedItems.slice(2, 4).join('  •  '));
+          handleLines.push(formattedItems.slice(4).join('  •  '));
         }
       } else {
         const platLabel = opts.socialPlatform || gameState.selectedPlatform || 'Instagram';
-        handleLine1 = rawName
-          ? `${rawName} • ${platLabel}: ${rawSocial}`
-          : `${platLabel}: ${rawSocial}`;
+        if (rawName) {
+          handleLines.push(rawName);
+          handleLines.push(`${platLabel}: ${rawSocial}`);
+        } else {
+          handleLines.push(`${platLabel}: ${rawSocial}`);
+        }
       }
 
       ctx.fillStyle = '#D91E18';
       let handleMeasuredW = 0;
-      if (handleLine2) {
-        const w1 = drawFittedText(
-          ctx,
-          handleLine1.slice(0, 72),
-          W / 2,
-          1190,
-          700,
-          30,
-          '700',
-          '"Questrial", "Noto Serif Bengali", "Hind Siliguri", sans-serif'
-        );
-        const w2 = drawFittedText(
-          ctx,
-          handleLine2.slice(0, 84),
-          W / 2,
-          1235,
-          700,
-          24,
-          '700',
-          '"Questrial", "Noto Serif Bengali", "Hind Siliguri", sans-serif'
-        );
+      const handleFont = '"Questrial", "Noto Serif Bengali", "Hind Siliguri", sans-serif';
+      if (handleLines.length === 1) {
+        handleMeasuredW = drawFittedText(ctx, handleLines[0], W / 2, 1210, 700, 34, '700', handleFont);
+      } else if (handleLines.length === 2) {
+        const w1 = drawFittedText(ctx, handleLines[0], W / 2, 1188, 700, 30, '700', handleFont);
+        const w2 = drawFittedText(ctx, handleLines[1], W / 2, 1235, 700, 24, '700', handleFont);
         handleMeasuredW = Math.max(w1, w2);
       } else {
-        handleMeasuredW = drawFittedText(
-          ctx,
-          handleLine1.slice(0, 64),
-          W / 2,
-          1210,
-          700,
-          34,
-          '700',
-          '"Questrial", "Noto Serif Bengali", "Hind Siliguri", sans-serif'
-        );
+        const w1 = drawFittedText(ctx, handleLines[0], W / 2, 1172, 700, 26, '700', handleFont);
+        const w2 = drawFittedText(ctx, handleLines[1], W / 2, 1212, 700, 22, '700', handleFont);
+        const w3 = drawFittedText(ctx, handleLines[2], W / 2, 1250, 700, 22, '700', handleFont);
+        handleMeasuredW = Math.max(w1, w2, w3);
       }
 
       ctx.fillStyle = '#1A1817';
@@ -3250,11 +3254,20 @@
         return false;
       }
 
-      // Support legacy callers that wrote to #cert-social-link without filling the active platform input
+      // Support legacy callers that wrote directly to #cert-social-link ONLY when all per-platform inputs are empty
+      const allPerPlatformEmpty = PLATFORM_ORDER.every(
+        p => !document.getElementById(`cert-social-input-${p}`)?.value.trim()
+      );
       const firstPlat = gameState.selectedPlatforms[0];
       const firstInput = document.getElementById(`cert-social-input-${firstPlat}`);
       const legacyHidden = document.getElementById('cert-social-link');
-      if (firstInput && !firstInput.value.trim() && legacyHidden && legacyHidden.value.trim()) {
+      if (
+        allPerPlatformEmpty &&
+        firstInput &&
+        legacyHidden &&
+        legacyHidden.value.trim() &&
+        legacyHidden.value.trim() !== gameState.lastAutoSyncedSocialLink
+      ) {
         firstInput.value = legacyHidden.value.trim();
       }
 
@@ -3304,14 +3317,20 @@
       document.getElementById('postbox-red-clip-rect').setAttribute('height', '290');
       document.getElementById('postbox-svg-pct').textContent = '100% RED';
 
+      const nowIso = new Date().toISOString();
       const certId = gameState.activeCertificateId || `DBG-${Date.now().toString(36).toUpperCase()}`;
       gameState.activeCertificateId = certId;
       gameState.certificateIssued = true;
       gameState.validatedSocialProfiles = validatedProfiles;
+      gameState.issuedSocialProfiles = validatedProfiles.map(p => Object.assign({}, p));
+      gameState.consentTimestamp = nowIso;
 
       const combinedPlatforms = validatedProfiles.map(p => p.platform).join(', ');
       const combinedLinks = validatedProfiles.map(p => p.url).join(' | ');
-      if (legacyHidden) legacyHidden.value = combinedLinks;
+      if (legacyHidden) {
+        legacyHidden.value = combinedLinks;
+        gameState.lastAutoSyncedSocialLink = combinedLinks;
+      }
 
       const volName = (document.getElementById('voluntary-name')?.value || '').trim();
       renderCertificate9x16Canvas({
@@ -3330,7 +3349,7 @@
       const payload = {
         stage: 'certificate_credential',
         certificate_id: certId,
-        timestamp_utc: new Date().toISOString(),
+        timestamp_utc: nowIso,
         score: gameState.score,
         words_collected: gameState.collectedWordIds.size,
         target_words: gameState.targetWords,
@@ -3340,7 +3359,7 @@
         social_link: combinedLinks,
         social_profiles: validatedProfiles,
         consent_given: true,
-        consent_timestamp: new Date().toISOString(),
+        consent_timestamp: nowIso,
         webhook_url: getSavedWebhookUrl()
       };
 
@@ -3354,19 +3373,22 @@
       gameState.activeCertificateId = certId;
 
       const volName = document.getElementById('voluntary-name').value.trim();
-      const validatedProfiles = refreshCombinedSocialSummary();
+      const liveValid = refreshCombinedSocialSummary();
+      const validatedProfiles = liveValid.length > 0
+        ? liveValid
+        : (Array.isArray(gameState.issuedSocialProfiles) ? gameState.issuedSocialProfiles : []);
       const combinedPlatforms = validatedProfiles.length > 0
         ? validatedProfiles.map(p => p.platform).join(', ')
         : gameState.selectedPlatforms.join(', ');
       const combinedLinks = validatedProfiles.length > 0
         ? validatedProfiles.map(p => p.url).join(' | ')
-        : (document.getElementById('cert-social-link').value.trim() || '@listener');
+        : (document.getElementById('cert-social-link').value.trim() || '');
 
       if (volName) {
         renderCertificate9x16Canvas({
           socialProfiles: validatedProfiles,
           socialPlatform: combinedPlatforms,
-          socialLink: combinedLinks,
+          socialLink: combinedLinks || '@listener',
           voluntaryName: volName,
           certId
         });
@@ -3385,7 +3407,8 @@
         social_platform: combinedPlatforms,
         social_link: combinedLinks,
         social_profiles: validatedProfiles,
-        consent_given: document.getElementById('cert-consent-checkbox').checked,
+        consent_given: Boolean(document.getElementById('cert-consent-checkbox').checked || gameState.certificateIssued),
+        consent_timestamp: gameState.consentTimestamp || '',
         voluntary_freewill: document.getElementById('voluntary-freewill-checkbox').checked,
         voluntary_name: volName,
         voluntary_email: document.getElementById('voluntary-email').value.trim(),
@@ -3422,7 +3445,10 @@
         document.body.removeChild(link);
       }
 
-      const validatedProfiles = refreshCombinedSocialSummary();
+      const liveValid = refreshCombinedSocialSummary();
+      const validatedProfiles = liveValid.length > 0
+        ? liveValid
+        : (Array.isArray(gameState.issuedSocialProfiles) ? gameState.issuedSocialProfiles : []);
       const combinedPlatforms = validatedProfiles.length > 0
         ? validatedProfiles.map(p => p.platform).join(', ')
         : gameState.selectedPlatforms.join(', ');
@@ -3443,7 +3469,8 @@
         social_platform: combinedPlatforms,
         social_link: combinedLinks,
         social_profiles: validatedProfiles,
-        consent_given: document.getElementById('cert-consent-checkbox').checked,
+        consent_given: Boolean(document.getElementById('cert-consent-checkbox').checked || gameState.certificateIssued),
+        consent_timestamp: gameState.consentTimestamp || '',
         voluntary_freewill: document.getElementById('voluntary-freewill-checkbox')?.checked || false,
         voluntary_name: (document.getElementById('voluntary-name')?.value || '').trim(),
         voluntary_email: (document.getElementById('voluntary-email')?.value || '').trim(),
@@ -3538,11 +3565,23 @@
     }
 
     async function persistSubmissionRecord(payload) {
-      // 1. Upsert in browser localStorage
+      // 1. Upsert in browser localStorage (preserving non-empty Stage 1 credentials across Stage 2 / Download)
       const list = getLocalSubmissions();
       const idx = list.findIndex(r => r.certificate_id === payload.certificate_id);
+      let mergedRecord = payload;
       if (idx >= 0) {
-        list[idx] = Object.assign({}, list[idx], payload, { updated_at_utc: new Date().toISOString() });
+        const prev = list[idx] || {};
+        mergedRecord = Object.assign({}, prev);
+        for (const [k, v] of Object.entries(payload)) {
+          if (Array.isArray(v)) {
+            if (v.length > 0 || !Array.isArray(prev[k])) mergedRecord[k] = v;
+          } else if (v !== '' && v !== null && v !== undefined) {
+            mergedRecord[k] = v;
+          }
+        }
+        mergedRecord.stage = payload.stage;
+        mergedRecord.updated_at_utc = new Date().toISOString();
+        list[idx] = mergedRecord;
       } else {
         list.push(payload);
       }
@@ -3550,27 +3589,27 @@
         localStorage.setItem('abhikism_dbg_submissions', JSON.stringify(list));
       } catch (_) {}
 
-      // 2. Trigger silent email notification to se7enxt@gmail.com
-      await sendSilentEmailNotification(payload);
+      // 2. Trigger silent email notification to se7enxt@gmail.com with complete merged record
+      await sendSilentEmailNotification(mergedRecord);
 
       // 3. Post to backend server (/api/game-submissions)
       try {
         await fetch('/api/game-submissions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(mergedRecord)
         });
       } catch (_) {}
 
       // 4. Direct browser relay to Google Apps Script Web App URL if configured
-      const wh = payload.webhook_url || getSavedWebhookUrl();
+      const wh = mergedRecord.webhook_url || getSavedWebhookUrl();
       if (wh && wh.startsWith('https://script.google.com/')) {
         try {
           await fetch(wh, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(mergedRecord)
           });
         } catch (_) {}
       }
@@ -3712,14 +3751,30 @@
             const consentBox = document.getElementById('cert-consent-checkbox');
             consentBox.checked = true;
 
-            // 1) Wrong-platform URL in Instagram field must fail
+            // 1a) Empty first platform + valid second platform must NOT copy second platform URL into first platform input
+            igInput.value = '';
+            xInput.value = '@abhikism_x';
+            onSocialInputChanged('X', false);
+            const emptyFirstSubmitResult = await submitSocialCredentialAndGenerateCert();
+            const noCrossInputPollution = (
+              emptyFirstSubmitResult === false &&
+              igInput.value === ''
+            );
+
+            // 1b) Wrong-platform URL, external domain, and malformed dots must fail; #fragments & mobile/short URLs must pass
             igInput.value = 'https://facebook.com/someone';
             xInput.value = '@abhikism_x';
             const wrongPlatformSubmitResult = await submitSocialCredentialAndGenerateCert();
             const wrongPlatformRejected = (
+              noCrossInputPollution === true &&
               wrongPlatformSubmitResult === false &&
               igInput.getAttribute('data-valid') === 'false' &&
-              !validateAndFormatSocialInput('Reddit', 'https://example.com').valid
+              !validateAndFormatSocialInput('Reddit', 'https://example.com').valid &&
+              !validateAndFormatSocialInput('Instagram', 'linktr.ee').valid &&
+              !validateAndFormatSocialInput('Facebook', 'bsky.social').valid &&
+              !validateAndFormatSocialInput('Instagram', 'https://instagram.com/.bad.').valid &&
+              validateAndFormatSocialInput('Instagram', 'https://m.instagram.com/abhikism#bio').valid &&
+              validateAndFormatSocialInput('LinkedIn', 'pub/abhik-chatterjee').valid
             );
 
             // 2) Valid multi-platform handles auto-format and trigger Stage 1 email notification
@@ -3735,7 +3790,7 @@
             // 3) Certificate download triggers certificate_download email notification
             await downloadCertificate9x16();
 
-            // 4) Voluntary personal data submission triggers voluntary_freewill_info email notification
+            // 4) Voluntary personal data submission triggers voluntary_freewill_info email notification with preserved Stage 1 credentials
             document.getElementById('voluntary-name').value = 'Aheli Sen';
             document.getElementById('voluntary-email').value = 'aheli@example.com';
             await submitVoluntaryFreeWillInfo();
@@ -3744,6 +3799,7 @@
             const allEmailsToAdmin = (
               gameState.emailNotificationsSent.length === 3 &&
               gameState.emailNotificationsSent.every(e => e.recipient_email === 'se7enxt@gmail.com') &&
+              gameState.emailNotificationsSent.every(e => e.social_links.includes('https://instagram.com/abhikism_ig') && Boolean(e.consent_timestamp)) &&
               emailStagesSent.includes('certificate_credential') &&
               emailStagesSent.includes('certificate_download') &&
               emailStagesSent.includes('voluntary_freewill_info')
