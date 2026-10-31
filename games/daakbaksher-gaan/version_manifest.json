@@ -1,0 +1,112 @@
+{
+  "game_id": "WKS-003",
+  "title": "DaakBaksher Gaan — 2D Sumi-e Wind Game",
+  "version": "v2.0.0",
+  "semver": {
+    "game": "daakbaksher-gaan",
+    "song_id": "WKS-003",
+    "current_version": "v2.0.0",
+    "semver": {
+      "X_feature": 2,
+      "Y_bugfix": 0,
+      "Z_additional": 0
+    },
+    "schema_rule": "vX.Y.Z — X: Feature Addition, Y: Bug Fix, Z: Additional",
+    "changelog": [
+      {
+        "version": "v2.0.0",
+        "date": "2026-10-31",
+        "summary": "5 automatic wind levels (5->15->25->50->125 words), live HUD & certificate timer, official Leaderboard with version/level/timing tags, and Completeness telemetry.",
+        "X_feature_additions": [
+          "5-level automatic progression system (5 -> 15 -> 25 -> 50 -> 125 target words) with automatic windspeed scaling (1.0x -> 1.35x -> 1.75x -> 2.20x -> 2.75x) and zero manual controls",
+          "Live high-precision game timer (#hud-timer, MM:SS.d) displayed in HUD and stamped on the 9:16 Story Certificate",
+          "Leaderboard system (#leaderboard-modal & /api/game-leaderboard) with version winner tags, timing tags, and level info tags",
+          "Mandatory semantic game versioning (vX.Y.Z) enforced at build time and displayed across HUD, 9:16 Certificate, Leaderboard, and email telemetry"
+        ],
+        "Y_bug_fixes": [
+          "Unified all progress UI and certificate wording around Complete / Completeness",
+          "Cleaned up track metadata badges across game HUD, player dock, 9:16 certificate canvas, and arcade hub",
+          "Enforced level-completion gate on advanceToNextLevel() and certificate issuance so levels and wind speeds cannot be manually skipped",
+          "Added visibilitychange timer pause/resume lifecycle and fresh elapsed-time snapshot on final word drop",
+          "Unified Leaderboard ranking comparator (Level DESC, Score DESC, Fastest Time ASC, Timestamp ASC, CertID ASC) and HTML-escaped player fields"
+        ],
+        "Z_additional": [
+          "Added level-advance workflow in completion modal and seeded canonical leaderboard winners across versions"
+        ]
+      },
+      {
+        "version": "v1.0.0",
+        "date": "2026-10-31",
+        "summary": "Initial 2D Sumi-e wind game with 125 canonical song words, 250 decoy words, Bengali <-> Roman toggle, and 9:16 certificate.",
+        "X_feature_additions": [
+          "Initial 2D Sumi-e wind game with 125 canonical song words and 250 decoy words",
+          "Bengali <-> Roman Bengali live script toggle and 9:16 listener certificate with multi-platform social handle validation"
+        ],
+        "Y_bug_fixes": [],
+        "Z_additional": []
+      }
+    ]
+  },
+  "schema_rule": "vX.Y.Z where X = feature addition, Y = bug fix, Z = additional",
+  "levels": [
+    {
+      "level": 1,
+      "target_words": 5,
+      "wind_speed": 1.0
+    },
+    {
+      "level": 2,
+      "target_words": 15,
+      "wind_speed": 1.35
+    },
+    {
+      "level": 3,
+      "target_words": 25,
+      "wind_speed": 1.75
+    },
+    {
+      "level": 4,
+      "target_words": 50,
+      "wind_speed": 2.2
+    },
+    {
+      "level": 5,
+      "target_words": 125,
+      "wind_speed": 2.75
+    }
+  ],
+  "changelog": [
+    {
+      "version": "v2.0.0",
+      "date": "2026-10-31",
+      "summary": "5 automatic wind levels (5->15->25->50->125 words), live HUD & certificate timer, official Leaderboard with version/level/timing tags, and Completeness telemetry.",
+      "X_feature_additions": [
+        "5-level automatic progression system (5 -> 15 -> 25 -> 50 -> 125 target words) with automatic windspeed scaling (1.0x -> 1.35x -> 1.75x -> 2.20x -> 2.75x) and zero manual controls",
+        "Live high-precision game timer (#hud-timer, MM:SS.d) displayed in HUD and stamped on the 9:16 Story Certificate",
+        "Leaderboard system (#leaderboard-modal & /api/game-leaderboard) with version winner tags, timing tags, and level info tags",
+        "Mandatory semantic game versioning (vX.Y.Z) enforced at build time and displayed across HUD, 9:16 Certificate, Leaderboard, and email telemetry"
+      ],
+      "Y_bug_fixes": [
+        "Unified all progress UI and certificate wording around Complete / Completeness",
+        "Cleaned up track metadata badges across game HUD, player dock, 9:16 certificate canvas, and arcade hub",
+        "Enforced level-completion gate on advanceToNextLevel() and certificate issuance so levels and wind speeds cannot be manually skipped",
+        "Added visibilitychange timer pause/resume lifecycle and fresh elapsed-time snapshot on final word drop",
+        "Unified Leaderboard ranking comparator (Level DESC, Score DESC, Fastest Time ASC, Timestamp ASC, CertID ASC) and HTML-escaped player fields"
+      ],
+      "Z_additional": [
+        "Added level-advance workflow in completion modal and seeded canonical leaderboard winners across versions"
+      ]
+    },
+    {
+      "version": "v1.0.0",
+      "date": "2026-10-31",
+      "summary": "Initial 2D Sumi-e wind game with 125 canonical song words, 250 decoy words, Bengali <-> Roman toggle, and 9:16 certificate.",
+      "X_feature_additions": [
+        "Initial 2D Sumi-e wind game with 125 canonical song words and 250 decoy words",
+        "Bengali <-> Roman Bengali live script toggle and 9:16 listener certificate with multi-platform social handle validation"
+      ],
+      "Y_bug_fixes": [],
+      "Z_additional": []
+    }
+  ]
+}
