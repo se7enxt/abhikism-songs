@@ -668,7 +668,8 @@
       border-color: var(--brand-neon);
       transform: translateY(-1px);
     }
-    .player-action-pill.active-toggle {
+    .player-action-pill.active-toggle,
+    .player-action-pill.is-muted {
       background: var(--hanko-vermilion);
       border-color: #FFFFFF;
       color: #FFFFFF;
@@ -682,6 +683,9 @@
       border: 1.5px solid var(--hanko-vermilion);
       background: #000000;
       flex-shrink: 0;
+    }
+    .yt-music-dock-mount[data-fallback-active="true"] {
+      display: none;
     }
     .yt-music-dock-mount iframe {
       width: 100%;
@@ -3022,6 +3026,37 @@
     let audioCtx = null;
     let ytPlayerInstance = null;
     let ytWatchdogTimer = null;
+    let ytBufferingWatchdogTimer = null;
+
+    function postYtCommand(funcName, args = '') {
+      const payload = JSON.stringify({
+        event: 'command',
+        func: funcName,
+        args: Array.isArray(args) ? args : (args === '' ? '' : [args])
+      });
+      ['yt-music-embed-iframe', 'youtube-embed-iframe'].forEach(iframeId => {
+        const el = document.getElementById(iframeId);
+        if (el && el.contentWindow) {
+          try {
+            el.contentWindow.postMessage(payload, '*');
+          } catch (_) {}
+        }
+      });
+    }
+    window.postYtCommand = postYtCommand;
+
+    function onYtShieldClick(ev) {
+      if (ev && typeof ev.preventDefault === 'function') ev.preventDefault();
+      if (ev && typeof ev.stopPropagation === 'function') ev.stopPropagation();
+      ensureAudioStartedOnInteraction();
+      showFeedbackWhisper(
+        gameState.scriptMode === 'bn'
+          ? '🔁 গানটি নিরবচ্ছিন্ন লুপে বাজছে — শুধু Mute বা Play from Beginning (0:00) ব্যবহার করুন'
+          : '🔁 Continuous song loop active — only Mute/Unmute or Play from Beginning (0:00)'
+      );
+      return true;
+    }
+    window.onYtShieldClick = onYtShieldClick;
 
     function playPaperChime(isSuccess) {
       if (gameState.isMuted) return;
@@ -3090,8 +3125,8 @@
           muteBtn.setAttribute('aria-pressed', 'true');
         }
         if (dockMuteBtn) {
-          dockMuteBtn.innerHTML = '🔇 <span id="dock-mute-label">Unmute</span>';
-          dockMuteBtn.classList.add('is-muted');
+          dockMuteBtn.innerHTML = '🔇 <span id="dock-mute-label">Unmute Song</span>';
+          dockMuteBtn.classList.add('active-toggle', 'is-muted');
           dockMuteBtn.setAttribute('aria-pressed', 'true');
         }
         if (statusPill) {
@@ -3104,12 +3139,14 @@
           muteBtn.setAttribute('aria-pressed', 'false');
         }
         if (dockMuteBtn) {
-          dockMuteBtn.innerHTML = '🔊 <span id="dock-mute-label">Mute</span>';
-          dockMuteBtn.classList.remove('is-muted');
+          dockMuteBtn.innerHTML = '🔊 <span id="dock-mute-label">Mute Song</span>';
+          dockMuteBtn.classList.remove('active-toggle', 'is-muted');
           dockMuteBtn.setAttribute('aria-pressed', 'false');
         }
         if (statusPill) {
-          statusPill.textContent = '🔁 Seamless Loop Active';
+          statusPill.textContent = gameState.audioEngineMode === 'youtube_music'
+            ? '🔁 YouTube Music Loop Active'
+            : '🔁 Seamless Loop Active';
         }
       }
     }
@@ -3126,18 +3163,25 @@
         clearTimeout(ytWatchdogTimer);
         ytWatchdogTimer = null;
       }
+      if (ytBufferingWatchdogTimer) {
+        clearTimeout(ytBufferingWatchdogTimer);
+        ytBufferingWatchdogTimer = null;
+      }
 
-      // Silence YouTube embed so two audio streams never overlap
+      // Silence YouTube embed via both YT.Player API and postMessage so two audio streams never overlap
       try {
         if (ytPlayerInstance) {
           if (typeof ytPlayerInstance.mute === 'function') ytPlayerInstance.mute();
           if (typeof ytPlayerInstance.stopVideo === 'function') ytPlayerInstance.stopVideo();
         }
       } catch (_) {}
+      postYtCommand('mute', '');
+      postYtCommand('stopVideo', []);
 
       const sourceBadge = document.getElementById('player-source-badge');
       if (sourceBadge) {
         sourceBadge.textContent = '⚡ FALLBACK WEB AUDIO • LOOP';
+        sourceBadge.setAttribute('data-audio-engine', 'web_audio_fallback');
         sourceBadge.setAttribute('data-engine-mode', 'web_audio_fallback');
         sourceBadge.setAttribute('data-fallback-reason', fallbackReason);
       }
@@ -3171,7 +3215,18 @@
         clearTimeout(ytWatchdogTimer);
         ytWatchdogTimer = null;
       }
-      if (gameState.audioEngineMode !== 'youtube_music') return;
+      // If fallback already activated before YouTube finished loading, silence YouTube immediately
+      if (gameState.audioEngineMode !== 'youtube_music') {
+        try {
+          if (event && event.target) {
+            if (typeof event.target.mute === 'function') event.target.mute();
+            if (typeof event.target.stopVideo === 'function') event.target.stopVideo();
+          }
+        } catch (_) {}
+        postYtCommand('mute', '');
+        postYtCommand('stopVideo', []);
+        return;
+      }
 
       // Ensure fallback <audio> is silent while YouTube Music is primary
       if (audioPlayer && !audioPlayer.paused) {
@@ -3196,9 +3251,23 @@
     }
 
     function onYtPlayerStateChange(event) {
-      if (gameState.audioEngineMode !== 'youtube_music') return;
-      const state = event ? event.data : null;
       const target = (event && event.target) ? event.target : ytPlayerInstance;
+      if (gameState.audioEngineMode !== 'youtube_music') {
+        try {
+          if (target && typeof target.mute === 'function') target.mute();
+          if (target && typeof target.stopVideo === 'function') target.stopVideo();
+        } catch (_) {}
+        postYtCommand('mute', '');
+        postYtCommand('stopVideo', []);
+        return;
+      }
+      const state = event ? event.data : null;
+
+      // Clear buffering stall watchdog once player transitions out of BUFFERING (3)
+      if (state !== 3 && ytBufferingWatchdogTimer) {
+        clearTimeout(ytBufferingWatchdogTimer);
+        ytBufferingWatchdogTimer = null;
+      }
 
       // YT.PlayerState.ENDED === 0 -> Seamless immediate loop from 0:00
       if (state === 0) {
@@ -3209,11 +3278,24 @@
           if (target && typeof target.seekTo === 'function') target.seekTo(0, true);
           if (target && typeof target.playVideo === 'function') target.playVideo();
         } catch (_) {}
+        postYtCommand('seekTo', [0, true]);
+        postYtCommand('playVideo', []);
       } else if (state === 2) {
         // YT.PlayerState.PAUSED === 2 -> Enforce continuous playback (zero pause/stop allowed)
         try {
           if (target && typeof target.playVideo === 'function') target.playVideo();
         } catch (_) {}
+        postYtCommand('playVideo', []);
+      } else if (state === 3) {
+        // YT.PlayerState.BUFFERING === 3 -> Guard against mid-stream buffering stalls (>6000ms)
+        if (!ytBufferingWatchdogTimer) {
+          ytBufferingWatchdogTimer = setTimeout(() => {
+            ytBufferingWatchdogTimer = null;
+            if (gameState.audioEngineMode === 'youtube_music') {
+              smartDetectAudioErrorAndFallback('yt_buffering_stall');
+            }
+          }, 6000);
+        }
       } else if (state === 1) {
         // YT.PlayerState.PLAYING === 1
         gameState.ytPlayerPlaying = true;
@@ -3222,14 +3304,20 @@
         }
       }
     }
+    window.onYtPlayerReady = onYtPlayerReady;
+    window.onYtPlayerStateChange = onYtPlayerStateChange;
 
     function onYtPlayerError(event) {
       const code = (event && event.data !== undefined) ? event.data : 'unknown';
       smartDetectAudioErrorAndFallback('yt_player_error_' + String(code));
     }
+    window.onYtPlayerError = onYtPlayerError;
 
     window.onYouTubeIframeAPIReady = function() {
-      if (gameState.audioEngineMode !== 'youtube_music') return;
+      if (gameState.audioEngineMode !== 'youtube_music') {
+        postYtCommand('mute', '');
+        postYtCommand('stopVideo', []);
+      }
       try {
         if (window.YT && typeof window.YT.Player === 'function') {
           ytPlayerInstance = new window.YT.Player('yt-music-embed-iframe', {
@@ -3242,9 +3330,17 @@
           window.ytPlayerInstance = ytPlayerInstance;
         }
       } catch (_) {
-        smartDetectAudioErrorAndFallback('yt_player_init_exception');
+        if (gameState.audioEngineMode === 'youtube_music') {
+          smartDetectAudioErrorAndFallback('yt_player_init_exception');
+        }
       }
     };
+
+    window.addEventListener('offline', () => {
+      if (gameState.audioEngineMode === 'youtube_music') {
+        smartDetectAudioErrorAndFallback('network_offline');
+      }
+    });
 
     function initYouTubeMusicPrimaryEngine() {
       // Keep fallback <audio> silent initially while YouTube Music is primary
@@ -3309,6 +3405,8 @@
             ytPlayerInstance.playVideo();
           }
         } catch (_) {}
+        postYtCommand(gameState.isMuted ? 'mute' : 'unMute', '');
+        postYtCommand('playVideo', []);
       } else {
         if (audioPlayer) {
           audioPlayer.loop = true;
@@ -3337,6 +3435,7 @@
           }
         }
       } catch (_) {}
+      postYtCommand(gameState.isMuted ? 'mute' : 'unMute', '');
 
       syncMuteButtonsUI();
       ensureAudioStartedOnInteraction();
@@ -3357,13 +3456,8 @@
             ytPlayerInstance.playVideo();
           }
         } catch (_) {}
-        const ytIframe = document.getElementById('yt-music-embed-iframe');
-        if (ytIframe && ytIframe.contentWindow) {
-          try {
-            ytIframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'seekTo', args: [0, true] }), '*');
-            ytIframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: [] }), '*');
-          } catch (_) {}
-        }
+        postYtCommand('seekTo', [0, true]);
+        postYtCommand('playVideo', []);
         if (audioPlayer) {
           try { audioPlayer.currentTime = 0; } catch (_) {}
         }
@@ -4871,6 +4965,31 @@
             const initialSourceBadgeText = (document.getElementById('player-source-badge')?.textContent || '').trim();
             const ytEmbedSrc = document.getElementById('yt-music-embed-iframe')?.getAttribute('src') || '';
 
+            // 1b) Verify clicking #yt-embed-click-shield works without throwing and reinforces continuous loop
+            const shieldEl = document.getElementById('yt-embed-click-shield');
+            let shieldClickedOk = false;
+            if (shieldEl && typeof window.onYtShieldClick === 'function') {
+              shieldEl.click();
+              shieldClickedOk = (gameState.audioEngineMode === 'youtube_music');
+            }
+
+            // 1c) Verify YT.PlayerState.ENDED (0) loops from 0:00 and YT.PlayerState.PAUSED (2) immediately resumes
+            let ytMockSeekedZero = false;
+            let ytMockPlayCalls = 0;
+            const ytMockTarget = {
+              seekTo: (sec) => { if (sec === 0) ytMockSeekedZero = true; },
+              playVideo: () => { ytMockPlayCalls += 1; }
+            };
+            const loopsBeforeEnd = gameState.loopCount;
+            onYtPlayerStateChange({ data: 0, target: ytMockTarget });
+            onYtPlayerStateChange({ data: 2, target: ytMockTarget });
+            const ytContinuousLoopEnforced = (
+              shieldClickedOk &&
+              ytMockSeekedZero === true &&
+              ytMockPlayCalls === 2 &&
+              gameState.loopCount === loopsBeforeEnd + 1
+            );
+
             // 2) Verify ZERO Stop or Pause buttons exist anywhere, and ONLY Mute/Unmute + Play from Beginning (0:00) controls exist
             const noPlayPauseBtnId = (document.getElementById('btn-' + 'play-' + 'pause') === null);
             const stopWord = ['s', 't', 'o', 'p'].join('');
@@ -4891,7 +5010,13 @@
 
             // 3) Verify Mute / Unmute and Play from Beginning (0:00) on primary engine
             toggleMute();
-            const mutedState1 = Boolean(gameState.isMuted && audioPlayer && audioPlayer.muted && document.getElementById('btn-dock-mute')?.getAttribute('aria-pressed') === 'true');
+            const mutedState1 = Boolean(
+              gameState.isMuted &&
+              audioPlayer &&
+              audioPlayer.muted &&
+              document.getElementById('btn-dock-mute')?.getAttribute('aria-pressed') === 'true' &&
+              document.getElementById('btn-dock-mute')?.classList.contains('active-toggle')
+            );
             toggleMute();
             const mutedState2 = Boolean(gameState.isMuted || (audioPlayer && audioPlayer.muted) || document.getElementById('btn-dock-mute')?.getAttribute('aria-pressed') !== 'false');
 
@@ -4903,18 +5028,34 @@
               document.getElementById('audio-time-current')?.textContent === '0:00'
             );
 
-            // 4) Verify Smart Audio Error Detection Fallback -> Instant Web Audio loop
+            // 4) Verify Smart Audio Error Detection Fallback -> Instant Web Audio loop + zero dual-audio overlap if YT loads late
             const fallbackEngineResult = window.triggerSmartAudioErrorFallback('autotest_simulated_yt_error');
-            const fallbackSourceBadgeText = (document.getElementById('player-source-badge')?.textContent || '').trim();
+            const sourceBadgeEl = document.getElementById('player-source-badge');
+            const fallbackSourceBadgeText = (sourceBadgeEl?.textContent || '').trim();
             const fallbackAudioLoopAttr = Boolean(audioPlayer && audioPlayer.loop === true);
+            const ytMountEl = document.getElementById('yt-music-dock-mount');
+            const ytMountHiddenOnFallback = Boolean(ytMountEl && window.getComputedStyle(ytMountEl).display === 'none');
+            let lateYtMuted = false;
+            let lateYtStopped = false;
+            onYtPlayerReady({
+              target: {
+                mute: () => { lateYtMuted = true; },
+                stopVideo: () => { lateYtStopped = true; }
+              }
+            });
             const smartAudioFallbackVerified = (
               defaultAudioEngine === 'youtube_music' &&
+              ytContinuousLoopEnforced === true &&
               initialSourceBadgeText.includes('YOUTUBE MUSIC STREAM') &&
               ytEmbedSrc.includes('8K1B2qG3U7E') &&
               fallbackEngineResult === 'web_audio_fallback' &&
               gameState.audioEngineMode === 'web_audio_fallback' &&
               gameState.audioFallbackTriggered === true &&
               fallbackSourceBadgeText.includes('FALLBACK WEB AUDIO') &&
+              sourceBadgeEl?.getAttribute('data-audio-engine') === 'web_audio_fallback' &&
+              ytMountHiddenOnFallback === true &&
+              lateYtMuted === true &&
+              lateYtStopped === true &&
               fallbackAudioLoopAttr === true
             );
 
