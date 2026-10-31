@@ -1024,30 +1024,38 @@
       #btn-gust-now { order: 3; }
       #target-mode-select {
         order: 4;
-        padding: 3px 4px;
+        padding: 3px 5px;
         font-size: 9.5px;
         border-radius: 6px;
-        max-width: 118px;
+        max-width: 124px;
         min-width: 0;
       }
       #btn-open-lexicon { order: 5; }
       #btn-open-certificate { order: 6; }
 
-      /* Compact top banner for #wind-legend-card / #instruction-card on mobile so it never obscures floating words */
+      /* Sleek 1-line compact top pill banner for #wind-legend-card / #instruction-card on mobile so it never obscures floating words */
       .poetic-instruction-card {
-        top: 6px;
+        top: 5px;
         left: 8px;
         right: 8px;
         width: calc(100% - 16px);
         max-width: calc(100vw - 16px);
         padding: 4px 8px;
         border-radius: 7px;
-        background: rgba(251, 248, 242, 0.93);
+        background: rgba(251, 248, 242, 0.94);
         box-shadow: 2px 2px 0px rgba(26, 24, 23, 0.12);
       }
       .poetic-instruction-title {
-        font-size: 10px;
+        font-size: 9.5px;
         margin-bottom: 0;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      #inst-heading {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .poetic-instruction-body {
         display: none;
@@ -1055,7 +1063,17 @@
         line-height: 1.3;
         margin-top: 4px;
       }
-      .poetic-instruction-card.mobile-expanded .poetic-instruction-body {
+      .live-lyric-ticker {
+        display: none;
+        margin-top: 3px;
+        padding-top: 3px;
+        font-size: 10.5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .poetic-instruction-card.mobile-expanded .poetic-instruction-body,
+      .poetic-instruction-card.mobile-expanded .live-lyric-ticker {
         display: block;
       }
       .mobile-legend-toggle {
@@ -1073,26 +1091,19 @@
         cursor: pointer;
         padding: 0;
         line-height: 1;
-      }
-      .live-lyric-ticker {
-        margin-top: 2px;
-        padding-top: 2px;
-        font-size: 10.5px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        flex-shrink: 0;
       }
 
       /* Postbox positioned cleanly inside right viewport edge */
       .postbox-zone {
         right: 12px;
         bottom: 6px;
-        width: 122px;
-        height: 180px;
+        width: 120px;
+        height: 176px;
       }
       .postbox-svg {
-        width: 114px;
-        height: 168px;
+        width: 112px;
+        height: 164px;
       }
       .postbox-Zone-prompt {
         right: 0;
@@ -1102,8 +1113,8 @@
         top: -26px;
       }
       .floating-word-slip {
-        font-size: 14.5px;
-        padding: 5px 11px;
+        font-size: 14px;
+        padding: 5px 10px;
       }
 
       /* Stream player dock mobile layout */
@@ -1194,18 +1205,95 @@
         font-size: 9px;
       }
       #target-mode-select {
-        max-width: 108px;
+        max-width: 116px;
         font-size: 9px;
       }
       .postbox-zone {
         right: 12px;
         bottom: 4px;
-        width: 108px;
-        height: 160px;
+        width: 104px;
+        height: 152px;
       }
       .postbox-svg {
-        width: 100px;
-        height: 148px;
+        width: 96px;
+        height: 140px;
+      }
+    }
+
+    /* Short viewport / landscape mobile orientation (e.g. 844x390, 640x340) */
+    @media (max-height: 500px) {
+      .top-score-bar {
+        padding: 3px 10px;
+        gap: 6px;
+      }
+      .game-title-sub {
+        display: none;
+      }
+      .score-telemetry-cluster {
+        padding: 2px 8px;
+        gap: 6px;
+      }
+      .stat-value {
+        font-size: 13px;
+      }
+      .ink-btn {
+        padding: 3px 7px;
+        font-size: 10px;
+      }
+      .poetic-instruction-card {
+        top: 4px;
+        left: 10px;
+        max-width: 340px;
+        padding: 3px 8px;
+      }
+      .poetic-instruction-title {
+        font-size: 10px;
+        margin-bottom: 0;
+      }
+      .poetic-instruction-body,
+      .live-lyric-ticker {
+        display: none;
+      }
+      .poetic-instruction-card.mobile-expanded .poetic-instruction-body,
+      .poetic-instruction-card.mobile-expanded .live-lyric-ticker {
+        display: block;
+      }
+      .mobile-legend-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        border: 1px solid var(--sumi-ink);
+        background: #FFFFFF;
+        color: var(--sumi-ink);
+        font-size: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        padding: 0;
+      }
+      .postbox-zone {
+        right: 12px;
+        bottom: 4px;
+        width: 96px;
+        height: 140px;
+      }
+      .postbox-svg {
+        width: 88px;
+        height: 128px;
+      }
+      .floating-word-slip {
+        font-size: 13.5px;
+        padding: 4px 10px;
+      }
+      .stream-player-dock {
+        padding: 3px 10px;
+        gap: 6px;
+      }
+      .player-art-thumb {
+        width: 28px;
+        height: 28px;
       }
     }
   </style>
@@ -1263,10 +1351,10 @@
       </button>
 
       <select id="target-mode-select" class="target-select" onchange="changeTargetWords(this.value)" title="Select completion target">
-        <option value="5">Target: 5 Words (Quick)</option>
-        <option value="15" selected>Target: 15 Words (Standard)</option>
-        <option value="25">Target: 25 Words (Chapter II)</option>
-        <option value="125">Target: All 125 Song Words</option>
+        <option value="5">Target: 5 Words</option>
+        <option value="15" selected>Target: 15 Words</option>
+        <option value="25">Target: 25 Words</option>
+        <option value="125">Target: 125 Words</option>
       </select>
 
       <button type="button" class="ink-btn" id="btn-gust-now" onclick="triggerWindGust()" title="Summon a fresh gust of wind">
@@ -1294,8 +1382,8 @@
       <div id="wind-legend-card">
         <div class="poetic-instruction-title">
           <span id="inst-heading">🌬️ বাতাসের চিঠি (The Wind &amp; The Postbox)</span>
-          <span style="display:inline-flex; align-items:center; gap:5px;">
-            <span id="wind-speed-badge" style="font-family:var(--font-mono); font-size:10px; color:var(--sumi-wash);">Gust: 1.0x</span>
+          <span style="display:inline-flex; align-items:center; gap:5px; flex-shrink:0;">
+            <span id="wind-speed-badge" style="font-family:var(--font-mono); font-size:9.5px; color:var(--sumi-wash); white-space:nowrap;">Gust: 1.0x</span>
             <button type="button" class="mobile-legend-toggle" id="btn-toggle-legend" onclick="toggleMobileLegendCard()" aria-label="Toggle instructions">ⓘ</button>
           </span>
         </div>
@@ -1733,24 +1821,78 @@
     // Resize 2D Canvas & dynamically fit between top HUD and bottom dock (prevents overlap on <360px viewports)
     let stageWidth = window.innerWidth;
     let stageHeight = window.innerHeight - 144;
+    function getSafeVerticalBounds(forX = null) {
+      const isCompact = window.innerWidth <= 640 || window.innerHeight <= 500;
+      const instEl = document.getElementById('instruction-card');
+      const stageEl = document.getElementById('game-stage');
+      let instBottom = isCompact ? 38 : 44;
+      if (instEl && stageEl) {
+        const iRect = instEl.getBoundingClientRect();
+        const sRect = stageEl.getBoundingClientRect();
+        const instRightInStage = iRect.right - sRect.left;
+        const overlapsInstructionHorizontally = isCompact || forX === null || (forX < instRightInStage + 14);
+        if (iRect.height > 0 && overlapsInstructionHorizontally) {
+          instBottom = Math.max(24, (iRect.bottom - sRect.top) + 10);
+        }
+      }
+      const minY = Math.min(Math.max(26, instBottom), Math.max(32, stageHeight * 0.36));
+      let bottomReserve = isCompact ? 48 : 68;
+      if (forX !== null && postboxContainer && stageEl) {
+        const pbRect = postboxContainer.getBoundingClientRect();
+        const sRect = stageEl.getBoundingClientRect();
+        const pbLeftInStage = pbRect.left - sRect.left;
+        if (forX + 95 >= pbLeftInStage) {
+          bottomReserve = Math.max(bottomReserve, pbRect.height + 34);
+        }
+      }
+      const maxY = Math.max(minY + 24, stageHeight - bottomReserve);
+      return { minY, maxY, isCompact };
+    }
+
     function resizeStage() {
+      const prevW = stageWidth;
       const stageEl = document.getElementById('game-stage');
       const topBar = document.getElementById('top-score-bar');
       const bottomDock = document.getElementById('stream-player-dock');
       if (topBar && stageEl) {
         const topH = Math.ceil(topBar.getBoundingClientRect().height);
-        stageEl.style.top = `${Math.max(48, topH)}px`;
+        stageEl.style.top = `${Math.max(38, topH)}px`;
       }
       if (bottomDock && stageEl) {
         const botH = Math.ceil(bottomDock.getBoundingClientRect().height);
-        stageEl.style.bottom = `${Math.max(54, botH)}px`;
+        stageEl.style.bottom = `${Math.max(42, botH)}px`;
       }
       const rect = stageEl.getBoundingClientRect();
       stageWidth = Math.max(280, rect.width);
-      stageHeight = Math.max(180, rect.height);
+      stageHeight = Math.max(140, rect.height);
       windCanvas.width = stageWidth * window.devicePixelRatio;
       windCanvas.height = stageHeight * window.devicePixelRatio;
       windCtx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+
+      // Re-distribute wind ribbons and re-map existing floating words on orientation change / resize
+      if (typeof windRibbons !== 'undefined' && windRibbons.length > 0) {
+        for (let i = 0; i < windRibbons.length; i++) {
+          windRibbons[i].yBase = (i + 0.7) * (stageHeight / (windRibbons.length + 0.5));
+        }
+      }
+      if (gameState && Array.isArray(gameState.floatingEntities)) {
+        for (const entity of gameState.floatingEntities) {
+          if (prevW > 0 && Math.abs(stageWidth - prevW) > 20 && entity !== gameState.draggedEntity && entity.x >= 0) {
+            entity.x = Math.min(stageWidth - 95, Math.max(10, (entity.x / prevW) * stageWidth));
+          }
+          const { minY, maxY } = getSafeVerticalBounds(entity.x);
+          if (typeof entity.laneRatio === 'number' && entity !== gameState.draggedEntity) {
+            entity.baseY = minY + entity.laneRatio * (maxY - minY);
+          } else {
+            entity.baseY = Math.max(minY, Math.min(maxY, entity.baseY));
+          }
+          entity.y = Math.max(minY - 8, Math.min(maxY + 8, entity.baseY));
+          if (entity === gameState.draggedEntity) {
+            entity.x = Math.max(4, Math.min(stageWidth - 80, entity.x));
+          }
+          updateEntityTransform(entity);
+        }
+      }
     }
     window.addEventListener('resize', resizeStage);
 
@@ -1887,7 +2029,7 @@
       return pool[Math.floor(Math.random() * pool.length)] || GAME_WORD_POOL.song_words[0];
     }
 
-    function spawnFloatingWord(initialX = null) {
+    function spawnFloatingWord(initialX = null, laneRatio = null) {
       const wordObj = pickNextWordToSpawn();
       const el = document.createElement('div');
       el.className = 'floating-word-slip word-slip';
@@ -1897,13 +2039,10 @@
       el.setAttribute('data-roman', wordObj.roman);
       el.textContent = formatWordLabel(wordObj);
 
-      const isMobileStage = window.innerWidth <= 640;
-      const minY = isMobileStage
-        ? Math.min(82, Math.max(58, stageHeight * 0.20))
-        : Math.min(75, Math.max(24, stageHeight * 0.18));
-      const maxY = Math.max(minY + 40, stageHeight - (isMobileStage ? 75 : 95));
-      const y = minY + Math.random() * (maxY - minY);
       const x = initialX !== null ? initialX : (-140 - Math.random() * 120);
+      const { minY, maxY, isCompact } = getSafeVerticalBounds(initialX);
+      const ratioY = laneRatio !== null ? laneRatio : Math.random();
+      const y = minY + ratioY * (maxY - minY);
 
       const entity = {
         id: `${wordObj.id}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
@@ -1912,12 +2051,13 @@
         x,
         y,
         baseY: y,
+        laneRatio: ratioY,
         vx: 1.05 + Math.random() * 1.15,
         vy: 0,
         flutterPhase: Math.random() * Math.PI * 2,
         flutterSpeed: 0.025 + Math.random() * 0.02,
-        flutterAmp: isMobileStage ? (8 + Math.random() * 12) : (12 + Math.random() * 18),
-        angle: (Math.random() - 0.5) * 8,
+        flutterAmp: isCompact ? (6 + Math.random() * 9) : (12 + Math.random() * 18),
+        angle: (Math.random() - 0.5) * 7,
         isThrownBack: false,
         throwTicks: 0
       };
@@ -1938,10 +2078,14 @@
       wordsLayer.innerHTML = '';
       gameState.floatingEntities.length = 0;
       const count = 10;
-      const usableSpan = Math.max(120, stageWidth - (window.innerWidth <= 640 ? 150 : 280));
+      const isMobile = window.innerWidth <= 640;
+      const laneOrder = [0.06, 0.50, 0.86, 0.24, 0.68, 0.12, 0.58, 0.36, 0.78, 0.42];
       for (let i = 0; i < count; i++) {
-        const startX = 16 + (i / count) * usableSpan;
-        spawnFloatingWord(startX);
+        const startX = isMobile
+          ? (-140 + (i / (count - 1)) * Math.max(240, stageWidth + 35))
+          : (24 + (i / count) * Math.max(260, stageWidth - 220));
+        const laneY = Math.min(0.95, Math.max(0.05, laneOrder[i % laneOrder.length]));
+        spawnFloatingWord(startX, laneY);
       }
     }
 
@@ -2488,10 +2632,11 @@
     }
 
     function openCompletionModal() {
-      // Ensure preview reflects current progress (if opened early via button, show current or 100% on completion)
+      const volName = (document.getElementById('voluntary-name')?.value || '').trim();
       renderCertificate9x16Canvas({
         socialPlatform: gameState.selectedPlatform,
         socialLink: document.getElementById('cert-social-link').value.trim() || '@listener',
+        voluntaryName: volName,
         certId: gameState.activeCertificateId || 'DBG-PREVIEW'
       });
       refreshLocalLedgerCount();
@@ -2507,17 +2652,18 @@
       if (card) {
         card.classList.toggle('mobile-expanded');
       }
+      resizeStage();
     }
 
     function drawFittedText(ctx, text, x, y, maxWidth, baseSize, fontWeight, fontFamily) {
       let size = baseSize;
       ctx.font = `${fontWeight} ${size}px ${fontFamily}`;
-      while (size > 14 && ctx.measureText(text).width > maxWidth) {
+      while (size > 10 && ctx.measureText(text).width > maxWidth) {
         size -= 1;
         ctx.font = `${fontWeight} ${size}px ${fontFamily}`;
       }
       ctx.fillText(text, x, y, maxWidth);
-      return ctx.measureText(text).width;
+      return Math.min(maxWidth, ctx.measureText(text).width);
     }
 
     function renderCertificate9x16Canvas(opts = {}) {
@@ -2549,7 +2695,7 @@
       ctx.lineWidth = 5;
       ctx.strokeRect(72, 72, W - 144, H - 144);
 
-      // 3. Top Header Banner (Safe width inside x=72..1008 red frame is 840px)
+      // 3. Top Header Banner (Generous padding inside x=72..1008 red frame: maxWidth=780)
       ctx.textAlign = 'center';
       ctx.fillStyle = '#1A1817';
       const headerMeasuredW = drawFittedText(
@@ -2557,14 +2703,14 @@
         '#ABHIKISM • OFFICIAL LISTENER CERTIFICATE',
         W / 2,
         175,
-        840,
-        29,
+        780,
+        27,
         '700',
-        '"Syne", sans-serif'
+        '"Syne", "Questrial", sans-serif'
       );
 
       ctx.fillStyle = '#D91E18';
-      drawFittedText(ctx, 'ডাকবাক্সের গান', W / 2, 285, 840, 74, '700', '"Noto Serif Bengali", sans-serif');
+      drawFittedText(ctx, 'ডাকবাক্সের গান', W / 2, 285, 780, 72, '700', '"Noto Serif Bengali", "Hind Siliguri", sans-serif');
 
       ctx.fillStyle = '#3D3834';
       drawFittedText(
@@ -2572,10 +2718,10 @@
         'DaakBaksher Gaan (Suzanne) • ISRC: USE831599537',
         W / 2,
         352,
-        840,
-        33,
+        780,
+        31,
         '600',
-        '"Questrial", sans-serif'
+        '"Questrial", "Hind Siliguri", sans-serif'
       );
 
       // 4. Center 100% Red Pillar Postbox Illustration on 9:16 Canvas
@@ -2606,17 +2752,17 @@
       ctx.fillRect(pbX - 85, pbY - 10, 170, 125);
       ctx.strokeRect(pbX - 85, pbY - 10, 170, 125);
       ctx.fillStyle = '#1A1817';
-      drawFittedText(ctx, 'ডাকবাক্স', pbX, pbY + 42, 150, 35, '700', '"Noto Serif Bengali", sans-serif');
+      drawFittedText(ctx, 'ডাকবাক্স', pbX, pbY + 42, 146, 34, '700', '"Noto Serif Bengali", "Hind Siliguri", sans-serif');
       ctx.fillStyle = '#D91E18';
-      drawFittedText(ctx, '100% RED', pbX, pbY + 88, 150, 25, '700', '"JetBrains Mono", monospace');
+      drawFittedText(ctx, '100% RED', pbX, pbY + 88, 146, 24, '700', '"JetBrains Mono", monospace');
       ctx.restore();
 
-      // 5. Recipient Social Credential & Score Box (x=110..970, width=860; safe inner maxWidth=770)
+      // 5. Recipient Social Credential & Score Box (x=120..960, width=840; generous inner maxWidth=700)
       ctx.fillStyle = '#FFFFFF';
       ctx.strokeStyle = '#1A1817';
       ctx.lineWidth = 6;
-      ctx.fillRect(110, 1060, W - 220, 390);
-      ctx.strokeRect(110, 1060, W - 220, 390);
+      ctx.fillRect(120, 1060, W - 240, 390);
+      ctx.strokeRect(120, 1060, W - 240, 390);
 
       ctx.fillStyle = '#6E665E';
       drawFittedText(
@@ -2624,15 +2770,28 @@
         'ISSUED WITH CONSENT TO KEEPER OF THE POSTBOX',
         W / 2,
         1130,
-        770,
-        24,
+        700,
+        22,
         '700',
         '"JetBrains Mono", monospace'
       );
 
-      const handleText = `${opts.socialPlatform || gameState.selectedPlatform}: ${opts.socialLink || '@listener'}`;
+      const rawSocial = (opts.socialLink || '@listener').trim();
+      const rawName = (opts.voluntaryName || '').trim();
+      const handleText = rawName
+        ? `${rawName} • ${opts.socialPlatform || gameState.selectedPlatform}: ${rawSocial}`
+        : `${opts.socialPlatform || gameState.selectedPlatform}: ${rawSocial}`;
       ctx.fillStyle = '#D91E18';
-      drawFittedText(ctx, handleText.slice(0, 48), W / 2, 1210, 770, 38, '700', '"Questrial", sans-serif');
+      const handleMeasuredW = drawFittedText(
+        ctx,
+        handleText.slice(0, 64),
+        W / 2,
+        1210,
+        700,
+        34,
+        '700',
+        '"Questrial", "Noto Serif Bengali", "Hind Siliguri", sans-serif'
+      );
 
       ctx.fillStyle = '#1A1817';
       const wordsCaught = gameState.collectedWordIds.size;
@@ -2641,8 +2800,8 @@
         `SCORE: ${gameState.score} PTS  •  WORDS: ${wordsCaught}  •  REDNESS: 100%`,
         W / 2,
         1300,
-        770,
-        27,
+        700,
+        24,
         '700',
         '"JetBrains Mono", monospace'
       );
@@ -2653,10 +2812,10 @@
         '“এই ডাকবাক্সেই রইলো পড়ে আমার ইতিহাস”',
         W / 2,
         1385,
-        770,
-        29,
+        700,
+        28,
         '600',
-        '"Noto Serif Bengali", sans-serif'
+        '"Noto Serif Bengali", "Hind Siliguri", sans-serif'
       );
 
       // 6. Hanko Stamp & Metadata Footer
@@ -2664,7 +2823,7 @@
       ctx.lineWidth = 6;
       ctx.strokeRect(W / 2 - 180, 1520, 360, 110);
       ctx.fillStyle = '#D91E18';
-      drawFittedText(ctx, '#ABHIKISM SEAL', W / 2, 1588, 320, 30, '700', '"Syne", sans-serif');
+      drawFittedText(ctx, '#ABHIKISM SEAL', W / 2, 1588, 310, 28, '700', '"Syne", "Questrial", sans-serif');
 
       const dateStr = new Date().toISOString().slice(0, 10);
       const certId = opts.certId || gameState.activeCertificateId || 'DBG-V1';
@@ -2674,8 +2833,8 @@
         `CERT ID: ${certId}  •  DATE: ${dateStr}  •  ASPECT: 9:16`,
         W / 2,
         1715,
-        840,
-        24,
+        780,
+        22,
         '600',
         '"JetBrains Mono", monospace'
       );
@@ -2684,14 +2843,15 @@
         'games.abhikism.com  •  songs.abhikism.com/daakbaksher-gaan',
         W / 2,
         1765,
-        840,
-        24,
+        780,
+        22,
         '600',
         '"JetBrains Mono", monospace'
       );
 
       canvas.setAttribute('data-header-width', String(Math.round(headerMeasuredW)));
       canvas.setAttribute('data-score-width', String(Math.round(scoreLineMeasuredW)));
+      canvas.setAttribute('data-handle-width', String(Math.round(handleMeasuredW)));
     }
 
     async function submitSocialCredentialAndGenerateCert() {
@@ -2728,9 +2888,11 @@
       gameState.activeCertificateId = certId;
       gameState.certificateIssued = true;
 
+      const volName = (document.getElementById('voluntary-name')?.value || '').trim();
       renderCertificate9x16Canvas({
         socialPlatform: gameState.selectedPlatform,
         socialLink,
+        voluntaryName: volName,
         certId
       });
 
@@ -2763,6 +2925,17 @@
       const certId = gameState.activeCertificateId || `DBG-${Date.now().toString(36).toUpperCase()}`;
       gameState.activeCertificateId = certId;
 
+      const volName = document.getElementById('voluntary-name').value.trim();
+      const socialLink = document.getElementById('cert-social-link').value.trim() || '@listener';
+      if (volName) {
+        renderCertificate9x16Canvas({
+          socialPlatform: gameState.selectedPlatform,
+          socialLink,
+          voluntaryName: volName,
+          certId
+        });
+      }
+
       const favSongEl = document.getElementById('voluntary-favorite-song');
       const payload = {
         stage: 'voluntary_freewill_info',
@@ -2776,7 +2949,7 @@
         social_link: document.getElementById('cert-social-link').value.trim(),
         consent_given: document.getElementById('cert-consent-checkbox').checked,
         voluntary_freewill: document.getElementById('voluntary-freewill-checkbox').checked,
-        voluntary_name: document.getElementById('voluntary-name').value.trim(),
+        voluntary_name: volName,
         voluntary_email: document.getElementById('voluntary-email').value.trim(),
         voluntary_phone: document.getElementById('voluntary-phone').value.trim(),
         voluntary_location: document.getElementById('voluntary-location').value.trim(),
@@ -3010,6 +3183,16 @@
             window.dropWordIntoPostboxById(sid);
           }
 
+          // Stress test 9:16 certificate with a 32-char Bengali + uppercase name before rendering final preview
+          renderCertificate9x16Canvas({
+            socialPlatform: 'Instagram',
+            socialLink: 'https://instagram.com/abhikism_daakbaksher_gaan_listener_2026',
+            voluntaryName: 'অভীকিজম শ্রোতা • KEEPER OF THE RED POSTBOX',
+            certId: 'DBG-STRESS-TEST'
+          });
+          const certCanvas = document.getElementById('cert-canvas-9x16');
+          const certLongHandleW = Number(certCanvas?.getAttribute('data-handle-width') || 9999);
+
           renderCertificate9x16Canvas({
             socialPlatform: 'Instagram',
             socialLink: '@abhikism_listener',
@@ -3019,11 +3202,11 @@
           const finalRedness = gameState.rednessPct;
           const svgRedLabel = document.getElementById('postbox-svg-pct')?.textContent || '';
           const completed = gameState.isCompleted;
-          const certCanvas = document.getElementById('cert-canvas-9x16');
           const certPngPrefix = certCanvas ? certCanvas.toDataURL('image/png').slice(0, 30) : '';
           const certHeaderW = Number(certCanvas?.getAttribute('data-header-width') || 9999);
           const certScoreW = Number(certCanvas?.getAttribute('data-score-width') || 9999);
-          const certTextFits = (certHeaderW <= 840 && certScoreW <= 770);
+          const certHandleW = Number(certCanvas?.getAttribute('data-handle-width') || 9999);
+          const certTextFits = (certHeaderW <= 780 && certScoreW <= 700 && certHandleW <= 700 && certLongHandleW <= 700);
 
           const allOk = (
             GAME_WORD_POOL.song_words.length === 125 &&
@@ -3096,6 +3279,8 @@
             certHeight: certCanvas.height,
             certHeaderW,
             certScoreW,
+            certHandleW,
+            certLongHandleW,
             certTextFits
           });
           document.body.appendChild(summaryDiv);
