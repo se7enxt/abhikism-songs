@@ -1,18 +1,35 @@
 {
   "game_id": "WKS-003",
   "title": "DaakBaksher Gaan — 2D Sumi-e Wind Game",
-  "version": "v2.0.0",
+  "version": "v3.0.0",
   "semver": {
     "game": "daakbaksher-gaan",
     "song_id": "WKS-003",
-    "current_version": "v2.0.0",
+    "current_version": "v3.0.0",
     "semver": {
-      "X_feature": 2,
+      "X_feature": 3,
       "Y_bugfix": 0,
       "Z_additional": 0
     },
     "schema_rule": "vX.Y.Z — X: Feature Addition, Y: Bug Fix, Z: Additional",
     "changelog": [
+      {
+        "version": "v3.0.0",
+        "date": "2026-10-31",
+        "summary": "YouTube Music embedded player looping by default with smart error detection fallback to Instant Web Audio, continuous autoplay by default, and exclusive Mute/Unmute + Play from Beginning (0:00) controls (zero Stop/Pause).",
+        "X_feature_additions": [
+          "YouTube Music embedded player (8K1B2qG3U7E) active and looping by default via YouTube IFrame API with automatic loop-on-end and auto-resume-on-pause enforcement",
+          "Smart audio error detection (smartDetectAudioErrorAndFallback / window.triggerSmartAudioErrorFallback) detecting YT.Player onError events, iframe API script blocks, offline states, and watchdog timeouts to seamlessly switch to Instant Web Audio fallback (daakbaksher-gaan.m4a)",
+          "Continuous default song playback with only Mute/Unmute (#btn-mute-toggle, #btn-dock-mute) and Play from Beginning 0:00 (#btn-restart-song, #btn-dock-restart) options and zero Stop/Pause controls"
+        ],
+        "Y_bug_fixes": [
+          "Prevented dual-audio track overlap by keeping Instant Web Audio fallback silenced while YouTube Music primary loop is active",
+          "Added transparent click-shield over embedded YouTube surface and pause-interception guard on fallback Web Audio so playback can never be stopped"
+        ],
+        "Z_additional": [
+          "Added v3.0.0 Leaderboard version filter pill and updated version_manifest.json across all 14 deployment targets"
+        ]
+      },
       {
         "version": "v2.0.0",
         "date": "2026-10-31",
@@ -76,6 +93,23 @@
     }
   ],
   "changelog": [
+    {
+      "version": "v3.0.0",
+      "date": "2026-10-31",
+      "summary": "YouTube Music embedded player looping by default with smart error detection fallback to Instant Web Audio, continuous autoplay by default, and exclusive Mute/Unmute + Play from Beginning (0:00) controls (zero Stop/Pause).",
+      "X_feature_additions": [
+        "YouTube Music embedded player (8K1B2qG3U7E) active and looping by default via YouTube IFrame API with automatic loop-on-end and auto-resume-on-pause enforcement",
+        "Smart audio error detection (smartDetectAudioErrorAndFallback / window.triggerSmartAudioErrorFallback) detecting YT.Player onError events, iframe API script blocks, offline states, and watchdog timeouts to seamlessly switch to Instant Web Audio fallback (daakbaksher-gaan.m4a)",
+        "Continuous default song playback with only Mute/Unmute (#btn-mute-toggle, #btn-dock-mute) and Play from Beginning 0:00 (#btn-restart-song, #btn-dock-restart) options and zero Stop/Pause controls"
+      ],
+      "Y_bug_fixes": [
+        "Prevented dual-audio track overlap by keeping Instant Web Audio fallback silenced while YouTube Music primary loop is active",
+        "Added transparent click-shield over embedded YouTube surface and pause-interception guard on fallback Web Audio so playback can never be stopped"
+      ],
+      "Z_additional": [
+        "Added v3.0.0 Leaderboard version filter pill and updated version_manifest.json across all 14 deployment targets"
+      ]
+    },
     {
       "version": "v2.0.0",
       "date": "2026-10-31",

@@ -1,5 +1,22 @@
 [
   {
+    "certificate_id": "DBG-V3-SEED-L5",
+    "timestamp_utc": "2026-10-31T20:05:00Z",
+    "player_name": "Subhajit Mukherjee",
+    "social_platform": "Instagram",
+    "social_link": "https://instagram.com/subhajit_kolkata",
+    "social_handle": "@subhajit_kolkata",
+    "game_version": "v3.0.0",
+    "level": 5,
+    "target_words": 125,
+    "words_collected": 125,
+    "wind_speed": "2.75x",
+    "completion_time_ms": 188500,
+    "completion_time_formatted": "03:08.5",
+    "score": 17200,
+    "completeness_pct": 100
+  },
+  {
     "certificate_id": "DBG-V2-SEED-L5",
     "timestamp_utc": "2026-10-31T18:10:00Z",
     "player_name": "Arindam Roy",
