@@ -649,6 +649,45 @@
       border-color: rgba(255, 255, 255, 0.25);
     }
 
+    .btn-song-game-cta {
+      width: 100%;
+      margin-top: 14px;
+      padding: 13px 18px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(217, 30, 24, 0.22) 0%, rgba(169, 21, 17, 0.34) 100%);
+      border: 1.5px solid rgba(217, 30, 24, 0.65);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--font-sans);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 24px rgba(217, 30, 24, 0.22);
+    }
+
+    .btn-song-game-cta:hover {
+      background: linear-gradient(135deg, #D91E18 0%, #A91511 100%);
+      border-color: #ff6b6b;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(217, 30, 24, 0.42);
+    }
+
+    .btn-song-game-badge {
+      background: #D91E18;
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
     /* Collapsible Drawer in Single Song View */
     .discography-card {
       width: 100%;
@@ -1812,6 +1851,12 @@
             </a>
 
           </div>
+          <div id="song-game-cta-wrap" style="display:none; width:100%;">
+            <a id="btn-play-song-game" href="./games/daakbaksher-gaan/index.html" class="btn-song-game-cta" title="Play DaakBaksher Gaan 2D Wind &amp; Postbox Game">
+              <span>📮 Play Song Game — ডাকবাক্সের গান</span>
+              <span class="btn-song-game-badge">Play Game ↗</span>
+            </a>
+          </div>
           <div id="primary-card-inline-share" style="display:none; width:100%; margin-top:14px;">
             <button class="btn-action-tool" style="width:100%;" onclick="copyStoryLink()">
               <span>🔗</span> Copy Story Link
@@ -1826,6 +1871,9 @@
         <button class="btn-action-tool" id="btn-copy-link" onclick="copyStoryLink()">
           <span>🔗</span> Copy Story Link
         </button>
+        <a href="./games/daakbaksher-gaan/index.html" class="btn-action-tool" id="btn-quick-play-dbg-game" style="text-decoration:none; border-color:rgba(217,30,24,0.5) !important;" title="Play DaakBaksher Gaan 2D Interactive Game">
+          <span>📮</span> Play Game (ডাকবাক্সের গান)
+        </a>
         <button class="btn-action-tool" id="btn-toggle-catalog" onclick="toggleCatalogDrawer()">
           <span>📚</span> Browse All Releases <span id="catalog-toggle-arrow">▾</span>
         </button>
@@ -3131,6 +3179,18 @@
         document.body.classList.add('wix-embedded');
       }
       const rawHash = (window.location.hash || '').replace(/^#\/?/, '').trim();
+      const normPath = (window.location.pathname || '').replace(/\/+$/, '').toLowerCase();
+      const normHash = rawHash.replace(/\/+$/, '').toLowerCase();
+      if (
+        normPath.endsWith('/daakbaksher-gaan/game') ||
+        normPath.endsWith('/games/daakbaksher-gaan') ||
+        normHash === 'daakbaksher-gaan/game' ||
+        normHash === 'games/daakbaksher-gaan' ||
+        urlParams.get('game') === 'daakbaksher-gaan'
+      ) {
+        window.location.replace('/games/daakbaksher-gaan/index.html');
+        return;
+      }
       const isExplicitHubHash = rawHash === 'discography' || rawHash === 'hub';
       const isExplicitFeaturedHash = rawHash === 'featured' || rawHash === 'release';
       let songSlug = (rawHash && !isExplicitHubHash && !isExplicitFeaturedHash) ? rawHash : (urlParams.get('song') || urlParams.get('track'));
@@ -3412,6 +3472,11 @@
       document.getElementById('btn-ytmusic').href = track.youtube_music_url || `https://music.youtube.com/search?q=${encodeURIComponent(track.title + ' abhikism')}`;
       document.getElementById('btn-youtube').href = track.youtube_search_url || `https://www.youtube.com/results?search_query=${encodeURIComponent(track.title + ' abhikism')}`;
       document.getElementById('btn-amazon').href = `https://music.amazon.com/search/${encodeURIComponent(track.title + ' abhikism')}`;
+
+      const gameCtaWrap = document.getElementById('song-game-cta-wrap');
+      if (gameCtaWrap) {
+        gameCtaWrap.style.display = (track.slug === 'daakbaksher-gaan') ? 'block' : 'none';
+      }
     }
 
     function renderFeaturedReleaseView(updateUrl = false) {
@@ -3529,6 +3594,9 @@
         const spotifyLink = t.spotify_url || `https://open.spotify.com/search/${encodeURIComponent(t.title)}`;
         const appleLink = t.apple_music_url || `https://music.apple.com/us/search?term=${encodeURIComponent(t.title + ' abhikism')}`;
         const ytLink = t.youtube_music_url || `https://music.youtube.com/search?q=${encodeURIComponent(t.title + ' abhikism')}`;
+        const gameBtn = (t.slug === 'daakbaksher-gaan')
+          ? `<a href="./games/daakbaksher-gaan/index.html" class="btn-card-onelink" style="background:rgba(217,30,24,0.22);border-color:rgba(217,30,24,0.65);color:#ffffff;" onclick="event.stopPropagation()" title="Play DaakBaksher Gaan 2D Interactive Game">📮 Play Game</a>`
+          : '';
 
         return `
           <div class="song-grid-card" onclick="openSingleTrack('${t.slug}')">
@@ -3551,7 +3619,8 @@
                 <a href="${appleLink}" target="_blank" rel="noopener" class="card-dsp-link" title="Apple Music" aria-label="Apple Music">${DSP_ICONS.apple}</a>
                 <a href="${ytLink}" target="_blank" rel="noopener" class="card-dsp-link" title="YouTube Music" aria-label="YouTube Music">${DSP_ICONS.ytmusic}</a>
               </div>
-              <div style="display:flex; align-items:center; gap:6px;" onclick="event.stopPropagation()">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;" onclick="event.stopPropagation()">
+                ${gameBtn}
                 <button class="btn-card-onelink" onclick="event.stopPropagation(); copyTrackLink('${t.slug}')" title="Copy Share Link for ${escapeHtml(t.title)}" aria-label="Copy Share Link">
                   🔗 Share
                 </button>
