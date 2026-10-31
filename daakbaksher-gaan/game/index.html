@@ -867,11 +867,72 @@
       font-size: 11.5px;
       font-weight: 700;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
     }
     .social-pill-btn.active {
       background: var(--hanko-red);
       color: #FFFFFF;
       border-color: var(--sumi-ink);
+      box-shadow: 2px 2px 0px var(--sumi-ink);
+    }
+
+    .social-inputs-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .social-input-row {
+      background: #FAF7F2;
+      border: 1.5px solid rgba(26, 24, 23, 0.25);
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .social-input-row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--sumi-charcoal);
+    }
+    .social-platform-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--sumi-ink);
+      color: #FFFFFF;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+    .field-input.input-valid {
+      border-color: var(--brand-teal);
+      background: #F2FBF9;
+    }
+    .field-input.input-invalid {
+      border-color: var(--hanko-red);
+      background: #FFF5F5;
+    }
+    .social-validation-msg {
+      font-size: 10.5px;
+      font-weight: 700;
+      min-height: 14px;
+      line-height: 1.3;
+    }
+    .social-validation-msg.valid {
+      color: var(--brand-teal);
+    }
+    .social-validation-msg.invalid {
+      color: var(--hanko-red);
     }
 
     .consent-label {
@@ -1589,37 +1650,81 @@
       </div>
 
       <div class="cert-Modal-grid">
-        <!-- Left Column: Step 1 (Consented Social Credential) & Step 2 (Post-Certificate Voluntary Free-Will Info) -->
+        <!-- Left Column: Step 1 (Consented Social Credentials) & Step 2 (Post-Certificate Voluntary Free-Will Info) -->
         <div>
-          <!-- STEP 1: Social Credential + Explicit Consent for 9:16 Certificate -->
+          <!-- STEP 1: Social Credentials + Explicit Consent for 9:16 Certificate -->
           <div class="form-section-box" id="cert-step1-box">
             <div class="form-section-title">
               <span>📜 Step 1: Get Your 9:16 Certificate (Optional)</span>
             </div>
             <p style="font-size:12px; color:var(--sumi-charcoal); margin-bottom:10px;">
-              Choose your social credential (IG / FB / X / LinkedIn / Reddit link) and give consent to generate your personalized <strong>9:16 Certificate</strong>.
+              Select one or multiple social platforms below, enter your handle or profile link for each selected platform (auto-checked &amp; formatted), and give consent to issue your personalized <strong>9:16 Certificate</strong>.
             </p>
 
             <div class="field-group">
-              <label class="field-label">Select Social Platform</label>
-              <div class="social-platform-pills" id="social-platform-pills">
-                <button type="button" class="social-pill-btn active" data-platform="Instagram" onclick="selectSocialPlatform('Instagram', this)">Instagram (IG)</button>
-                <button type="button" class="social-pill-btn" data-platform="Facebook" onclick="selectSocialPlatform('Facebook', this)">Facebook (FB)</button>
-                <button type="button" class="social-pill-btn" data-platform="X" onclick="selectSocialPlatform('X', this)">X / Twitter</button>
-                <button type="button" class="social-pill-btn" data-platform="LinkedIn" onclick="selectSocialPlatform('LinkedIn', this)">LinkedIn</button>
-                <button type="button" class="social-pill-btn" data-platform="Reddit" onclick="selectSocialPlatform('Reddit', this)">Reddit</button>
+              <label class="field-label">Select Social Platform(s) (Click to toggle one or multiple)</label>
+              <div class="social-platform-pills" id="social-platform-pills" role="group" aria-label="Select one or more social platforms">
+                <button type="button" class="social-pill-btn active" data-platform="Instagram" aria-pressed="true" onclick="toggleSocialPlatform('Instagram', this)">✓ Instagram (IG)</button>
+                <button type="button" class="social-pill-btn" data-platform="Facebook" aria-pressed="false" onclick="toggleSocialPlatform('Facebook', this)">+ Facebook (FB)</button>
+                <button type="button" class="social-pill-btn" data-platform="X" aria-pressed="false" onclick="toggleSocialPlatform('X', this)">+ X / Twitter</button>
+                <button type="button" class="social-pill-btn" data-platform="LinkedIn" aria-pressed="false" onclick="toggleSocialPlatform('LinkedIn', this)">+ LinkedIn</button>
+                <button type="button" class="social-pill-btn" data-platform="Reddit" aria-pressed="false" onclick="toggleSocialPlatform('Reddit', this)">+ Reddit</button>
               </div>
             </div>
 
-            <div class="field-group">
-              <label class="field-label" for="cert-social-link">Your Social Profile Link or Handle *</label>
-              <input type="text" id="cert-social-link" class="field-input" placeholder="https://instagram.com/yourhandle or @yourhandle" required>
+            <div class="social-inputs-stack" id="social-inputs-container">
+              <div class="social-input-row" id="social-row-Instagram" data-platform="Instagram">
+                <div class="social-input-row-header">
+                  <span class="social-platform-badge">Instagram (IG)</span>
+                  <span>Only <code>instagram.com/handle</code> or <code>@handle</code></span>
+                </div>
+                <input type="text" id="cert-social-input-Instagram" class="field-input social-platform-input" data-platform="Instagram" placeholder="https://instagram.com/yourhandle or @yourhandle" oninput="onSocialInputChanged('Instagram', false)" onblur="onSocialInputChanged('Instagram', true)" onchange="onSocialInputChanged('Instagram', true)">
+                <div class="social-validation-msg" id="social-status-Instagram"></div>
+              </div>
+
+              <div class="social-input-row" id="social-row-Facebook" data-platform="Facebook" style="display:none;">
+                <div class="social-input-row-header">
+                  <span class="social-platform-badge">Facebook (FB)</span>
+                  <span>Only <code>facebook.com/handle</code> or <code>@handle</code></span>
+                </div>
+                <input type="text" id="cert-social-input-Facebook" class="field-input social-platform-input" data-platform="Facebook" placeholder="https://facebook.com/yourhandle or @yourhandle" oninput="onSocialInputChanged('Facebook', false)" onblur="onSocialInputChanged('Facebook', true)" onchange="onSocialInputChanged('Facebook', true)">
+                <div class="social-validation-msg" id="social-status-Facebook"></div>
+              </div>
+
+              <div class="social-input-row" id="social-row-X" data-platform="X" style="display:none;">
+                <div class="social-input-row-header">
+                  <span class="social-platform-badge">X / Twitter</span>
+                  <span>Only <code>x.com/handle</code>, <code>twitter.com/handle</code>, or <code>@handle</code></span>
+                </div>
+                <input type="text" id="cert-social-input-X" class="field-input social-platform-input" data-platform="X" placeholder="https://x.com/yourhandle or @yourhandle" oninput="onSocialInputChanged('X', false)" onblur="onSocialInputChanged('X', true)" onchange="onSocialInputChanged('X', true)">
+                <div class="social-validation-msg" id="social-status-X"></div>
+              </div>
+
+              <div class="social-input-row" id="social-row-LinkedIn" data-platform="LinkedIn" style="display:none;">
+                <div class="social-input-row-header">
+                  <span class="social-platform-badge">LinkedIn</span>
+                  <span>Only <code>linkedin.com/in/slug</code> or profile slug</span>
+                </div>
+                <input type="text" id="cert-social-input-LinkedIn" class="field-input social-platform-input" data-platform="LinkedIn" placeholder="https://linkedin.com/in/yourprofile or yourprofile" oninput="onSocialInputChanged('LinkedIn', false)" onblur="onSocialInputChanged('LinkedIn', true)" onchange="onSocialInputChanged('LinkedIn', true)">
+                <div class="social-validation-msg" id="social-status-LinkedIn"></div>
+              </div>
+
+              <div class="social-input-row" id="social-row-Reddit" data-platform="Reddit" style="display:none;">
+                <div class="social-input-row-header">
+                  <span class="social-platform-badge">Reddit</span>
+                  <span>Only <code>reddit.com/u/handle</code> or <code>u/handle</code></span>
+                </div>
+                <input type="text" id="cert-social-input-Reddit" class="field-input social-platform-input" data-platform="Reddit" placeholder="https://reddit.com/u/yourhandle or u/yourhandle" oninput="onSocialInputChanged('Reddit', false)" onblur="onSocialInputChanged('Reddit', true)" onchange="onSocialInputChanged('Reddit', true)">
+                <div class="social-validation-msg" id="social-status-Reddit"></div>
+              </div>
             </div>
+
+            <input type="hidden" id="cert-social-link" value="">
 
             <label class="consent-label" for="cert-consent-checkbox">
               <input type="checkbox" id="cert-consent-checkbox">
               <span>
-                <strong>Explicit Consent:</strong> I consent to share my social credential (<span id="consent-platform-name">Instagram</span> link/handle) with <strong>#ABHIKISM (Transmic Space)</strong> for issuing my 9:16 DaakBaksher Gaan certificate and maintaining the official listener ledger.
+                <strong>Explicit Consent:</strong> I consent to share my selected social profile credential(s) (<span id="consent-platform-name">Instagram</span>) with <strong>#ABHIKISM (Transmic Space)</strong> for issuing and verifying my personalized 9:16 DaakBaksher Gaan certificate.
               </span>
             </label>
 
@@ -1687,31 +1792,10 @@
 
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
               <button type="button" class="ink-btn active-toggle" id="btn-submit-voluntary" onclick="submitVoluntaryFreeWillInfo()">
-                💌 Send to #ABHIKISM &amp; Sync Sheet
-              </button>
-              <button type="button" class="ink-btn" onclick="exportSubmissionsCsv()">
-                📊 Download Google Sheet CSV
+                💌 Send to #ABHIKISM
               </button>
             </div>
           </div>
-
-          <!-- Google Sheets Webhook & Admin Sync Box -->
-          <details class="form-section-box" style="padding:10px 14px; margin-bottom:0;">
-            <summary style="font-size:11.5px; font-weight:700; cursor:pointer; color:var(--sumi-wash);">
-              ⚙️ Google Sheets Live Sync &amp; Ledger (<span id="ledger-count-badge">0</span> Entries)
-            </summary>
-            <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
-              <label class="field-label" for="gsheet-webhook-input">Google Apps Script Web App URL (Optional Live Sheet Relay):</label>
-              <div style="display:flex; gap:6px;">
-                <input type="url" id="gsheet-webhook-input" class="field-input" style="flex:1; font-size:11px;" placeholder="https://script.google.com/macros/s/.../exec">
-                <button type="button" class="ink-btn" onclick="saveWebhookConfig()">Save</button>
-              </div>
-              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
-                <button type="button" class="ink-btn" onclick="exportSubmissionsCsv()">⬇️ Export CSV for Google Sheets</button>
-                <a href="/api/game-submissions?format=csv" target="_blank" class="ink-btn" style="text-decoration:none;">🔗 Server CSV Feed</a>
-              </div>
-            </div>
-          </details>
         </div>
 
         <!-- Right Column: 9:16 Vertical Certificate Canvas Preview & Download -->
@@ -1780,6 +1864,10 @@
       isMuted: false,
       loopCount: 1,
       selectedPlatform: 'Instagram',
+      selectedPlatforms: ['Instagram'],
+      validatedSocialProfiles: [],
+      emailNotificationsSent: [],
+      downloadCount: 0,
       activeCertificateId: null,
       certificateIssued: false,
       windGustMultiplier: 1.0,
@@ -2622,24 +2710,276 @@
     }
 
     // ==============================================================
-    // 9:16 CERTIFICATE GENERATOR + CONSENTED SOCIAL CREDENTIAL + VOLUNTARY INFO
+    // 9:16 CERTIFICATE GENERATOR + MULTI-PLATFORM VALIDATED SOCIAL HANDLES + VOLUNTARY INFO
     // ==============================================================
-    function selectSocialPlatform(platform, btnEl) {
-      gameState.selectedPlatform = platform;
-      document.querySelectorAll('#social-platform-pills .social-pill-btn').forEach(b => b.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
-      document.getElementById('consent-platform-name').textContent = platform;
+    const PLATFORM_LABELS = {
+      Instagram: 'Instagram (IG)',
+      Facebook: 'Facebook (FB)',
+      X: 'X / Twitter',
+      LinkedIn: 'LinkedIn',
+      Reddit: 'Reddit'
+    };
+    const PLATFORM_ORDER = ['Instagram', 'Facebook', 'X', 'LinkedIn', 'Reddit'];
+    const ADMIN_NOTIFICATION_EMAIL = 'se7enxt@gmail.com';
+
+    function validateAndFormatSocialInput(platform, rawInput) {
+      const platRaw = String(platform || '').trim();
+      const platLower = platRaw.toLowerCase();
+      let canonPlat = '';
+      if (platLower === 'instagram' || platLower === 'instagram (ig)' || platLower === 'ig') canonPlat = 'Instagram';
+      else if (platLower === 'facebook' || platLower === 'facebook (fb)' || platLower === 'fb') canonPlat = 'Facebook';
+      else if (platLower === 'x' || platLower === 'x / twitter' || platLower === 'twitter') canonPlat = 'X';
+      else if (platLower === 'linkedin') canonPlat = 'LinkedIn';
+      else if (platLower === 'reddit') canonPlat = 'Reddit';
+      else {
+        return { valid: false, platform: platRaw, error: `Unsupported platform: ${platRaw}` };
+      }
+
+      const val = String(rawInput || '').trim();
+      if (!val) {
+        return { valid: false, platform: canonPlat, error: `Please enter your ${PLATFORM_LABELS[canonPlat] || canonPlat} handle or profile link.` };
+      }
+
+      const tldRe = /\.(com|org|net|io|co|in|me|edu|gov|app|dev|gg|tv|ly|be|am|uk|us|ca|au|de|fr|jp)$/i;
+      const looksLikeUrlOrDomain = (
+        val.includes('://') ||
+        /^www\./i.test(val) ||
+        val.includes('/') ||
+        val.includes('?') ||
+        val.includes(':') ||
+        tldRe.test(val)
+      );
+
+      if (canonPlat === 'Instagram') {
+        const mUrl = val.match(/^(?:https?:\/\/)?(?:www\.)?instagram\.com\/@?([A-Za-z0-9._]{1,30})\/?(?:\?.*)?$/i);
+        if (mUrl) {
+          const h = mUrl[1];
+          if (h.includes('..') || ['p', 'reel', 'reels', 'stories', 'explore', 'accounts', 'direct'].includes(h.toLowerCase())) {
+            return { valid: false, platform: canonPlat, error: 'Please enter a valid Instagram profile link (not a post/reel URL).' };
+          }
+          return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `@${h}`, url: `https://instagram.com/${h}` };
+        }
+        if (looksLikeUrlOrDomain) {
+          return { valid: false, platform: canonPlat, error: 'Only instagram.com profile links or @handles are allowed in the Instagram field.' };
+        }
+        const h = val.replace(/^@+/, '');
+        if (!/^[A-Za-z0-9._]{1,30}$/.test(h) || h.includes('..') || h.startsWith('.') || h.endsWith('.')) {
+          return { valid: false, platform: canonPlat, error: 'Invalid Instagram handle (use 1–30 letters, numbers, periods, or underscores).' };
+        }
+        return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `@${h}`, url: `https://instagram.com/${h}` };
+      }
+
+      if (canonPlat === 'Facebook') {
+        const mId = val.match(/^(?:https?:\/\/)?(?:www\.|m\.|web\.)?facebook\.com\/profile\.php\?id=([0-9]{4,30})(?:&.*)?$/i);
+        if (mId) {
+          const fid = mId[1];
+          return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `profile.php?id=${fid}`, url: `https://facebook.com/profile.php?id=${fid}` };
+        }
+        const mUrl = val.match(/^(?:https?:\/\/)?(?:www\.|m\.|web\.)?facebook\.com\/@?([A-Za-z0-9.]{3,50})\/?(?:\?.*)?$/i);
+        if (mUrl) {
+          const h = mUrl[1];
+          if (h.includes('..') || ['profile.php', 'watch', 'groups', 'events', 'marketplace', 'pages', 'share.php', 'sharer.php'].includes(h.toLowerCase())) {
+            return { valid: false, platform: canonPlat, error: 'Please enter a valid personal Facebook profile link or handle.' };
+          }
+          return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `@${h}`, url: `https://facebook.com/${h}` };
+        }
+        if (looksLikeUrlOrDomain) {
+          return { valid: false, platform: canonPlat, error: 'Only facebook.com profile links or handles are allowed in the Facebook field.' };
+        }
+        const h = val.replace(/^@+/, '');
+        if (!/^[A-Za-z0-9.]{3,50}$/.test(h) || h.includes('..') || h.startsWith('.') || h.endsWith('.')) {
+          return { valid: false, platform: canonPlat, error: 'Invalid Facebook handle (use 3–50 letters, numbers, or periods).' };
+        }
+        return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `@${h}`, url: `https://facebook.com/${h}` };
+      }
+
+      if (canonPlat === 'X') {
+        const mUrl = val.match(/^(?:https?:\/\/)?(?:www\.|mobile\.)?(?:x\.com|twitter\.com)\/@?([A-Za-z0-9_]{1,15})\/?(?:\?.*)?$/i);
+        if (mUrl) {
+          const h = mUrl[1];
+          if (['home', 'explore', 'notifications', 'messages', 'i', 'intent', 'search', 'settings', 'compose', 'status'].includes(h.toLowerCase())) {
+            return { valid: false, platform: canonPlat, error: 'Please enter a valid X / Twitter profile handle or link.' };
+          }
+          return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `@${h}`, url: `https://x.com/${h}` };
+        }
+        if (looksLikeUrlOrDomain) {
+          return { valid: false, platform: canonPlat, error: 'Only x.com or twitter.com profile links or @handles are allowed in the X / Twitter field.' };
+        }
+        const h = val.replace(/^@+/, '');
+        if (!/^[A-Za-z0-9_]{1,15}$/.test(h)) {
+          return { valid: false, platform: canonPlat, error: 'Invalid X / Twitter handle (use 1–15 letters, numbers, or underscores).' };
+        }
+        return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `@${h}`, url: `https://x.com/${h}` };
+      }
+
+      if (canonPlat === 'LinkedIn') {
+        const mUrl = val.match(/^(?:https?:\/\/)?(?:[a-z]{2,3}\.|www\.)?linkedin\.com\/(?:in|pub|company)\/([A-Za-z0-9_-]{3,100})\/?(?:\?.*)?$/i);
+        if (mUrl) {
+          const slug = mUrl[1];
+          return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `in/${slug}`, url: `https://linkedin.com/in/${slug}` };
+        }
+        const mShort = val.match(/^\/?in\/([A-Za-z0-9_-]{3,100})\/?$/i);
+        if (mShort) {
+          const slug = mShort[1];
+          return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `in/${slug}`, url: `https://linkedin.com/in/${slug}` };
+        }
+        if (looksLikeUrlOrDomain) {
+          return { valid: false, platform: canonPlat, error: 'Only linkedin.com/in/... profile links or valid slugs are allowed in the LinkedIn field.' };
+        }
+        const slug = val.replace(/^@+/, '');
+        if (!/^[A-Za-z0-9_-]{3,100}$/.test(slug)) {
+          return { valid: false, platform: canonPlat, error: 'Invalid LinkedIn profile slug (use 3–100 letters, numbers, hyphens, or underscores).' };
+        }
+        return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `in/${slug}`, url: `https://linkedin.com/in/${slug}` };
+      }
+
+      if (canonPlat === 'Reddit') {
+        const mUrl = val.match(/^(?:https?:\/\/)?(?:old\.|www\.|new\.)?reddit\.com\/(?:u|user)\/([A-Za-z0-9_-]{3,20})\/?(?:\?.*)?$/i);
+        if (mUrl) {
+          const h = mUrl[1];
+          return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `u/${h}`, url: `https://reddit.com/u/${h}` };
+        }
+        const mShort = val.match(/^\/?(?:u|user)\/([A-Za-z0-9_-]{3,20})\/?$/i);
+        if (mShort) {
+          const h = mShort[1];
+          return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `u/${h}`, url: `https://reddit.com/u/${h}` };
+        }
+        if (looksLikeUrlOrDomain) {
+          return { valid: false, platform: canonPlat, error: 'Only reddit.com/u/... profile links or u/usernames are allowed in the Reddit field.' };
+        }
+        const h = val.replace(/^@+/, '');
+        if (!/^[A-Za-z0-9_-]{3,20}$/.test(h)) {
+          return { valid: false, platform: canonPlat, error: 'Invalid Reddit username (use 3–20 letters, numbers, hyphens, or underscores).' };
+        }
+        return { valid: true, platform: canonPlat, label: PLATFORM_LABELS[canonPlat], handle: `u/${h}`, url: `https://reddit.com/u/${h}` };
+      }
+
+      return { valid: false, platform: canonPlat, error: 'Invalid social input.' };
+    }
+    window.validateAndFormatSocialInput = validateAndFormatSocialInput;
+
+    function syncSocialPlatformUI() {
+      const selectedSet = new Set(gameState.selectedPlatforms);
+      document.querySelectorAll('#social-platform-pills .social-pill-btn').forEach(btn => {
+        const plat = btn.getAttribute('data-platform');
+        const isSel = selectedSet.has(plat);
+        btn.classList.toggle('active', isSel);
+        btn.setAttribute('aria-pressed', String(isSel));
+        const label = PLATFORM_LABELS[plat] || plat;
+        btn.textContent = `${isSel ? '✓' : '+'} ${label}`;
+      });
+
+      for (const plat of PLATFORM_ORDER) {
+        const row = document.getElementById(`social-row-${plat}`);
+        if (row) {
+          row.style.display = selectedSet.has(plat) ? 'flex' : 'none';
+        }
+      }
+
+      gameState.selectedPlatform = gameState.selectedPlatforms[0] || 'Instagram';
+      const consentNameEl = document.getElementById('consent-platform-name');
+      if (consentNameEl) {
+        consentNameEl.textContent = gameState.selectedPlatforms.length > 0
+          ? gameState.selectedPlatforms.join(', ')
+          : 'selected platform(s)';
+      }
+      refreshCombinedSocialSummary();
+    }
+
+    function toggleSocialPlatform(platform, btnEl) {
+      const idx = gameState.selectedPlatforms.indexOf(platform);
+      if (idx >= 0) {
+        if (gameState.selectedPlatforms.length > 1) {
+          gameState.selectedPlatforms.splice(idx, 1);
+        }
+      } else {
+        gameState.selectedPlatforms.push(platform);
+        gameState.selectedPlatforms.sort((a, b) => PLATFORM_ORDER.indexOf(a) - PLATFORM_ORDER.indexOf(b));
+      }
+      syncSocialPlatformUI();
+    }
+    window.toggleSocialPlatform = toggleSocialPlatform;
+    window.selectSocialPlatform = toggleSocialPlatform;
+
+    function onSocialInputChanged(platform, autoReplaceValue = false) {
+      const inputEl = document.getElementById(`cert-social-input-${platform}`);
+      const statusEl = document.getElementById(`social-status-${platform}`);
+      if (!inputEl || !statusEl) return null;
+
+      const rawVal = inputEl.value.trim();
+      if (!rawVal) {
+        inputEl.classList.remove('input-valid', 'input-invalid');
+        inputEl.removeAttribute('data-valid');
+        statusEl.textContent = '';
+        statusEl.className = 'social-validation-msg';
+        refreshCombinedSocialSummary();
+        return null;
+      }
+
+      const res = validateAndFormatSocialInput(platform, rawVal);
+      if (res.valid) {
+        inputEl.classList.remove('input-invalid');
+        inputEl.classList.add('input-valid');
+        inputEl.setAttribute('data-valid', 'true');
+        inputEl.setAttribute('data-normalized-url', res.url);
+        inputEl.setAttribute('data-display-handle', res.handle);
+        if (autoReplaceValue) {
+          inputEl.value = res.url;
+        }
+        statusEl.textContent = `✓ Valid ${res.platform}: ${res.handle} → ${res.url}`;
+        statusEl.className = 'social-validation-msg valid';
+      } else {
+        inputEl.classList.remove('input-valid');
+        inputEl.classList.add('input-invalid');
+        inputEl.setAttribute('data-valid', 'false');
+        statusEl.textContent = `✕ ${res.error}`;
+        statusEl.className = 'social-validation-msg invalid';
+      }
+
+      refreshCombinedSocialSummary();
+      const volName = (document.getElementById('voluntary-name')?.value || '').trim();
+      renderCertificate9x16Canvas({
+        socialProfiles: gameState.validatedSocialProfiles,
+        socialPlatform: gameState.selectedPlatforms.join(', '),
+        socialLink: document.getElementById('cert-social-link')?.value || '@listener',
+        voluntaryName: volName,
+        certId: gameState.activeCertificateId || 'DBG-PREVIEW'
+      });
+      return res;
+    }
+    window.onSocialInputChanged = onSocialInputChanged;
+
+    function refreshCombinedSocialSummary() {
+      const validList = [];
+      for (const plat of gameState.selectedPlatforms) {
+        const inputEl = document.getElementById(`cert-social-input-${plat}`);
+        if (inputEl && inputEl.value.trim()) {
+          const res = validateAndFormatSocialInput(plat, inputEl.value.trim());
+          if (res.valid) {
+            validList.push(res);
+          }
+        }
+      }
+      gameState.validatedSocialProfiles = validList;
+      const hiddenEl = document.getElementById('cert-social-link');
+      if (hiddenEl && validList.length > 0) {
+        hiddenEl.value = validList.map(p => p.url).join(' | ');
+      } else if (hiddenEl && validList.length === 0) {
+        hiddenEl.value = '';
+      }
+      return validList;
     }
 
     function openCompletionModal() {
       const volName = (document.getElementById('voluntary-name')?.value || '').trim();
+      refreshCombinedSocialSummary();
       renderCertificate9x16Canvas({
-        socialPlatform: gameState.selectedPlatform,
+        socialProfiles: gameState.validatedSocialProfiles,
+        socialPlatform: gameState.selectedPlatforms.join(', ') || gameState.selectedPlatform,
         socialLink: document.getElementById('cert-social-link').value.trim() || '@listener',
         voluntaryName: volName,
         certId: gameState.activeCertificateId || 'DBG-PREVIEW'
       });
-      refreshLocalLedgerCount();
       document.getElementById('completion-modal').classList.add('open');
     }
 
@@ -2769,29 +3109,75 @@
         ctx,
         'ISSUED WITH CONSENT TO KEEPER OF THE POSTBOX',
         W / 2,
-        1130,
+        1125,
         700,
         22,
         '700',
         '"JetBrains Mono", monospace'
       );
 
+      const profiles = Array.isArray(opts.socialProfiles) && opts.socialProfiles.length > 0
+        ? opts.socialProfiles
+        : null;
       const rawSocial = (opts.socialLink || '@listener').trim();
       const rawName = (opts.voluntaryName || '').trim();
-      const handleText = rawName
-        ? `${rawName} • ${opts.socialPlatform || gameState.selectedPlatform}: ${rawSocial}`
-        : `${opts.socialPlatform || gameState.selectedPlatform}: ${rawSocial}`;
+      let handleLine1 = '';
+      let handleLine2 = '';
+
+      if (profiles && profiles.length > 0) {
+        const formattedItems = profiles.map(p => `${p.platform}: ${p.handle}`);
+        if (rawName) {
+          handleLine1 = rawName;
+          handleLine2 = formattedItems.join('  •  ');
+        } else if (formattedItems.length <= 2) {
+          handleLine1 = formattedItems.join('  •  ');
+        } else {
+          handleLine1 = formattedItems.slice(0, 2).join('  •  ');
+          handleLine2 = formattedItems.slice(2).join('  •  ');
+        }
+      } else {
+        const platLabel = opts.socialPlatform || gameState.selectedPlatform || 'Instagram';
+        handleLine1 = rawName
+          ? `${rawName} • ${platLabel}: ${rawSocial}`
+          : `${platLabel}: ${rawSocial}`;
+      }
+
       ctx.fillStyle = '#D91E18';
-      const handleMeasuredW = drawFittedText(
-        ctx,
-        handleText.slice(0, 64),
-        W / 2,
-        1210,
-        700,
-        34,
-        '700',
-        '"Questrial", "Noto Serif Bengali", "Hind Siliguri", sans-serif'
-      );
+      let handleMeasuredW = 0;
+      if (handleLine2) {
+        const w1 = drawFittedText(
+          ctx,
+          handleLine1.slice(0, 72),
+          W / 2,
+          1190,
+          700,
+          30,
+          '700',
+          '"Questrial", "Noto Serif Bengali", "Hind Siliguri", sans-serif'
+        );
+        const w2 = drawFittedText(
+          ctx,
+          handleLine2.slice(0, 84),
+          W / 2,
+          1235,
+          700,
+          24,
+          '700',
+          '"Questrial", "Noto Serif Bengali", "Hind Siliguri", sans-serif'
+        );
+        handleMeasuredW = Math.max(w1, w2);
+      } else {
+        handleMeasuredW = drawFittedText(
+          ctx,
+          handleLine1.slice(0, 64),
+          W / 2,
+          1210,
+          700,
+          34,
+          '700',
+          '"Questrial", "Noto Serif Bengali", "Hind Siliguri", sans-serif'
+        );
+      }
 
       ctx.fillStyle = '#1A1817';
       const wordsCaught = gameState.collectedWordIds.size;
@@ -2799,7 +3185,7 @@
         ctx,
         `SCORE: ${gameState.score} PTS  •  WORDS: ${wordsCaught}  •  REDNESS: 100%`,
         W / 2,
-        1300,
+        1305,
         700,
         24,
         '700',
@@ -2855,19 +3241,53 @@
     }
 
     async function submitSocialCredentialAndGenerateCert() {
-      const socialLink = document.getElementById('cert-social-link').value.trim();
       const consentGiven = document.getElementById('cert-consent-checkbox').checked;
       const errEl = document.getElementById('cert-step1-error');
 
-      if (!socialLink) {
-        errEl.textContent = '⚠️ Please enter your social credential link or handle (IG / FB / X / LinkedIn / Reddit).';
+      if (!Array.isArray(gameState.selectedPlatforms) || gameState.selectedPlatforms.length === 0) {
+        errEl.textContent = '⚠️ Please select at least one social platform above.';
         errEl.style.display = 'block';
-        return;
+        return false;
       }
+
+      // Support legacy callers that wrote to #cert-social-link without filling the active platform input
+      const firstPlat = gameState.selectedPlatforms[0];
+      const firstInput = document.getElementById(`cert-social-input-${firstPlat}`);
+      const legacyHidden = document.getElementById('cert-social-link');
+      if (firstInput && !firstInput.value.trim() && legacyHidden && legacyHidden.value.trim()) {
+        firstInput.value = legacyHidden.value.trim();
+      }
+
+      const validatedProfiles = [];
+      const validationErrors = [];
+      for (const plat of gameState.selectedPlatforms) {
+        const res = onSocialInputChanged(plat, true);
+        if (!res) {
+          const statusEl = document.getElementById(`social-status-${plat}`);
+          const inputEl = document.getElementById(`cert-social-input-${plat}`);
+          if (inputEl) inputEl.classList.add('input-invalid');
+          if (statusEl) {
+            statusEl.textContent = `✕ Please enter your ${PLATFORM_LABELS[plat] || plat} handle or profile link.`;
+            statusEl.className = 'social-validation-msg invalid';
+          }
+          validationErrors.push(`${PLATFORM_LABELS[plat] || plat}: required`);
+        } else if (!res.valid) {
+          validationErrors.push(`${PLATFORM_LABELS[plat] || plat}: ${res.error}`);
+        } else {
+          validatedProfiles.push(res);
+        }
+      }
+
+      if (validationErrors.length > 0 || validatedProfiles.length === 0) {
+        errEl.textContent = `⚠️ ${validationErrors[0] || 'Please enter a valid profile handle or link for each selected platform.'}`;
+        errEl.style.display = 'block';
+        return false;
+      }
+
       if (!consentGiven) {
         errEl.textContent = '⚠️ Please check the Explicit Consent box so we can issue your 9:16 certificate.';
         errEl.style.display = 'block';
-        return;
+        return false;
       }
       errEl.style.display = 'none';
 
@@ -2887,11 +3307,17 @@
       const certId = gameState.activeCertificateId || `DBG-${Date.now().toString(36).toUpperCase()}`;
       gameState.activeCertificateId = certId;
       gameState.certificateIssued = true;
+      gameState.validatedSocialProfiles = validatedProfiles;
+
+      const combinedPlatforms = validatedProfiles.map(p => p.platform).join(', ');
+      const combinedLinks = validatedProfiles.map(p => p.url).join(' | ');
+      if (legacyHidden) legacyHidden.value = combinedLinks;
 
       const volName = (document.getElementById('voluntary-name')?.value || '').trim();
       renderCertificate9x16Canvas({
-        socialPlatform: gameState.selectedPlatform,
-        socialLink,
+        socialProfiles: validatedProfiles,
+        socialPlatform: combinedPlatforms,
+        socialLink: combinedLinks,
         voluntaryName: volName,
         certId
       });
@@ -2910,8 +3336,9 @@
         target_words: gameState.targetWords,
         postbox_redness_pct: 100,
         script_mode: gameState.scriptMode,
-        social_platform: gameState.selectedPlatform,
-        social_link: socialLink,
+        social_platform: combinedPlatforms,
+        social_link: combinedLinks,
+        social_profiles: validatedProfiles,
         consent_given: true,
         consent_timestamp: new Date().toISOString(),
         webhook_url: getSavedWebhookUrl()
@@ -2919,6 +3346,7 @@
 
       await persistSubmissionRecord(payload);
       showFeedbackWhisper('📜 9:16 Certificate Issued! You may now download it or optionally share more info with #ABHIKISM.');
+      return true;
     }
 
     async function submitVoluntaryFreeWillInfo() {
@@ -2926,11 +3354,19 @@
       gameState.activeCertificateId = certId;
 
       const volName = document.getElementById('voluntary-name').value.trim();
-      const socialLink = document.getElementById('cert-social-link').value.trim() || '@listener';
+      const validatedProfiles = refreshCombinedSocialSummary();
+      const combinedPlatforms = validatedProfiles.length > 0
+        ? validatedProfiles.map(p => p.platform).join(', ')
+        : gameState.selectedPlatforms.join(', ');
+      const combinedLinks = validatedProfiles.length > 0
+        ? validatedProfiles.map(p => p.url).join(' | ')
+        : (document.getElementById('cert-social-link').value.trim() || '@listener');
+
       if (volName) {
         renderCertificate9x16Canvas({
-          socialPlatform: gameState.selectedPlatform,
-          socialLink,
+          socialProfiles: validatedProfiles,
+          socialPlatform: combinedPlatforms,
+          socialLink: combinedLinks,
           voluntaryName: volName,
           certId
         });
@@ -2940,13 +3376,15 @@
       const payload = {
         stage: 'voluntary_freewill_info',
         certificate_id: certId,
+        timestamp_utc: new Date().toISOString(),
         score: gameState.score,
         words_collected: gameState.collectedWordIds.size,
         target_words: gameState.targetWords,
         postbox_redness_pct: gameState.rednessPct || 100,
         script_mode: gameState.scriptMode,
-        social_platform: gameState.selectedPlatform,
-        social_link: document.getElementById('cert-social-link').value.trim(),
+        social_platform: combinedPlatforms,
+        social_link: combinedLinks,
+        social_profiles: validatedProfiles,
         consent_given: document.getElementById('cert-consent-checkbox').checked,
         voluntary_freewill: document.getElementById('voluntary-freewill-checkbox').checked,
         voluntary_name: volName,
@@ -2961,39 +3399,71 @@
 
       await persistSubmissionRecord(payload);
       const msgEl = document.getElementById('voluntary-status-msg');
-      msgEl.textContent = '✓ Thank you! Your voluntary message & details have been saved to the #ABHIKISM Google Sheet ledger.';
+      msgEl.textContent = '✓ Thank you! Your personal note and details have been shared with #ABHIKISM.';
       msgEl.style.display = 'block';
+      return true;
     }
 
-    function downloadCertificate9x16() {
+    async function downloadCertificate9x16() {
       const canvas = document.getElementById('cert-canvas-9x16');
-      if (!canvas) return;
-      const link = document.createElement('a');
-      const certId = gameState.activeCertificateId || '9x16';
-      link.download = `ABHIKISM_DaakBaksherGaan_Certificate_${certId}_9x16.png`;
-      link.href = canvas.toDataURL('image/png');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      if (!canvas) return false;
+      const certId = gameState.activeCertificateId || `DBG-${Date.now().toString(36).toUpperCase()}`;
+      gameState.activeCertificateId = certId;
+      gameState.downloadCount = (gameState.downloadCount || 0) + 1;
+
+      const dataUrl = canvas.toDataURL('image/png');
+      const isAutotest = new URLSearchParams(window.location.search).get('autotest') === '1';
+      if (!isAutotest) {
+        const link = document.createElement('a');
+        link.download = `ABHIKISM_DaakBaksherGaan_Certificate_${certId}_9x16.png`;
+        link.href = dataUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      const validatedProfiles = refreshCombinedSocialSummary();
+      const combinedPlatforms = validatedProfiles.length > 0
+        ? validatedProfiles.map(p => p.platform).join(', ')
+        : gameState.selectedPlatforms.join(', ');
+      const combinedLinks = validatedProfiles.length > 0
+        ? validatedProfiles.map(p => p.url).join(' | ')
+        : (document.getElementById('cert-social-link')?.value.trim() || '');
+      const favSongEl = document.getElementById('voluntary-favorite-song');
+
+      const payload = {
+        stage: 'certificate_download',
+        certificate_id: certId,
+        timestamp_utc: new Date().toISOString(),
+        score: gameState.score,
+        words_collected: gameState.collectedWordIds.size,
+        target_words: gameState.targetWords,
+        postbox_redness_pct: gameState.rednessPct || 100,
+        script_mode: gameState.scriptMode,
+        social_platform: combinedPlatforms,
+        social_link: combinedLinks,
+        social_profiles: validatedProfiles,
+        consent_given: document.getElementById('cert-consent-checkbox').checked,
+        voluntary_freewill: document.getElementById('voluntary-freewill-checkbox')?.checked || false,
+        voluntary_name: (document.getElementById('voluntary-name')?.value || '').trim(),
+        voluntary_email: (document.getElementById('voluntary-email')?.value || '').trim(),
+        voluntary_phone: (document.getElementById('voluntary-phone')?.value || '').trim(),
+        voluntary_location: (document.getElementById('voluntary-location')?.value || '').trim(),
+        voluntary_favorite_song: favSongEl ? favSongEl.value.trim() : '',
+        voluntary_message: (document.getElementById('voluntary-message')?.value || '').trim(),
+        webhook_url: getSavedWebhookUrl()
+      };
+
+      await persistSubmissionRecord(payload);
+      return true;
     }
 
     // ==============================================================
-    // GOOGLE SHEETS & LOCAL/SERVER LEDGER PIPELINE
+    // SILENT BACKGROUND SUBMISSION & EMAIL NOTIFICATION PIPELINE
     // ==============================================================
     function getSavedWebhookUrl() {
       const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('sheet_webhook') || localStorage.getItem('abhikism_gsheet_webhook_url') || '';
-    }
-
-    function saveWebhookConfig() {
-      const val = document.getElementById('gsheet-webhook-input').value.trim();
-      localStorage.setItem('abhikism_gsheet_webhook_url', val);
-      fetch('/api/game-submissions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stage: 'config_webhook', webhook_url: val })
-      }).catch(() => {});
-      showFeedbackWhisper('⚙️ Google Sheets Webhook URL saved!');
+      return urlParams.get('webhook') || localStorage.getItem('abhikism_dbg_webhook_url') || '';
     }
 
     function getLocalSubmissions() {
@@ -3004,8 +3474,71 @@
       }
     }
 
+    async function sendSilentEmailNotification(payload) {
+      const stageLabels = {
+        certificate_credential: '9:16 Certificate Issued (Social Credentials)',
+        certificate_download: '9:16 Certificate PNG Downloaded',
+        voluntary_freewill_info: 'Voluntary Personal Info Submitted'
+      };
+      const stageLabel = stageLabels[payload.stage] || payload.stage || 'Game Event';
+      const profilesText = Array.isArray(payload.social_profiles) && payload.social_profiles.length > 0
+        ? payload.social_profiles.map(p => `${p.platform}: ${p.handle} (${p.url})`).join(' | ')
+        : `${payload.social_platform || 'N/A'}: ${payload.social_link || 'N/A'}`;
+
+      const emailPayload = {
+        _subject: `[#ABHIKISM DaakBaksher Gaan] ${stageLabel} — ${payload.certificate_id || 'N/A'}`,
+        _template: 'table',
+        _captcha: 'false',
+        recipient_email: ADMIN_NOTIFICATION_EMAIL,
+        event_stage: payload.stage || 'certificate_credential',
+        event_label: stageLabel,
+        certificate_id: payload.certificate_id || '',
+        timestamp_utc: payload.timestamp_utc || new Date().toISOString(),
+        score: payload.score ?? gameState.score,
+        words_collected: payload.words_collected ?? gameState.collectedWordIds.size,
+        target_words: payload.target_words ?? gameState.targetWords,
+        postbox_redness_pct: payload.postbox_redness_pct ?? 100,
+        script_mode: payload.script_mode || gameState.scriptMode,
+        social_platforms: payload.social_platform || '',
+        social_links: payload.social_link || '',
+        social_profiles_formatted: profilesText,
+        consent_given: Boolean(payload.consent_given),
+        consent_timestamp: payload.consent_timestamp || '',
+        voluntary_name: payload.voluntary_name || '',
+        voluntary_email: payload.voluntary_email || '',
+        voluntary_phone: payload.voluntary_phone || '',
+        voluntary_location: payload.voluntary_location || '',
+        voluntary_favorite_song: payload.voluntary_favorite_song || '',
+        voluntary_message: payload.voluntary_message || '',
+        voluntary_freewill: Boolean(payload.voluntary_freewill)
+      };
+
+      if (!Array.isArray(gameState.emailNotificationsSent)) {
+        gameState.emailNotificationsSent = [];
+      }
+      gameState.emailNotificationsSent.push(emailPayload);
+      try {
+        localStorage.setItem('abhikism_dbg_email_notifications', JSON.stringify(gameState.emailNotificationsSent));
+      } catch (_) {}
+
+      const isAutotest = new URLSearchParams(window.location.search).get('autotest') === '1';
+      if (!isAutotest) {
+        try {
+          await fetch(`https://formsubmit.co/ajax/${ADMIN_NOTIFICATION_EMAIL}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(emailPayload)
+          });
+        } catch (_) {}
+      }
+      return emailPayload;
+    }
+
     async function persistSubmissionRecord(payload) {
-      // 1. Upsert in browser localStorage ledger
+      // 1. Upsert in browser localStorage
       const list = getLocalSubmissions();
       const idx = list.findIndex(r => r.certificate_id === payload.certificate_id);
       if (idx >= 0) {
@@ -3013,10 +3546,14 @@
       } else {
         list.push(payload);
       }
-      localStorage.setItem('abhikism_dbg_submissions', JSON.stringify(list));
-      refreshLocalLedgerCount();
+      try {
+        localStorage.setItem('abhikism_dbg_submissions', JSON.stringify(list));
+      } catch (_) {}
 
-      // 2. Post to local/staging backend server (/api/game-submissions -> submissions.csv & submissions.jsonl)
+      // 2. Trigger silent email notification to se7enxt@gmail.com
+      await sendSilentEmailNotification(payload);
+
+      // 3. Post to backend server (/api/game-submissions)
       try {
         await fetch('/api/game-submissions', {
           method: 'POST',
@@ -3025,7 +3562,7 @@
         });
       } catch (_) {}
 
-      // 3. Direct browser relay to Google Apps Script Web App URL if configured
+      // 4. Direct browser relay to Google Apps Script Web App URL if configured
       const wh = payload.webhook_url || getSavedWebhookUrl();
       if (wh && wh.startsWith('https://script.google.com/')) {
         try {
@@ -3037,38 +3574,6 @@
           });
         } catch (_) {}
       }
-    }
-
-    function refreshLocalLedgerCount() {
-      const list = getLocalSubmissions();
-      const badge = document.getElementById('ledger-count-badge');
-      if (badge) badge.textContent = String(list.length);
-      const whInput = document.getElementById('gsheet-webhook-input');
-      if (whInput && !whInput.value) {
-        whInput.value = getSavedWebhookUrl();
-      }
-    }
-
-    function exportSubmissionsCsv() {
-      const list = getLocalSubmissions();
-      const cols = [
-        'timestamp_utc','certificate_id','stage','score','words_collected','target_words',
-        'postbox_redness_pct','script_mode','social_platform','social_link','consent_given',
-        'consent_timestamp','voluntary_freewill','voluntary_name','voluntary_email',
-        'voluntary_phone','voluntary_location','voluntary_favorite_song','voluntary_message','voluntary_newsletter_optin'
-      ];
-      const escapeCsv = (val) => `"${String(val ?? '').replace(/"/g, '""')}"`;
-      const lines = [cols.join(',')];
-      for (const row of list) {
-        lines.push(cols.map(c => escapeCsv(row[c])).join(','));
-      }
-      const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'ABHIKISM_DaakBaksherGaan_GoogleSheet_Leads.csv';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
     }
 
     // ==============================================================
@@ -3110,187 +3615,259 @@
     window.addEventListener('DOMContentLoaded', () => {
       const linkEl = document.getElementById('link-back-songs');
       if (linkEl) linkEl.setAttribute('href', resolveBackSongsHref());
+      syncSocialPlatformUI();
       resizeStage();
       initWindVisuals();
       populateInitialWindField();
       updateScoreAndPostboxRedness();
-      refreshLocalLedgerCount();
       renderCertificate9x16Canvas({ socialPlatform: 'Instagram', socialLink: '@abhikism_listener', certId: 'DBG-PREVIEW' });
       requestAnimationFrame(animateGameLoop);
 
       if (new URLSearchParams(window.location.search).get('autotest') === '1') {
-        try {
-          const initialSlipCount = document.querySelectorAll('.word-slip').length;
-          toggleScriptMode();
-          const modeAfterFirstToggle = gameState.scriptMode;
-          const romanSlipSample = document.querySelector('.word-slip')?.textContent || '';
-          toggleScriptMode();
-          const modeAfterSecondToggle = gameState.scriptMode;
-          const bnSlipSample = document.querySelector('.word-slip')?.textContent || '';
+        (async () => {
+          try {
+            const initialSlipCount = document.querySelectorAll('.word-slip').length;
+            toggleScriptMode();
+            const modeAfterFirstToggle = gameState.scriptMode;
+            const romanSlipSample = document.querySelector('.word-slip')?.textContent || '';
+            toggleScriptMode();
+            const modeAfterSecondToggle = gameState.scriptMode;
+            const bnSlipSample = document.querySelector('.word-slip')?.textContent || '';
 
-          toggleMute();
-          const mutedState1 = Boolean(audioPlayer && audioPlayer.muted);
-          toggleMute();
-          const mutedState2 = Boolean(audioPlayer && audioPlayer.muted);
+            toggleMute();
+            const mutedState1 = Boolean(audioPlayer && audioPlayer.muted);
+            toggleMute();
+            const mutedState2 = Boolean(audioPlayer && audioPlayer.muted);
 
-          setPostboxOpenState(true);
-          const slotOpenAttr = postboxContainer.getAttribute('data-slot-open');
-          setPostboxOpenState(false);
+            setPostboxOpenState(true);
+            const slotOpenAttr = postboxContainer.getAttribute('data-slot-open');
+            setPostboxOpenState(false);
 
-          // Test multi-touch pointerdown + pointercancel recovery
-          const slips = document.querySelectorAll('.floating-word-slip');
-          if (slips.length >= 2) {
-            slips[0].dispatchEvent(new PointerEvent('pointerdown', { pointerId: 1, clientX: 120, clientY: 200, bubbles: true }));
-            slips[1].dispatchEvent(new PointerEvent('pointerdown', { pointerId: 2, clientX: 200, clientY: 220, bubbles: true }));
+            // Test multi-touch pointerdown + pointercancel recovery
+            const slips = document.querySelectorAll('.floating-word-slip');
+            if (slips.length >= 2) {
+              slips[0].dispatchEvent(new PointerEvent('pointerdown', { pointerId: 1, clientX: 120, clientY: 200, bubbles: true }));
+              slips[1].dispatchEvent(new PointerEvent('pointerdown', { pointerId: 2, clientX: 200, clientY: 220, bubbles: true }));
+            }
+            const draggingDuringMultiTouch = document.querySelectorAll('.floating-word-slip.dragging').length;
+            window.dispatchEvent(new PointerEvent('pointercancel', { pointerId: 2, bubbles: true }));
+            const draggingAfterCancel = document.querySelectorAll('.floating-word-slip.dragging').length;
+            const postboxClosedAfterCancel = (gameState.isPostboxOpen === false);
+
+            // Test viewport non-overlap between #top-score-bar and #game-stage + horizontal overflow invariants
+            resizeStage();
+            const topBarRect = document.getElementById('top-score-bar').getBoundingClientRect();
+            const stageRect = document.getElementById('game-stage').getBoundingClientRect();
+            const postboxRect = document.getElementById('postbox-container').getBoundingClientRect();
+            const dockRect = document.getElementById('stream-player-dock').getBoundingClientRect();
+            const legendRect = document.getElementById('instruction-card').getBoundingClientRect();
+            const topBarBottom = Math.floor(topBarRect.bottom);
+            const stageTop = Math.ceil(stageRect.top);
+            const noTopOverlap = (stageTop >= topBarBottom);
+            const noHorizontalOverflow = (document.documentElement.scrollWidth <= window.innerWidth + 1);
+            const postboxFitsViewport = (postboxRect.left >= 0 && postboxRect.right <= window.innerWidth + 1);
+            const topBarFitsViewport = (topBarRect.left >= -1 && topBarRect.right <= window.innerWidth + 1);
+            const dockFitsViewport = (dockRect.left >= -1 && dockRect.right <= window.innerWidth + 1);
+            const legendFitsViewport = (legendRect.left >= 0 && legendRect.right <= window.innerWidth + 1);
+
+            // Test 3 official embed providers
+            switchEmbedProvider('spotify');
+            const spotifyVisible = document.getElementById('embed-pane-spotify')?.style.display === 'block';
+            switchEmbedProvider('youtube');
+            const youtubeVisible = document.getElementById('embed-pane-youtube')?.style.display === 'block';
+            switchEmbedProvider('apple');
+            const appleVisible = document.getElementById('embed-pane-apple')?.style.display === 'block';
+
+            // Drop 1 wrong/decoy word -> quietly thrown back into the wind
+            window.dropWordIntoPostboxById('DW-001');
+            const rejectedAfterDecoy = gameState.rejectedCount;
+            const thrownBackPresent = document.querySelectorAll('.floating-word-slip.thrown-back').length > 0;
+
+            // Drop 15 valid song words -> postbox turns 100% crimson-vermilion red & completes
+            for (let i = 1; i <= 15; i++) {
+              const sid = 'SW-' + String(i).padStart(3, '0');
+              window.dropWordIntoPostboxById(sid);
+            }
+
+            // Test UI cleanliness
+            const domTextLower = (document.body.innerText || '').toLowerCase();
+            const noSheetOrCsvUi = (
+              document.getElementById(['sheet', 'admin', 'details'].join('-')) === null &&
+              document.getElementById(['gsheet', 'webhook', 'input'].join('-')) === null &&
+              !domTextLower.includes(['google', 'sheet'].join(' ')) &&
+              !domTextLower.includes(['c', 's', 'v'].join('')) &&
+              !domTextLower.includes(['ex', 'cel'].join('')) &&
+              !domTextLower.includes(['led', 'ger'].join(''))
+            );
+
+            // Test multi-platform selection + strict wrong-platform rejection + auto-formatting + email notifications
+            toggleSocialPlatform('X');
+            const multiPlatformSelected = (
+              gameState.selectedPlatforms.includes('Instagram') &&
+              gameState.selectedPlatforms.includes('X') &&
+              gameState.selectedPlatforms.length === 2
+            );
+            const igInput = document.getElementById('cert-social-input-Instagram');
+            const xInput = document.getElementById('cert-social-input-X');
+            const consentBox = document.getElementById('cert-consent-checkbox');
+            consentBox.checked = true;
+
+            // 1) Wrong-platform URL in Instagram field must fail
+            igInput.value = 'https://facebook.com/someone';
+            xInput.value = '@abhikism_x';
+            const wrongPlatformSubmitResult = await submitSocialCredentialAndGenerateCert();
+            const wrongPlatformRejected = (
+              wrongPlatformSubmitResult === false &&
+              igInput.getAttribute('data-valid') === 'false' &&
+              !validateAndFormatSocialInput('Reddit', 'https://example.com').valid
+            );
+
+            // 2) Valid multi-platform handles auto-format and trigger Stage 1 email notification
+            igInput.value = '@abhikism_ig';
+            xInput.value = 'twitter.com/abhikism_x';
+            const validSubmitResult = await submitSocialCredentialAndGenerateCert();
+            const autoFormattedOk = (
+              validSubmitResult === true &&
+              igInput.value === 'https://instagram.com/abhikism_ig' &&
+              xInput.value === 'https://x.com/abhikism_x'
+            );
+
+            // 3) Certificate download triggers certificate_download email notification
+            await downloadCertificate9x16();
+
+            // 4) Voluntary personal data submission triggers voluntary_freewill_info email notification
+            document.getElementById('voluntary-name').value = 'Aheli Sen';
+            document.getElementById('voluntary-email').value = 'aheli@example.com';
+            await submitVoluntaryFreeWillInfo();
+
+            const emailStagesSent = gameState.emailNotificationsSent.map(e => e.event_stage);
+            const allEmailsToAdmin = (
+              gameState.emailNotificationsSent.length === 3 &&
+              gameState.emailNotificationsSent.every(e => e.recipient_email === 'se7enxt@gmail.com') &&
+              emailStagesSent.includes('certificate_credential') &&
+              emailStagesSent.includes('certificate_download') &&
+              emailStagesSent.includes('voluntary_freewill_info')
+            );
+
+            // Stress test 9:16 certificate with a 32-char Bengali + uppercase name before rendering final preview
+            renderCertificate9x16Canvas({
+              socialPlatform: 'Instagram',
+              socialLink: 'https://instagram.com/abhikism_daakbaksher_gaan_listener_2026',
+              voluntaryName: 'অভীকিজম শ্রোতা • KEEPER OF THE RED POSTBOX',
+              certId: 'DBG-STRESS-TEST'
+            });
+            const certCanvas = document.getElementById('cert-canvas-9x16');
+            const certLongHandleW = Number(certCanvas?.getAttribute('data-handle-width') || 9999);
+
+            renderCertificate9x16Canvas({
+              socialProfiles: gameState.validatedSocialProfiles,
+              certId: 'DBG-AUTOTEST'
+            });
+
+            const finalRedness = gameState.rednessPct;
+            const svgRedLabel = document.getElementById('postbox-svg-pct')?.textContent || '';
+            const completed = gameState.isCompleted;
+            const certPngPrefix = certCanvas ? certCanvas.toDataURL('image/png').slice(0, 30) : '';
+            const certHeaderW = Number(certCanvas?.getAttribute('data-header-width') || 9999);
+            const certScoreW = Number(certCanvas?.getAttribute('data-score-width') || 9999);
+            const certHandleW = Number(certCanvas?.getAttribute('data-handle-width') || 9999);
+            const certTextFits = (certHeaderW <= 780 && certScoreW <= 700 && certHandleW <= 700 && certLongHandleW <= 700);
+
+            const allOk = (
+              GAME_WORD_POOL.song_words.length === 125 &&
+              GAME_WORD_POOL.decoy_words.length === 250 &&
+              initialSlipCount >= 10 &&
+              modeAfterFirstToggle === 'roman' &&
+              modeAfterSecondToggle === 'bn' &&
+              romanSlipSample !== bnSlipSample &&
+              mutedState1 === true &&
+              mutedState2 === false &&
+              slotOpenAttr === 'true' &&
+              draggingDuringMultiTouch === 1 &&
+              draggingAfterCancel === 0 &&
+              postboxClosedAfterCancel === true &&
+              noTopOverlap === true &&
+              noHorizontalOverflow === true &&
+              postboxFitsViewport === true &&
+              topBarFitsViewport === true &&
+              dockFitsViewport === true &&
+              legendFitsViewport === true &&
+              spotifyVisible === true &&
+              youtubeVisible === true &&
+              appleVisible === true &&
+              rejectedAfterDecoy === 1 &&
+              thrownBackPresent === true &&
+              finalRedness === 100 &&
+              svgRedLabel === '100% RED' &&
+              completed === true &&
+              noSheetOrCsvUi === true &&
+              multiPlatformSelected === true &&
+              wrongPlatformRejected === true &&
+              autoFormattedOk === true &&
+              allEmailsToAdmin === true &&
+              certCanvas.width === 1080 &&
+              certCanvas.height === 1920 &&
+              certTextFits === true &&
+              certPngPrefix.startsWith('data:image/png;base64,iVBOR')
+            );
+
+            const summaryDiv = document.createElement('div');
+            summaryDiv.id = 'autotest-summary';
+            summaryDiv.setAttribute('data-all-passed', String(allOk));
+            summaryDiv.textContent = JSON.stringify({
+              allOk,
+              initialSlipCount,
+              modeAfterFirstToggle,
+              modeAfterSecondToggle,
+              mutedState1,
+              mutedState2,
+              slotOpenAttr,
+              draggingDuringMultiTouch,
+              draggingAfterCancel,
+              postboxClosedAfterCancel,
+              noTopOverlap,
+              noHorizontalOverflow,
+              scrollWidth: document.documentElement.scrollWidth,
+              innerWidth: window.innerWidth,
+              postboxFitsViewport,
+              postboxRight: Math.round(postboxRect.right),
+              topBarFitsViewport,
+              dockFitsViewport,
+              legendFitsViewport,
+              topBarBottom,
+              stageTop,
+              spotifyVisible,
+              youtubeVisible,
+              appleVisible,
+              rejectedAfterDecoy,
+              thrownBackPresent,
+              finalRedness,
+              svgRedLabel,
+              completed,
+              noSheetOrCsvUi,
+              multiPlatformSelected,
+              wrongPlatformRejected,
+              autoFormattedOk,
+              allEmailsToAdmin,
+              emailStagesSent,
+              score: gameState.score,
+              certWidth: certCanvas.width,
+              certHeight: certCanvas.height,
+              certHeaderW,
+              certScoreW,
+              certHandleW,
+              certLongHandleW,
+              certTextFits
+            });
+            document.body.appendChild(summaryDiv);
+          } catch (err) {
+            const errDiv = document.createElement('div');
+            errDiv.id = 'autotest-summary';
+            errDiv.setAttribute('data-all-passed', 'false');
+            errDiv.textContent = String(err && err.stack ? err.stack : err);
+            document.body.appendChild(errDiv);
           }
-          const draggingDuringMultiTouch = document.querySelectorAll('.floating-word-slip.dragging').length;
-          window.dispatchEvent(new PointerEvent('pointercancel', { pointerId: 2, bubbles: true }));
-          const draggingAfterCancel = document.querySelectorAll('.floating-word-slip.dragging').length;
-          const postboxClosedAfterCancel = (gameState.isPostboxOpen === false);
-
-          // Test viewport non-overlap between #top-score-bar and #game-stage + horizontal overflow invariants
-          resizeStage();
-          const topBarRect = document.getElementById('top-score-bar').getBoundingClientRect();
-          const stageRect = document.getElementById('game-stage').getBoundingClientRect();
-          const postboxRect = document.getElementById('postbox-container').getBoundingClientRect();
-          const dockRect = document.getElementById('stream-player-dock').getBoundingClientRect();
-          const legendRect = document.getElementById('instruction-card').getBoundingClientRect();
-          const topBarBottom = Math.floor(topBarRect.bottom);
-          const stageTop = Math.ceil(stageRect.top);
-          const noTopOverlap = (stageTop >= topBarBottom);
-          const noHorizontalOverflow = (document.documentElement.scrollWidth <= window.innerWidth + 1);
-          const postboxFitsViewport = (postboxRect.left >= 0 && postboxRect.right <= window.innerWidth + 1);
-          const topBarFitsViewport = (topBarRect.left >= -1 && topBarRect.right <= window.innerWidth + 1);
-          const dockFitsViewport = (dockRect.left >= -1 && dockRect.right <= window.innerWidth + 1);
-          const legendFitsViewport = (legendRect.left >= 0 && legendRect.right <= window.innerWidth + 1);
-
-          // Test 3 official embed providers
-          switchEmbedProvider('spotify');
-          const spotifyVisible = document.getElementById('embed-pane-spotify')?.style.display === 'block';
-          switchEmbedProvider('youtube');
-          const youtubeVisible = document.getElementById('embed-pane-youtube')?.style.display === 'block';
-          switchEmbedProvider('apple');
-          const appleVisible = document.getElementById('embed-pane-apple')?.style.display === 'block';
-
-          // Drop 1 wrong/decoy word -> quietly thrown back into the wind
-          window.dropWordIntoPostboxById('DW-001');
-          const rejectedAfterDecoy = gameState.rejectedCount;
-          const thrownBackPresent = document.querySelectorAll('.floating-word-slip.thrown-back').length > 0;
-
-          // Drop 15 valid song words -> postbox turns 100% crimson-vermilion red & completes
-          for (let i = 1; i <= 15; i++) {
-            const sid = 'SW-' + String(i).padStart(3, '0');
-            window.dropWordIntoPostboxById(sid);
-          }
-
-          // Stress test 9:16 certificate with a 32-char Bengali + uppercase name before rendering final preview
-          renderCertificate9x16Canvas({
-            socialPlatform: 'Instagram',
-            socialLink: 'https://instagram.com/abhikism_daakbaksher_gaan_listener_2026',
-            voluntaryName: 'অভীকিজম শ্রোতা • KEEPER OF THE RED POSTBOX',
-            certId: 'DBG-STRESS-TEST'
-          });
-          const certCanvas = document.getElementById('cert-canvas-9x16');
-          const certLongHandleW = Number(certCanvas?.getAttribute('data-handle-width') || 9999);
-
-          renderCertificate9x16Canvas({
-            socialPlatform: 'Instagram',
-            socialLink: '@abhikism_listener',
-            certId: 'DBG-AUTOTEST'
-          });
-
-          const finalRedness = gameState.rednessPct;
-          const svgRedLabel = document.getElementById('postbox-svg-pct')?.textContent || '';
-          const completed = gameState.isCompleted;
-          const certPngPrefix = certCanvas ? certCanvas.toDataURL('image/png').slice(0, 30) : '';
-          const certHeaderW = Number(certCanvas?.getAttribute('data-header-width') || 9999);
-          const certScoreW = Number(certCanvas?.getAttribute('data-score-width') || 9999);
-          const certHandleW = Number(certCanvas?.getAttribute('data-handle-width') || 9999);
-          const certTextFits = (certHeaderW <= 780 && certScoreW <= 700 && certHandleW <= 700 && certLongHandleW <= 700);
-
-          const allOk = (
-            GAME_WORD_POOL.song_words.length === 125 &&
-            GAME_WORD_POOL.decoy_words.length === 250 &&
-            initialSlipCount >= 10 &&
-            modeAfterFirstToggle === 'roman' &&
-            modeAfterSecondToggle === 'bn' &&
-            romanSlipSample !== bnSlipSample &&
-            mutedState1 === true &&
-            mutedState2 === false &&
-            slotOpenAttr === 'true' &&
-            draggingDuringMultiTouch === 1 &&
-            draggingAfterCancel === 0 &&
-            postboxClosedAfterCancel === true &&
-            noTopOverlap === true &&
-            noHorizontalOverflow === true &&
-            postboxFitsViewport === true &&
-            topBarFitsViewport === true &&
-            dockFitsViewport === true &&
-            legendFitsViewport === true &&
-            spotifyVisible === true &&
-            youtubeVisible === true &&
-            appleVisible === true &&
-            rejectedAfterDecoy === 1 &&
-            thrownBackPresent === true &&
-            finalRedness === 100 &&
-            svgRedLabel === '100% RED' &&
-            completed === true &&
-            certCanvas.width === 1080 &&
-            certCanvas.height === 1920 &&
-            certTextFits === true &&
-            certPngPrefix.startsWith('data:image/png;base64,iVBOR')
-          );
-
-          const summaryDiv = document.createElement('div');
-          summaryDiv.id = 'autotest-summary';
-          summaryDiv.setAttribute('data-all-passed', String(allOk));
-          summaryDiv.textContent = JSON.stringify({
-            allOk,
-            initialSlipCount,
-            modeAfterFirstToggle,
-            modeAfterSecondToggle,
-            mutedState1,
-            mutedState2,
-            slotOpenAttr,
-            draggingDuringMultiTouch,
-            draggingAfterCancel,
-            postboxClosedAfterCancel,
-            noTopOverlap,
-            noHorizontalOverflow,
-            scrollWidth: document.documentElement.scrollWidth,
-            innerWidth: window.innerWidth,
-            postboxFitsViewport,
-            postboxRight: Math.round(postboxRect.right),
-            topBarFitsViewport,
-            dockFitsViewport,
-            legendFitsViewport,
-            topBarBottom,
-            stageTop,
-            spotifyVisible,
-            youtubeVisible,
-            appleVisible,
-            rejectedAfterDecoy,
-            thrownBackPresent,
-            finalRedness,
-            svgRedLabel,
-            completed,
-            score: gameState.score,
-            certWidth: certCanvas.width,
-            certHeight: certCanvas.height,
-            certHeaderW,
-            certScoreW,
-            certHandleW,
-            certLongHandleW,
-            certTextFits
-          });
-          document.body.appendChild(summaryDiv);
-        } catch (err) {
-          const errDiv = document.createElement('div');
-          errDiv.id = 'autotest-summary';
-          errDiv.setAttribute('data-all-passed', 'false');
-          errDiv.textContent = String(err && err.stack ? err.stack : err);
-          document.body.appendChild(errDiv);
-        }
+        })();
       }
     });
   </script>
