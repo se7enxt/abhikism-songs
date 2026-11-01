@@ -3968,6 +3968,11 @@
     }
     window.getActiveSessionToken = getActiveSessionToken;
 
+    function isUserAuthenticated() {
+      return Boolean(gameState.isAuthenticated && gameState.loggedInUser);
+    }
+    window.isUserAuthenticated = isUserAuthenticated;
+
     function validateAuthCredentials(rawUsername, rawPassword) {
       const uname = String(rawUsername || '').trim().replace(/^@+/, '');
       const pwd = String(rawPassword || '');
@@ -4027,8 +4032,8 @@
       }
       const sessionToken = `dbg_sess_${sha256HexSync(`${check.userKey}:${Date.now()}:${Math.random()}`).slice(0, 32)}`;
       const srv = await syncServerAuth('register', check.username, check.password, sessionToken);
-      if (srv.reachable && !srv.ok && srv.data && srv.data.error) {
-        return { ok: false, error: srv.data.error };
+      if (srv.reachable && !srv.ok && srv.data && (srv.data.error || srv.data.message)) {
+        return { ok: false, error: srv.data.error || srv.data.message };
       }
       const salt = sha256HexSync(`salt:${check.userKey}:${Date.now()}`).slice(0, 24);
       const passwordHash = hashPasswordWithSalt(check.password, salt);
@@ -4065,7 +4070,7 @@
 
       // Check backend server if user is registered server-side
       const srv = await syncServerAuth('login', check.username, check.password, sessionToken);
-      if (srv.reachable && srv.ok && srv.data && srv.data.ok) {
+      if (srv.reachable && srv.ok && srv.data && (srv.data.ok || srv.data.status === 'SUCCESS')) {
         const salt = sha256HexSync(`salt:${check.userKey}:${Date.now()}`).slice(0, 24);
         users[check.userKey] = {
           username: srv.data.username || check.username,
@@ -4083,11 +4088,27 @@
     }
     window.loginUserAccount = loginUserAccount;
 
-    async function submitUserAuth(contextPrefix = 'cert', mode = 'auto') {
-      const isLb = (contextPrefix === 'lb');
+    async function submitUserAuth(arg1 = 'auto', arg2 = 'cert') {
+      const validModes = ['auto', 'register', 'login'];
+      const a1 = String(arg1 || '').trim().toLowerCase();
+      const a2 = String(arg2 || '').trim().toLowerCase();
+      let mode = 'auto';
+      let contextPrefix = 'cert';
+      if (validModes.includes(a1)) {
+        mode = a1;
+        contextPrefix = a2 || 'cert';
+      } else if (validModes.includes(a2)) {
+        mode = a2;
+        contextPrefix = a1 || 'cert';
+      } else if (a1 === 'lb' || a1 === 'leaderboard' || a1 === 'cert') {
+        contextPrefix = a1;
+      }
+
+      const isLb = (contextPrefix === 'lb' || contextPrefix === 'leaderboard');
       const userEl = document.getElementById(isLb ? 'lb-auth-username' : 'cert-auth-username');
       const passEl = document.getElementById(isLb ? 'lb-auth-password' : 'cert-auth-password');
-      const msgEl = document.getElementById(isLb ? 'lb-auth-status-msg' : 'cert-auth-status-msg');
+      const msgEl = document.getElementById(isLb ? 'lb-auth-msg' : 'cert-auth-msg')
+        || document.getElementById(isLb ? 'lb-auth-status-msg' : 'cert-auth-status-msg');
       const rawUser = userEl ? userEl.value : '';
       const rawPass = passEl ? passEl.value : '';
 
@@ -4107,8 +4128,8 @@
           } else {
             const sessionToken = `dbg_sess_${sha256HexSync(`${check.userKey}:${Date.now()}:${Math.random()}`).slice(0, 32)}`;
             const srv = await syncServerAuth('auto', check.username, check.password, sessionToken);
-            if (srv.reachable && !srv.ok && srv.data && srv.data.error) {
-              res = { ok: false, error: srv.data.error };
+            if (srv.reachable && !srv.ok && srv.data && (srv.data.error || srv.data.message)) {
+              res = { ok: false, error: srv.data.error || srv.data.message };
             } else {
               const salt = sha256HexSync(`salt:${check.userKey}:${Date.now()}`).slice(0, 24);
               users[check.userKey] = {
@@ -4132,6 +4153,7 @@
       }
 
       if (msgEl) {
+        msgEl.style.display = 'block';
         if (res.ok) {
           msgEl.style.color = '#005A51';
           msgEl.textContent = `✓ Signed in as @${res.username} (${res.action === 'registered' ? 'Account Created' : 'Authenticated'}). Leaderboard & Social Credentials unlocked!`;
@@ -4165,10 +4187,13 @@
           });
         } catch (_) {}
       }
-      const certMsg = document.getElementById('cert-auth-status-msg');
-      if (certMsg) certMsg.textContent = '';
-      const lbMsg = document.getElementById('lb-auth-status-msg');
-      if (lbMsg) lbMsg.textContent = '';
+      for (const id of ['cert-auth-msg', 'lb-auth-msg', 'cert-auth-status-msg', 'lb-auth-status-msg']) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = '';
+          el.style.display = 'none';
+        }
+      }
       syncAuthUIState();
       showFeedbackWhisper('🔒 Logged out. Leaderboard & Social/Personal Inputs are now locked.');
       return true;
@@ -4176,7 +4201,7 @@
     window.logoutUserAccount = logoutUserAccount;
 
     function syncAuthUIState() {
-      const authed = Boolean(gameState.isAuthenticated && gameState.loggedInUser);
+      const authed = isUserAuthenticated();
       const uname = gameState.loggedInUser || '';
 
       const topAuthBtn = document.getElementById('btn-user-auth');
@@ -4186,25 +4211,38 @@
         topAuthBtn.textContent = authed ? `🔓 @${uname}` : '🔒 Login / Register';
       }
 
-      const certBadge = document.getElementById('cert-auth-status-badge');
+      const certBadge = document.getElementById('cert-auth-badge') || document.getElementById('cert-auth-status-badge');
       if (certBadge) {
-        certBadge.textContent = authed ? `🔓 UNLOCKED (@${uname})` : '🔒 LOCKED';
-        certBadge.style.background = authed ? '#005A51' : '#D91E18';
+        certBadge.textContent = authed ? `🔓 UNLOCKED (@${uname})` : '🔒 Logged Out';
+        certBadge.style.background = authed ? '#005A51' : '#1A1817';
+        certBadge.style.color = '#FFFDF9';
       }
 
-      const certFields = document.getElementById('cert-auth-form-fields');
-      if (certFields) certFields.style.display = authed ? 'none' : 'flex';
+      const certLoggedOutView = document.getElementById('cert-auth-logged-out-view') || document.getElementById('cert-auth-form-fields');
+      if (certLoggedOutView) certLoggedOutView.style.display = authed ? 'none' : 'block';
 
-      const certLoggedBar = document.getElementById('cert-auth-logged-in-bar');
-      if (certLoggedBar) certLoggedBar.style.display = authed ? 'flex' : 'none';
+      const certLoggedInView = document.getElementById('cert-auth-logged-in-view') || document.getElementById('cert-auth-logged-in-bar');
+      if (certLoggedInView) certLoggedInView.style.display = authed ? 'flex' : 'none';
 
       const certActiveUser = document.getElementById('cert-auth-active-user');
       if (certActiveUser) certActiveUser.textContent = authed ? `@${uname}` : '';
+
+      const lbActiveUser = document.getElementById('lb-auth-active-user');
+      if (lbActiveUser) lbActiveUser.textContent = authed ? `@${uname}` : '';
 
       const step1Box = document.getElementById('cert-step1-box');
       if (step1Box) {
         step1Box.classList.toggle('auth-locked-section', !authed);
         step1Box.setAttribute('data-auth-locked', String(!authed));
+        step1Box.setAttribute('aria-disabled', String(!authed));
+        step1Box.querySelectorAll('input, select, textarea, button').forEach(ctrl => {
+          if (String(ctrl.getAttribute('onclick') || '').includes('closeCompletionModal')) return;
+          if (ctrl.id === 'btn-download-cert') {
+            ctrl.disabled = !authed || !gameState.certificateIssued;
+          } else {
+            ctrl.disabled = !authed;
+          }
+        });
       }
 
       const step1Notice = document.getElementById('cert-step1-lock-notice');
@@ -4212,7 +4250,12 @@
 
       const step2Box = document.getElementById('cert-step2-voluntary-box');
       if (step2Box) {
+        step2Box.classList.toggle('auth-locked-section', !authed);
         step2Box.setAttribute('data-auth-locked', String(!authed));
+        step2Box.setAttribute('aria-disabled', String(!authed));
+        step2Box.querySelectorAll('input, select, textarea, button').forEach(ctrl => {
+          ctrl.disabled = !authed;
+        });
         if (!authed) {
           step2Box.style.display = 'none';
         } else if (gameState.certificateIssued) {
@@ -4222,6 +4265,12 @@
 
       const compLbNotice = document.getElementById('completion-lb-auth-notice');
       if (compLbNotice) compLbNotice.style.display = authed ? 'none' : 'block';
+
+      const previewEl = document.getElementById('completion-leaderboard-preview');
+      if (previewEl) {
+        previewEl.style.display = authed ? 'block' : 'none';
+        if (!authed) previewEl.innerHTML = '';
+      }
 
       const lbGate = document.getElementById('leaderboard-auth-gate');
       if (lbGate) lbGate.style.display = authed ? 'none' : 'block';
@@ -4245,9 +4294,9 @@
     }
     window.openAuthGateModal = openAuthGateModal;
 
-    function restoreSavedAuthSession() {
+    function restoreSavedAuthSession(allowInAutotest = false) {
       const isAutotest = new URLSearchParams(window.location.search).get('autotest') === '1';
-      if (isAutotest) {
+      if (isAutotest && !allowInAutotest) {
         // Start autotest in clean unauthenticated state so auth-gate tests can verify locked -> unlocked transitions
         gameState.isAuthenticated = false;
         gameState.loggedInUser = null;
@@ -4255,6 +4304,7 @@
         syncAuthUIState();
         return;
       }
+      let restored = false;
       try {
         const raw = localStorage.getItem('abhikism_dbg_active_session');
         if (raw) {
@@ -4263,11 +4313,24 @@
             gameState.isAuthenticated = true;
             gameState.loggedInUser = parsed.username;
             gameState.sessionToken = parsed.session_token;
+            restored = true;
           }
         }
       } catch (_) {}
+      if (!restored) {
+        gameState.isAuthenticated = false;
+        gameState.loggedInUser = null;
+        gameState.sessionToken = '';
+      }
       syncAuthUIState();
     }
+    window.restoreSavedAuthSession = restoreSavedAuthSession;
+
+    window.addEventListener('storage', (ev) => {
+      if (!ev || !ev.key || ev.key === 'abhikism_dbg_active_session' || ev.key === 'abhikism_dbg_users') {
+        restoreSavedAuthSession(true);
+      }
+    });
 
     function validateAndFormatSocialInput(platform, rawInput) {
       const platRaw = String(platform || '').trim();
@@ -4762,7 +4825,7 @@
         ? opts.socialProfiles
         : null;
       const rawSocial = (opts.socialLink || '@listener').trim();
-      const rawName = (opts.voluntaryName || '').trim();
+      const rawName = (opts.voluntaryName || '').trim() || (gameState.loggedInUser ? `@${gameState.loggedInUser}` : '');
       const handleLines = [];
 
       if (profiles && profiles.length > 0) {
@@ -5397,13 +5460,16 @@
         const lvlCfg = GAME_LEVELS[Math.min(4, Math.max(0, lvl - 1))];
         const profiles = Array.isArray(loc.social_profiles) ? loc.social_profiles : [];
         const firstHandle = profiles.length > 0 ? profiles[0].handle : (loc.social_link || '@listener');
-        const displayName = (loc.voluntary_name || '').trim() || firstHandle;
+        const uname = String(loc.username || '').trim();
+        const displayName = (loc.voluntary_name || '').trim() || (uname ? `@${uname}` : '') || firstHandle;
         const timeMs = Number(loc.completion_time_ms) || 12000;
         const timeFmt = loc.completion_time_formatted || formatElapsedTime(timeMs);
         byCertId.set(loc.certificate_id, {
           certificate_id: loc.certificate_id,
+          username: uname,
           player_name: displayName,
           social_platform: loc.social_platform || 'Instagram',
+          social_link: loc.social_link || (profiles[0] ? profiles[0].url : '') || '',
           social_handle: firstHandle,
           game_version: loc.game_version || GAME_VERSION,
           level: lvl,
@@ -5552,7 +5618,10 @@
 
       if (!gameState.isAuthenticated || !gameState.loggedInUser) {
         if (listEl) listEl.innerHTML = '';
-        if (previewEl) previewEl.innerHTML = '';
+        if (previewEl) {
+          previewEl.innerHTML = '';
+          previewEl.style.display = 'none';
+        }
         if (lbGate) lbGate.style.display = 'block';
         if (lbProtected) lbProtected.style.display = 'none';
         if (compLbNotice) compLbNotice.style.display = 'block';
@@ -5562,6 +5631,7 @@
       if (lbGate) lbGate.style.display = 'none';
       if (lbProtected) lbProtected.style.display = 'block';
       if (compLbNotice) compLbNotice.style.display = 'none';
+      if (previewEl) previewEl.style.display = 'block';
 
       const allEntries = getMergedLeaderboardEntries();
       const lvlFilter = gameState.leaderboardFilterLevel || 'all';
@@ -5938,8 +6008,14 @@
             openLeaderboardModal();
             const unauthLbRowsCount = document.querySelectorAll('#leaderboard-list .leaderboard-row').length;
             const unauthPreviewRowsCount = document.querySelectorAll('#completion-leaderboard-preview .leaderboard-row').length;
+            const unauthPreviewHidden = (document.getElementById('completion-leaderboard-preview')?.style.display === 'none');
             const unauthGateVisible = (document.getElementById('leaderboard-auth-gate')?.style.display !== 'none');
             const unauthProtectedHidden = (document.getElementById('leaderboard-protected-content')?.style.display === 'none');
+            const unauthControlsDisabled = (
+              document.getElementById('cert-social-input-Instagram')?.disabled === true &&
+              document.getElementById('cert-consent-checkbox')?.disabled === true &&
+              document.getElementById('btn-generate-cert')?.disabled === true
+            );
             closeLeaderboardModal();
 
             const igInput = document.getElementById('cert-social-input-Instagram');
@@ -5952,44 +6028,74 @@
             const unauthVoluntarySubmitResult = await submitVoluntaryFreeWillInfo();
             const unauthStateStrictlyBlocked = (
               gameState.isAuthenticated === false &&
+              window.isUserAuthenticated() === false &&
               unauthLbRowsCount === 0 &&
               unauthPreviewRowsCount === 0 &&
+              unauthPreviewHidden === true &&
               unauthGateVisible === true &&
               unauthProtectedHidden === true &&
+              unauthControlsDisabled === true &&
               unauthSocialSubmitResult === false &&
               unauthVoluntarySubmitResult === false &&
               document.getElementById('cert-step1-box')?.getAttribute('data-auth-locked') === 'true'
             );
 
-            // Register a new user with username + created password
+            // Register a new user via Leaderboard modal button signature submitUserAuth('register', 'leaderboard')
             const testUser = `keeper_${Date.now().toString(36).slice(-5)}`;
             const testPass = 'Postbox#2026!';
-            document.getElementById('cert-auth-username').value = testUser;
-            document.getElementById('cert-auth-password').value = testPass;
-            const regRes = await submitUserAuth('cert', 'register');
+            document.getElementById('lb-auth-username').value = testUser;
+            document.getElementById('lb-auth-password').value = testPass;
+            const regRes = await submitUserAuth('register', 'leaderboard');
             const registeredUnlockedOk = (
               regRes.ok === true &&
               gameState.isAuthenticated === true &&
+              window.isUserAuthenticated() === true &&
               gameState.loggedInUser === testUser &&
-              document.getElementById('cert-step1-box')?.getAttribute('data-auth-locked') === 'false'
+              document.getElementById('cert-step1-box')?.getAttribute('data-auth-locked') === 'false' &&
+              document.getElementById('cert-social-input-Instagram')?.disabled === false &&
+              document.getElementById('cert-auth-logged-out-view')?.style.display === 'none' &&
+              document.getElementById('cert-auth-logged-in-view')?.style.display === 'flex' &&
+              document.getElementById('cert-auth-badge')?.textContent.includes(testUser) &&
+              document.getElementById('lb-auth-active-user')?.textContent === `@${testUser}` &&
+              document.getElementById('lb-auth-msg')?.style.display === 'block' &&
+              document.getElementById('completion-leaderboard-preview')?.style.display === 'block'
             );
 
             // Test logout re-locks leaderboard & social fields, and wrong password fails login
             await logoutUserAccount();
             const relockedAfterLogout = (
               gameState.isAuthenticated === false &&
+              window.isUserAuthenticated() === false &&
               document.querySelectorAll('#leaderboard-list .leaderboard-row').length === 0 &&
+              document.getElementById('completion-leaderboard-preview')?.style.display === 'none' &&
+              document.getElementById('cert-auth-logged-out-view')?.style.display === 'block' &&
+              document.getElementById('cert-auth-logged-in-view')?.style.display === 'none' &&
+              document.getElementById('cert-social-input-Instagram')?.disabled === true &&
               document.getElementById('cert-step1-box')?.getAttribute('data-auth-locked') === 'true'
             );
             const wrongPassRes = await loginUserAccount(testUser, 'WrongPassword123');
             const wrongPassRejected = (wrongPassRes.ok === false && gameState.isAuthenticated === false);
 
-            // Log back in with the created password
-            const loginRes = await loginUserAccount(testUser, testPass);
+            // Log back in via Certificate modal button signature submitUserAuth('login', 'cert')
+            document.getElementById('cert-auth-username').value = testUser;
+            document.getElementById('cert-auth-password').value = testPass;
+            const loginRes = await submitUserAuth('login', 'cert');
+
+            // Verify multi-tab storage event synchronization
+            localStorage.removeItem('abhikism_dbg_active_session');
+            window.dispatchEvent(new StorageEvent('storage', { key: 'abhikism_dbg_active_session' }));
+            const storageLogoutSynced = (gameState.isAuthenticated === false);
+            setAuthenticatedSession(testUser, loginRes.session_token);
+            window.dispatchEvent(new StorageEvent('storage', { key: 'abhikism_dbg_active_session' }));
+            const storageLoginSynced = (gameState.isAuthenticated === true && gameState.loggedInUser === testUser);
+
             const reloginOk = (
               loginRes.ok === true &&
+              storageLogoutSynced === true &&
+              storageLoginSynced === true &&
               gameState.isAuthenticated === true &&
-              gameState.loggedInUser === testUser
+              gameState.loggedInUser === testUser &&
+              document.getElementById('cert-auth-msg')?.style.display === 'block'
             );
             const authGateVerified = (
               unauthStateStrictlyBlocked &&
