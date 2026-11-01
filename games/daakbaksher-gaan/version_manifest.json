@@ -1,18 +1,32 @@
 {
   "game_id": "WKS-003",
   "title": "DaakBaksher Gaan — 2D Sumi-e Wind Game",
-  "version": "v4.0.0",
+  "version": "v4.1.0",
   "semver": {
     "game": "daakbaksher-gaan",
     "song_id": "WKS-003",
-    "current_version": "v4.0.0",
+    "current_version": "v4.1.0",
     "semver": {
       "X_feature": 4,
-      "Y_bugfix": 0,
+      "Y_bugfix": 1,
       "Z_additional": 0
     },
     "schema_rule": "vX.Y.Z — X: Feature Addition, Y: Bug Fix, Z: Additional",
     "changelog": [
+      {
+        "version": "v4.1.0",
+        "date": "2026-11-01",
+        "summary": "Fixed 0% completeness certificate bug by removing the 0 || targetWords fallback and strictly gating the 9:16 certificate preview, issue button, download button, and HUD certificate button behind 100% postbox completeness.",
+        "X_feature_additions": [],
+        "Y_bug_fixes": [
+          "Fixed 0% completeness bug where 0 collected words fell back to targetWords (0 || 5 -> 5) and rendered a fake 100% Complete certificate preview",
+          "Added syncCertificateCompletionGate() to hide the HUD 9:16 Certificate button (#btn-open-certificate), certificate canvas frame (.cert-canvas-frame), issue button (#btn-generate-cert), and download button (#btn-download-cert) whenever postbox completeness is below 100%",
+          "Added locked certificate state card (#cert-incomplete-lock-card) in the modal when opened via Account Login at <100% completeness, and added hard guard in downloadCertificate9x16() and backend API against <100% completeness"
+        ],
+        "Z_additional": [
+          "Added v4.1.0 Leaderboard version filter pill and headless Chrome assertions for 0% vs 100% completeness certificate gating"
+        ]
+      },
       {
         "version": "v4.0.0",
         "date": "2026-11-01",
@@ -125,6 +139,20 @@
     }
   ],
   "changelog": [
+    {
+      "version": "v4.1.0",
+      "date": "2026-11-01",
+      "summary": "Fixed 0% completeness certificate bug by removing the 0 || targetWords fallback and strictly gating the 9:16 certificate preview, issue button, download button, and HUD certificate button behind 100% postbox completeness.",
+      "X_feature_additions": [],
+      "Y_bug_fixes": [
+        "Fixed 0% completeness bug where 0 collected words fell back to targetWords (0 || 5 -> 5) and rendered a fake 100% Complete certificate preview",
+        "Added syncCertificateCompletionGate() to hide the HUD 9:16 Certificate button (#btn-open-certificate), certificate canvas frame (.cert-canvas-frame), issue button (#btn-generate-cert), and download button (#btn-download-cert) whenever postbox completeness is below 100%",
+        "Added locked certificate state card (#cert-incomplete-lock-card) in the modal when opened via Account Login at <100% completeness, and added hard guard in downloadCertificate9x16() and backend API against <100% completeness"
+      ],
+      "Z_additional": [
+        "Added v4.1.0 Leaderboard version filter pill and headless Chrome assertions for 0% vs 100% completeness certificate gating"
+      ]
+    },
     {
       "version": "v4.0.0",
       "date": "2026-11-01",
