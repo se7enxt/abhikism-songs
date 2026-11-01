@@ -930,18 +930,34 @@
       gap: 6px;
     }
 
+    .auth-input-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 8px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
     .field-group {
       display: flex;
       flex-direction: column;
       gap: 4px;
       margin-bottom: 10px;
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
     .field-label {
       font-size: 11.5px;
       font-weight: 700;
       color: var(--sumi-charcoal);
     }
-    .field-input, .field-textarea {
+    .field-input, .field-textarea,
+    #lb-auth-username, #lb-auth-password,
+    #cert-auth-username, #cert-auth-password {
       padding: 8px 11px;
       border: 1.5px solid var(--sumi-ink);
       border-radius: 6px;
@@ -951,6 +967,10 @@
       color: var(--sumi-ink);
       user-select: text;
       -webkit-user-select: text;
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     .social-platform-pills {
@@ -1229,6 +1249,22 @@
       opacity: 0.7;
     }
 
+    #cert-auth-logged-in-view,
+    #lb-auth-logged-in-bar,
+    .auth-logged-in-text {
+      line-height: 1.75;
+    }
+    #cert-auth-active-user,
+    #lb-auth-active-user {
+      display: inline-block;
+      line-height: 1.25;
+      padding: 2px 6px;
+      margin: 1px 2px;
+      border-radius: 4px;
+      background: #FFFFFF;
+      border: 1px solid var(--brand-teal);
+    }
+
     @media (max-width: 768px) {
       .cert-Modal-grid {
         grid-template-columns: 1fr;
@@ -1258,6 +1294,11 @@
     }
 
     @media (max-width: 640px) {
+      .auth-input-grid,
+      #leaderboard-auth-gate .auth-input-grid,
+      #cert-auth-gate .auth-input-grid {
+        grid-template-columns: 1fr !important;
+      }
       .top-score-bar {
         padding: 4px 8px;
         gap: 4px;
@@ -2045,7 +2086,7 @@
               <p style="font-size:11.5px; color:var(--sumi-charcoal); margin-bottom:10px;">
                 Register with a username and created password (or log in with your existing account) to unlock social media profile entry, claim your personalized 9:16 Certificate, share optional personal info, and view the official Leaderboard.
               </p>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              <div class="auth-input-grid">
                 <div class="field-group" style="margin-bottom:6px;">
                   <label class="field-label" for="cert-auth-username">Username (3–32 chars: letters, numbers, <code>_ . -</code>)</label>
                   <input type="text" id="cert-auth-username" class="field-input" placeholder="e.g. abhik_listener" autocomplete="username">
@@ -2068,9 +2109,9 @@
                 </button>
               </div>
             </div>
-            <div id="cert-auth-logged-in-view" style="display:none; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-              <div style="font-size:12.5px; color:var(--brand-teal); font-weight:700;">
-                ✓ Signed in as <code id="cert-auth-active-user" style="background:#FFF; padding:2px 6px; border-radius:4px; border:1px solid var(--brand-teal);">@user</code> — Social Media Links, Voluntary Info &amp; Leaderboard Unlocked!
+            <div id="cert-auth-logged-in-view" style="display:none; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; line-height:1.75;">
+              <div class="auth-logged-in-text" style="font-size:12.5px; color:var(--brand-teal); font-weight:700; line-height:1.75;">
+                ✓ Signed in as <code id="cert-auth-active-user" style="display:inline-block; line-height:1.25; background:#FFF; padding:2px 6px; margin:1px 2px; border-radius:4px; border:1px solid var(--brand-teal);">@user</code> — Social Media Links, Voluntary Info &amp; Leaderboard Unlocked!
               </div>
               <button type="button" class="ink-btn" id="btn-cert-logout" onclick="logoutUserAccount()" style="padding:4px 10px; font-size:11px;">
                 🚪 Logout
@@ -2184,7 +2225,7 @@
               <input type="text" id="voluntary-name" class="field-input" placeholder="Your full name or pen name">
             </div>
 
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div class="auth-input-grid">
               <div class="field-group">
                 <label class="field-label" for="voluntary-email">Email Address (Optional)</label>
                 <input type="email" id="voluntary-email" class="field-input" placeholder="you@example.com">
@@ -2195,7 +2236,7 @@
               </div>
             </div>
 
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div class="auth-input-grid">
               <div class="field-group">
                 <label class="field-label" for="voluntary-location">City / Country (Optional)</label>
                 <input type="text" id="voluntary-location" class="field-input" placeholder="Kolkata, India">
@@ -2302,7 +2343,7 @@
         <p style="font-size:12px; color:var(--sumi-charcoal); margin-bottom:10px;">
           The Official DaakBaksher Gaan Leaderboard is exclusively visible to logged-in users. Enter your username and created password below (or create a free account in one click) to unlock the leaderboard rankings and version champions.
         </p>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="auth-input-grid" style="gap:10px;">
           <div class="field-group" style="margin-bottom:6px;">
             <label class="field-label" for="lb-auth-username">Username (3–32 chars)</label>
             <input type="text" id="lb-auth-username" class="field-input" placeholder="e.g. abhik_listener" autocomplete="username">
@@ -2328,9 +2369,9 @@
 
       <!-- PROTECTED LEADERBOARD CONTENT (Visible ONLY when gameState.isAuthenticated === true) -->
       <div id="leaderboard-protected-content" style="display:none;">
-        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:10px; padding:6px 10px; background:#F4FBF9; border:1px solid var(--brand-teal); border-radius:8px;">
-          <span style="font-size:12px; font-weight:700; color:var(--brand-teal);">
-            ✓ Viewing Official Leaderboard as <code id="lb-auth-active-user">@user</code>
+        <div id="lb-auth-logged-in-bar" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:10px; padding:6px 10px; background:#F4FBF9; border:1px solid var(--brand-teal); border-radius:8px; line-height:1.75;">
+          <span class="auth-logged-in-text" style="font-size:12px; font-weight:700; color:var(--brand-teal); line-height:1.75;">
+            ✓ Viewing Official Leaderboard as <code id="lb-auth-active-user" style="display:inline-block; line-height:1.25; background:#FFF; padding:2px 6px; margin:1px 2px; border-radius:4px; border:1px solid var(--brand-teal);">@user</code>
           </span>
           <button type="button" class="ink-btn" id="btn-lb-logout" onclick="logoutUserAccount()" style="padding:3px 9px; font-size:10.5px;">
             🚪 Logout
