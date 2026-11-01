@@ -1,5 +1,22 @@
 [
   {
+    "certificate_id": "DBG-V31-SEED-L5",
+    "timestamp_utc": "2026-11-01T05:30:00Z",
+    "player_name": "Debolina Mukherjee",
+    "social_platform": "Instagram",
+    "social_link": "https://instagram.com/debolina_shantiniketan",
+    "social_handle": "@debolina_shantiniketan",
+    "game_version": "v3.1.0",
+    "level": 5,
+    "target_words": 125,
+    "words_collected": 125,
+    "wind_speed": "2.75x",
+    "completion_time_ms": 182100,
+    "completion_time_formatted": "03:02.1",
+    "score": 17450,
+    "completeness_pct": 100
+  },
+  {
     "certificate_id": "DBG-V3-SEED-L5",
     "timestamp_utc": "2026-10-31T20:05:00Z",
     "player_name": "Subhajit Mukherjee",

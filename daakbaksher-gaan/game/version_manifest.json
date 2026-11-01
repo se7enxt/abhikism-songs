@@ -1,18 +1,31 @@
 {
   "game_id": "WKS-003",
   "title": "DaakBaksher Gaan — 2D Sumi-e Wind Game",
-  "version": "v3.0.0",
+  "version": "v3.1.0",
   "semver": {
     "game": "daakbaksher-gaan",
     "song_id": "WKS-003",
-    "current_version": "v3.0.0",
+    "current_version": "v3.1.0",
     "semver": {
       "X_feature": 3,
-      "Y_bugfix": 0,
+      "Y_bugfix": 1,
       "Z_additional": 0
     },
     "schema_rule": "vX.Y.Z — X: Feature Addition, Y: Bug Fix, Z: Additional",
     "changelog": [
+      {
+        "version": "v3.1.0",
+        "date": "2026-11-01",
+        "summary": "Fixed FormSubmit email notification links for se7enxt@gmail.com by binding canonical public URLs (https://songs.abhikism.com/daakbaksher-gaan/game/), activating pre-verified multi-relay delivery with _cc, blocking local loopback Referer leakage, and adding live cloud sync.",
+        "X_feature_additions": [],
+        "Y_bug_fixes": [
+          "Fixed broken local loopback link in FormSubmit emails to se7enxt@gmail.com by setting canonical _url and _next (https://songs.abhikism.com/daakbaksher-gaan/game/) and blocking direct browser FormSubmit calls from 127.0.0.1/localhost/file:",
+          "Added pre-activated FormSubmit relay endpoint (b687eb538ef3e237f9cd4b038cd2a232) with _cc: se7enxt@gmail.com plus direct authenticated SMTP & cloud sync on backend so notifications arrive in Inbox without requiring activation link clicks"
+        ],
+        "Z_additional": [
+          "Added v3.1.0 Leaderboard version filter pill and clickable game_url / leaderboard_url links inside every email notification payload"
+        ]
+      },
       {
         "version": "v3.0.0",
         "date": "2026-10-31",
@@ -93,6 +106,19 @@
     }
   ],
   "changelog": [
+    {
+      "version": "v3.1.0",
+      "date": "2026-11-01",
+      "summary": "Fixed FormSubmit email notification links for se7enxt@gmail.com by binding canonical public URLs (https://songs.abhikism.com/daakbaksher-gaan/game/), activating pre-verified multi-relay delivery with _cc, blocking local loopback Referer leakage, and adding live cloud sync.",
+      "X_feature_additions": [],
+      "Y_bug_fixes": [
+        "Fixed broken local loopback link in FormSubmit emails to se7enxt@gmail.com by setting canonical _url and _next (https://songs.abhikism.com/daakbaksher-gaan/game/) and blocking direct browser FormSubmit calls from 127.0.0.1/localhost/file:",
+        "Added pre-activated FormSubmit relay endpoint (b687eb538ef3e237f9cd4b038cd2a232) with _cc: se7enxt@gmail.com plus direct authenticated SMTP & cloud sync on backend so notifications arrive in Inbox without requiring activation link clicks"
+      ],
+      "Z_additional": [
+        "Added v3.1.0 Leaderboard version filter pill and clickable game_url / leaderboard_url links inside every email notification payload"
+      ]
+    },
     {
       "version": "v3.0.0",
       "date": "2026-10-31",
