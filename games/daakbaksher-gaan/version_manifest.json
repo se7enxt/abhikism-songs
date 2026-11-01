@@ -1,29 +1,48 @@
 {
   "game_id": "WKS-003",
   "title": "DaakBaksher Gaan — 2D Sumi-e Wind Game",
-  "version": "v3.1.0",
+  "version": "v4.0.0",
   "semver": {
     "game": "daakbaksher-gaan",
     "song_id": "WKS-003",
-    "current_version": "v3.1.0",
+    "current_version": "v4.0.0",
     "semver": {
-      "X_feature": 3,
-      "Y_bugfix": 1,
+      "X_feature": 4,
+      "Y_bugfix": 0,
       "Z_additional": 0
     },
     "schema_rule": "vX.Y.Z — X: Feature Addition, Y: Bug Fix, Z: Additional",
     "changelog": [
       {
-        "version": "v3.1.0",
+        "version": "v4.0.0",
         "date": "2026-11-01",
-        "summary": "Fixed FormSubmit email notification links for se7enxt@gmail.com by binding canonical public URLs (https://songs.abhikism.com/daakbaksher-gaan/game/), activating pre-verified multi-relay delivery with _cc, blocking local loopback Referer leakage, and adding live cloud sync.",
-        "X_feature_additions": [],
+        "summary": "Added Username + Created Password Authentication gating social media profile links, voluntary personal info, and Leaderboard visibility; implemented mobile UI touch/viewport fixes (6-word compact density, 44px touch targets, single-row landscape dock) and Zero-Client-Exposure privacy hardening.",
+        "X_feature_additions": [
+          "Username + Created Password authentication system (registerUserAccount, loginUserAccount, submitUserAuth, logoutUserAccount) with salted SHA-256 / PBKDF2 password hashing",
+          "Authenticated access gate for entering social media links (#cert-step1-box) and voluntary personal info (#cert-step2-voluntary-box) in the 9:16 Certificate modal",
+          "Members-only Official Leaderboard gate (#leaderboard-auth-gate & /api/game-leaderboard) visible exclusively to logged-in users while displaying verified names and social profiles"
+        ],
         "Y_bug_fixes": [
-          "Fixed broken local loopback link in FormSubmit emails to se7enxt@gmail.com by setting canonical _url and _next (https://songs.abhikism.com/daakbaksher-gaan/game/) and blocking direct browser FormSubmit calls from 127.0.0.1/localhost/file:",
-          "Added pre-activated FormSubmit relay endpoint (b687eb538ef3e237f9cd4b038cd2a232) with _cc: se7enxt@gmail.com plus direct authenticated SMTP & cloud sync on backend so notifications arrive in Inbox without requiring activation link clicks"
+          "Fixed mobile touch drag responsiveness with cached stage bounds, explicit releasePointerCapture, touch-action: none, and WCAG 44px touch targets",
+          "Implemented Option A adaptive word density (6 concurrent words on compact mobile <=420px wide or <=480px tall, 10 on desktop/tablet) and clamped initial mobile spawn X inside visible bounds away from the postbox",
+          "Fixed 844x390 landscape dock collision, 340x640 Completeness cell clipping, duplicate mobile HUD audio buttons, and repositioned #feedback-whisper to top of stage",
+          "Remediated client bundle privacy by stripping all internal notification email addresses, third-party relay tokens, and cloud document IDs from client HTML/JS and API responses"
         ],
         "Z_additional": [
-          "Added v3.1.0 Leaderboard version filter pill and clickable game_url / leaderboard_url links inside every email notification payload"
+          "Added v4.0.0 Leaderboard version filter pill, top HUD account status button (#btn-user-auth), and honeypot anti-spam protection"
+        ]
+      },
+      {
+        "version": "v3.1.0",
+        "date": "2026-11-01",
+        "summary": "Fixed backend notification links by binding canonical public URLs (https://songs.abhikism.com/daakbaksher-gaan/game/), blocking local loopback Referer leakage, and adding server-side relay synchronization.",
+        "X_feature_additions": [],
+        "Y_bug_fixes": [
+          "Fixed broken local loopback link in notification dispatches by setting canonical game URLs (https://songs.abhikism.com/daakbaksher-gaan/game/) and blocking direct browser calls from 127.0.0.1/localhost/file:",
+          "Added server-side authenticated notification relay and cloud sync so notifications arrive reliably"
+        ],
+        "Z_additional": [
+          "Added v3.1.0 Leaderboard version filter pill and clickable game_url / leaderboard_url links inside notification payloads"
         ]
       },
       {
@@ -51,7 +70,7 @@
           "5-level automatic progression system (5 -> 15 -> 25 -> 50 -> 125 target words) with automatic windspeed scaling (1.0x -> 1.35x -> 1.75x -> 2.20x -> 2.75x) and zero manual controls",
           "Live high-precision game timer (#hud-timer, MM:SS.d) displayed in HUD and stamped on the 9:16 Story Certificate",
           "Leaderboard system (#leaderboard-modal & /api/game-leaderboard) with version winner tags, timing tags, and level info tags",
-          "Mandatory semantic game versioning (vX.Y.Z) enforced at build time and displayed across HUD, 9:16 Certificate, Leaderboard, and email telemetry"
+          "Mandatory semantic game versioning (vX.Y.Z) enforced at build time and displayed across HUD, 9:16 Certificate, Leaderboard, and server telemetry"
         ],
         "Y_bug_fixes": [
           "Unified all progress UI and certificate wording around Complete / Completeness",
@@ -107,16 +126,35 @@
   ],
   "changelog": [
     {
-      "version": "v3.1.0",
+      "version": "v4.0.0",
       "date": "2026-11-01",
-      "summary": "Fixed FormSubmit email notification links for se7enxt@gmail.com by binding canonical public URLs (https://songs.abhikism.com/daakbaksher-gaan/game/), activating pre-verified multi-relay delivery with _cc, blocking local loopback Referer leakage, and adding live cloud sync.",
-      "X_feature_additions": [],
+      "summary": "Added Username + Created Password Authentication gating social media profile links, voluntary personal info, and Leaderboard visibility; implemented mobile UI touch/viewport fixes (6-word compact density, 44px touch targets, single-row landscape dock) and Zero-Client-Exposure privacy hardening.",
+      "X_feature_additions": [
+        "Username + Created Password authentication system (registerUserAccount, loginUserAccount, submitUserAuth, logoutUserAccount) with salted SHA-256 / PBKDF2 password hashing",
+        "Authenticated access gate for entering social media links (#cert-step1-box) and voluntary personal info (#cert-step2-voluntary-box) in the 9:16 Certificate modal",
+        "Members-only Official Leaderboard gate (#leaderboard-auth-gate & /api/game-leaderboard) visible exclusively to logged-in users while displaying verified names and social profiles"
+      ],
       "Y_bug_fixes": [
-        "Fixed broken local loopback link in FormSubmit emails to se7enxt@gmail.com by setting canonical _url and _next (https://songs.abhikism.com/daakbaksher-gaan/game/) and blocking direct browser FormSubmit calls from 127.0.0.1/localhost/file:",
-        "Added pre-activated FormSubmit relay endpoint (b687eb538ef3e237f9cd4b038cd2a232) with _cc: se7enxt@gmail.com plus direct authenticated SMTP & cloud sync on backend so notifications arrive in Inbox without requiring activation link clicks"
+        "Fixed mobile touch drag responsiveness with cached stage bounds, explicit releasePointerCapture, touch-action: none, and WCAG 44px touch targets",
+        "Implemented Option A adaptive word density (6 concurrent words on compact mobile <=420px wide or <=480px tall, 10 on desktop/tablet) and clamped initial mobile spawn X inside visible bounds away from the postbox",
+        "Fixed 844x390 landscape dock collision, 340x640 Completeness cell clipping, duplicate mobile HUD audio buttons, and repositioned #feedback-whisper to top of stage",
+        "Remediated client bundle privacy by stripping all internal notification email addresses, third-party relay tokens, and cloud document IDs from client HTML/JS and API responses"
       ],
       "Z_additional": [
-        "Added v3.1.0 Leaderboard version filter pill and clickable game_url / leaderboard_url links inside every email notification payload"
+        "Added v4.0.0 Leaderboard version filter pill, top HUD account status button (#btn-user-auth), and honeypot anti-spam protection"
+      ]
+    },
+    {
+      "version": "v3.1.0",
+      "date": "2026-11-01",
+      "summary": "Fixed backend notification links by binding canonical public URLs (https://songs.abhikism.com/daakbaksher-gaan/game/), blocking local loopback Referer leakage, and adding server-side relay synchronization.",
+      "X_feature_additions": [],
+      "Y_bug_fixes": [
+        "Fixed broken local loopback link in notification dispatches by setting canonical game URLs (https://songs.abhikism.com/daakbaksher-gaan/game/) and blocking direct browser calls from 127.0.0.1/localhost/file:",
+        "Added server-side authenticated notification relay and cloud sync so notifications arrive reliably"
+      ],
+      "Z_additional": [
+        "Added v3.1.0 Leaderboard version filter pill and clickable game_url / leaderboard_url links inside notification payloads"
       ]
     },
     {
@@ -144,7 +182,7 @@
         "5-level automatic progression system (5 -> 15 -> 25 -> 50 -> 125 target words) with automatic windspeed scaling (1.0x -> 1.35x -> 1.75x -> 2.20x -> 2.75x) and zero manual controls",
         "Live high-precision game timer (#hud-timer, MM:SS.d) displayed in HUD and stamped on the 9:16 Story Certificate",
         "Leaderboard system (#leaderboard-modal & /api/game-leaderboard) with version winner tags, timing tags, and level info tags",
-        "Mandatory semantic game versioning (vX.Y.Z) enforced at build time and displayed across HUD, 9:16 Certificate, Leaderboard, and email telemetry"
+        "Mandatory semantic game versioning (vX.Y.Z) enforced at build time and displayed across HUD, 9:16 Certificate, Leaderboard, and server telemetry"
       ],
       "Y_bug_fixes": [
         "Unified all progress UI and certificate wording around Complete / Completeness",

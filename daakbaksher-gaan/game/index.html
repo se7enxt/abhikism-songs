@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ডাকবাক্সের গান (DaakBaksher Gaan) — 2D Wind &amp; Postbox Game (v3.1.0) | #ABHIKISM</title>
+  <title>ডাকবাক্সের গান (DaakBaksher Gaan) — 2D Wind &amp; Postbox Game (v4.0.0) | #ABHIKISM</title>
   <meta name="description" content="Catch the floating words of #ABHIKISM's DaakBaksher Gaan from the gusty Sumi-e ink wind and drop them into the pillar postbox across 5 automatic levels.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📮</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -325,6 +325,10 @@
       bottom: 84px;
       z-index: 10;
       overflow: hidden;
+      touch-action: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     #wind-canvas {
@@ -334,6 +338,10 @@
       height: 100%;
       pointer-events: none;
       z-index: 2;
+      touch-action: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     #words-layer {
@@ -343,6 +351,10 @@
       height: 100%;
       z-index: 15;
       pointer-events: none;
+      touch-action: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     /* Artistic Hand-Torn Washi Paper Word Slips */
@@ -353,6 +365,10 @@
       pointer-events: auto;
       cursor: grab;
       touch-action: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      min-height: 44px;
       padding: 9px 18px;
       background: linear-gradient(135deg, #FFFDF9 0%, #F5EDE0 100%);
       border: 1.5px solid #231F1D;
@@ -378,6 +394,12 @@
       border-radius: 50%;
       background: rgba(217, 30, 24, 0.45);
       flex-shrink: 0;
+    }
+
+    .floating-word-slip::after {
+      content: "";
+      position: absolute;
+      inset: -8px -6px;
     }
 
     .floating-word-slip:hover {
@@ -538,19 +560,20 @@
       color: var(--sumi-ink);
     }
 
-    /* Feedback Toast Banner */
+    /* Feedback Toast Banner (Positioned at top of stage so it never obscures the postbox drop zone) */
     #feedback-whisper {
       position: absolute;
-      bottom: 24px;
+      top: 14px;
+      bottom: auto;
       left: 50%;
-      transform: translateX(-50%) translateY(15px);
+      transform: translateX(-50%) translateY(-10px);
       z-index: 60;
       background: var(--sumi-ink);
       color: #FFFDF9;
       border: 1.5px solid var(--hanko-vermilion);
-      padding: 9px 18px;
+      padding: 8px 16px;
       border-radius: 99px;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       opacity: 0;
       pointer-events: none;
@@ -1195,6 +1218,17 @@
       color: #90FF6C;
     }
 
+    .auth-locked-section {
+      opacity: 0.58;
+      transition: opacity 0.2s ease;
+    }
+    .auth-locked-section .field-input:disabled,
+    .auth-locked-section .field-textarea:disabled,
+    .auth-locked-section button:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
     @media (max-width: 768px) {
       .cert-Modal-grid {
         grid-template-columns: 1fr;
@@ -1217,8 +1251,9 @@
         height: 205px;
       }
       .floating-word-slip {
+        min-height: 44px;
         font-size: 15.5px;
-        padding: 6px 12px;
+        padding: 8px 14px;
       }
     }
 
@@ -1297,8 +1332,13 @@
       .level-readonly-pill {
         display: none;
       }
+      /* Hide duplicate top-HUD audio controls on mobile since bottom dock has canonical Mute & Restart */
+      #btn-mute-toggle,
+      #btn-restart-song {
+        display: none !important;
+      }
       .ink-btn {
-        padding: 3px 5px;
+        padding: 3px 6px;
         font-size: 8.5px;
         gap: 2px;
         border-radius: 6px;
@@ -1306,11 +1346,10 @@
         white-space: nowrap;
       }
       #btn-lang-toggle { order: 1; }
-      #btn-mute-toggle { order: 2; }
-      #btn-restart-song { order: 3; }
-      #btn-leaderboard { order: 4; }
-      #btn-open-lexicon { order: 5; }
-      #btn-open-certificate { order: 6; }
+      #btn-user-auth { order: 2; }
+      #btn-leaderboard { order: 3; }
+      #btn-open-lexicon { order: 4; }
+      #btn-open-certificate { order: 5; }
 
       /* Sleek 1-line compact top pill banner for #wind-legend-card / #instruction-card on mobile so it never obscures floating words */
       .poetic-instruction-card {
@@ -1392,8 +1431,9 @@
         top: -26px;
       }
       .floating-word-slip {
-        font-size: 14px;
-        padding: 5px 10px;
+        min-height: 44px;
+        font-size: 14.5px;
+        padding: 8px 13px;
       }
 
       /* Stream player dock mobile layout */
@@ -1500,6 +1540,35 @@
       }
     }
 
+    /* Ultra-compact narrow screens (e.g. 340x640) — prevent Completeness cell clipping */
+    @media (max-width: 360px) {
+      .score-telemetry-cluster {
+        padding: 2px 4px;
+        gap: 2px;
+      }
+      .stat-pill {
+        padding: 0 2px;
+      }
+      .stat-label {
+        font-size: 6.8px;
+      }
+      .stat-value {
+        font-size: 10px;
+      }
+      .completeness-meter-wrap {
+        min-width: 52px;
+        max-width: 82px;
+      }
+      .completeness-meter-top {
+        font-size: 6.8px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      #completeness-pct-value {
+        font-size: 8.5px !important;
+      }
+    }
+
     /* Short viewport / landscape mobile orientation (e.g. 844x390, 640x340) */
     @media (max-height: 500px) {
       .top-score-bar {
@@ -1565,8 +1634,9 @@
         height: 128px;
       }
       .floating-word-slip {
+        min-height: 44px;
         font-size: 13.5px;
-        padding: 4px 10px;
+        padding: 6px 12px;
       }
       .stream-player-dock {
         padding: 3px 10px;
@@ -1582,6 +1652,48 @@
         font-size: 9px;
       }
     }
+
+    /* Single-row compact landscape dock (e.g. 844x390, 640x340) so dock controls never collide or wrap */
+    @media (max-height: 450px) {
+      #btn-mute-toggle,
+      #btn-restart-song {
+        display: none !important;
+      }
+      .stream-player-dock {
+        height: 44px;
+        max-height: 44px;
+        padding: 2px 10px;
+        gap: 8px;
+        flex-wrap: nowrap;
+        overflow: hidden;
+      }
+      .player-track-meta {
+        width: auto;
+        max-width: 240px;
+        flex: 0 1 auto;
+        min-width: 110px;
+      }
+      .player-song-sub,
+      .player-loop-badge,
+      #audio-status-pill {
+        display: none !important;
+      }
+      .player-loop-controls {
+        width: auto;
+        max-width: 340px;
+        flex: 1 1 auto;
+        gap: 6px;
+      }
+      .player-progress-wrap {
+        max-width: 130px;
+      }
+      .player-dsp-cluster {
+        width: auto;
+        flex: 0 0 auto;
+        justify-content: flex-end;
+        gap: 4px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1595,10 +1707,10 @@
         ← #ABHIKISM
       </a>
       <span class="hanko-seal-badge">ডাকবাক্স</span>
-      <span class="version-badge" id="game-version-badge" onclick="openLeaderboardModal()" title="Semantic Game Version (X=Feature, Y=BugFix, Z=Additional) — Click to view Leaderboard &amp; Changelog">v3.1.0</span>
+      <span class="version-badge" id="game-version-badge" onclick="openLeaderboardModal()" title="Semantic Game Version (X=Feature, Y=BugFix, Z=Additional) — Click to view Leaderboard &amp; Changelog">v4.0.0</span>
       <div class="game-title-block">
         <h1 class="game-title-main" id="ui-game-title">ডাকবাক্সের গান — বাতাসের চিঠি</h1>
-        <span class="game-title-sub">DaakBaksher Gaan • Sumi-e Wind Game (WKS-003 • v3.1.0)</span>
+        <span class="game-title-sub">DaakBaksher Gaan • Sumi-e Wind Game (WKS-003 • v4.0.0)</span>
       </div>
     </div>
 
@@ -1635,7 +1747,7 @@
       </div>
     </div>
 
-    <!-- Interactive Toggles: Bengali <-> Roman Bengali, Mute, Play from Beginning, Read-Only Level Status, Leaderboard, Lexicon, Certificate -->
+    <!-- Interactive Toggles: Bengali <-> Roman Bengali, Mute, Play from Beginning, Read-Only Level Status, Account Auth, Leaderboard, Lexicon, Certificate -->
     <div class="controls-cluster">
       <span class="level-readonly-pill" id="hud-level-status-pill" title="Automatic 5-Level Progression (5 → 15 → 25 → 50 → 125 Words) & Wind Scaling">
         ⚡ LEVEL <span id="pill-level-num">1</span>/5 • TARGET: <span id="pill-level-target">5</span> • WIND: <span id="pill-level-wind">1.0x</span>
@@ -1653,7 +1765,11 @@
         ⏮️ <span id="restart-song-label">Play from Beginning</span>
       </button>
 
-      <button type="button" class="ink-btn" id="btn-leaderboard" onclick="openLeaderboardModal()" title="View Official Leaderboard, Winners, Timings & Version Tags">
+      <button type="button" class="ink-btn teal-btn" id="btn-user-auth" onclick="openAuthGateModal()" title="Login or Create Username &amp; Password to unlock Leaderboard, Social Links &amp; Personal Info">
+        🔒 <span id="hud-auth-label">Login / Register</span>
+      </button>
+
+      <button type="button" class="ink-btn" id="btn-leaderboard" onclick="openLeaderboardModal()" title="View Official Leaderboard, Winners, Timings & Version Tags (Login Required)">
         🏆 Leaderboard
       </button>
 
@@ -1900,7 +2016,7 @@
       <div id="completion-level-banner" style="background:rgba(0,90,81,0.08); border:1.5px solid var(--brand-teal); border-radius:8px; padding:10px 14px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
         <div>
           <div style="font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--brand-teal);" id="completion-level-headline">
-            ⚡ LEVEL 1/5 COMPLETE • TIME: 00:00.0 • VERSION: v3.1.0
+            ⚡ LEVEL 1/5 COMPLETE • TIME: 00:00.0 • VERSION: v4.0.0
           </div>
           <div style="font-size:11.5px; color:var(--sumi-charcoal);" id="completion-level-subline">
             Next up: Level 2/5 (15 Words • 1.35x Wind Speed). You can claim your certificate now or advance immediately!
@@ -1917,15 +2033,61 @@
       </div>
 
       <div class="cert-Modal-grid">
-        <!-- Left Column: Step 1 (Consented Social Credentials) & Step 2 (Post-Certificate Voluntary Free-Will Info) -->
+        <!-- Left Column: Account Auth Gate + Step 1 (Consented Social Credentials) & Step 2 (Post-Certificate Voluntary Free-Will Info) -->
         <div>
+          <!-- AUTH GATE: Required before entering Social Media Links, Personal Info, or viewing Leaderboard -->
+          <div class="form-section-box auth-gate-card" id="cert-auth-gate" style="border:2px solid var(--brand-teal); background:#F4FBF9;">
+            <div class="form-section-title" style="color:var(--brand-teal); justify-content:space-between; flex-wrap:wrap;">
+              <span>🔐 Account Login / Create Password (Required for Social Links, Certificate &amp; Leaderboard)</span>
+              <span id="cert-auth-badge" style="font-family:var(--font-mono); font-size:11px; padding:2px 8px; border-radius:4px; background:var(--sumi-ink); color:#FFF;">🔒 Logged Out</span>
+            </div>
+            <div id="cert-auth-logged-out-view">
+              <p style="font-size:11.5px; color:var(--sumi-charcoal); margin-bottom:10px;">
+                Register with a username and created password (or log in with your existing account) to unlock social media profile entry, claim your personalized 9:16 Certificate, share optional personal info, and view the official Leaderboard.
+              </p>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <div class="field-group" style="margin-bottom:6px;">
+                  <label class="field-label" for="cert-auth-username">Username (3–32 chars: letters, numbers, <code>_ . -</code>)</label>
+                  <input type="text" id="cert-auth-username" class="field-input" placeholder="e.g. abhik_listener" autocomplete="username">
+                </div>
+                <div class="field-group" style="margin-bottom:6px;">
+                  <label class="field-label" for="cert-auth-password">Password (minimum 6 characters)</label>
+                  <input type="password" id="cert-auth-password" class="field-input" placeholder="Create or enter password" autocomplete="current-password">
+                </div>
+              </div>
+              <div id="cert-auth-msg" style="font-size:11.5px; font-weight:700; margin:6px 0; display:none;"></div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+                <button type="button" class="ink-btn teal-btn" id="btn-cert-auth-submit" onclick="submitUserAuth('auto', 'cert')">
+                  🔑 Login / Create Account
+                </button>
+                <button type="button" class="ink-btn" id="btn-cert-auth-register" onclick="submitUserAuth('register', 'cert')">
+                  ✨ Create New Account
+                </button>
+                <button type="button" class="ink-btn" id="btn-cert-auth-login" onclick="submitUserAuth('login', 'cert')">
+                  🔓 Login Existing
+                </button>
+              </div>
+            </div>
+            <div id="cert-auth-logged-in-view" style="display:none; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+              <div style="font-size:12.5px; color:var(--brand-teal); font-weight:700;">
+                ✓ Signed in as <code id="cert-auth-active-user" style="background:#FFF; padding:2px 6px; border-radius:4px; border:1px solid var(--brand-teal);">@user</code> — Social Media Links, Voluntary Info &amp; Leaderboard Unlocked!
+              </div>
+              <button type="button" class="ink-btn" id="btn-cert-logout" onclick="logoutUserAccount()" style="padding:4px 10px; font-size:11px;">
+                🚪 Logout
+              </button>
+            </div>
+          </div>
+
           <!-- STEP 1: Social Credentials + Explicit Consent for 9:16 Certificate -->
-          <div class="form-section-box" id="cert-step1-box">
+          <div class="form-section-box auth-locked-section" id="cert-step1-box">
             <div class="form-section-title">
-              <span>📜 Step 1: Get Your 9:16 Certificate &amp; Post to Leaderboard (Optional)</span>
+              <span>📜 Step 1: Get Your 9:16 Certificate &amp; Post to Leaderboard (Login Required)</span>
+            </div>
+            <div id="cert-step1-lock-notice" class="auth-locked-banner" style="background:rgba(217,30,24,0.08); border:1px dashed var(--hanko-vermilion); color:var(--hanko-vermilion); padding:7px 10px; border-radius:6px; font-size:11.5px; font-weight:700; margin-bottom:10px;">
+              🔒 Please log in or create a username &amp; password above to enter your social media links and claim your certificate.
             </div>
             <p style="font-size:12px; color:var(--sumi-charcoal); margin-bottom:10px;">
-              Select one or multiple social platforms below, enter your handle or profile link for each selected platform (auto-checked &amp; formatted), and give consent to issue your personalized <strong>9:16 Certificate</strong> and record your time on the <strong>v3.1.0 Leaderboard</strong>.
+              Select one or multiple social platforms below, enter your handle or profile link for each selected platform (auto-checked &amp; formatted), and give consent to issue your personalized <strong>9:16 Certificate</strong> and record your time on the <strong>v4.0.0 Leaderboard</strong>.
             </p>
 
             <div class="field-group">
@@ -1987,6 +2149,7 @@
             </div>
 
             <input type="hidden" id="cert-social-link" value="">
+            <input type="text" id="cert-hp-check" name="_hp_check" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none;">
 
             <label class="consent-label" for="cert-consent-checkbox">
               <input type="checkbox" id="cert-consent-checkbox">
@@ -2064,20 +2227,23 @@
             </div>
           </div>
 
-          <!-- Compact Inline Leaderboard Preview inside Completion Modal -->
+          <!-- Compact Inline Leaderboard Preview inside Completion Modal (Gated by Login) -->
           <div class="form-section-box" id="completion-leaderboard-preview-box" style="margin-bottom:0;">
             <div class="form-section-title" style="justify-content:space-between;">
-              <span>🏆 Top Wind Postbox Winners (v3.1.0)</span>
+              <span>🏆 Top Wind Postbox Winners (v4.0.0)</span>
               <button type="button" class="ink-btn" style="padding:2px 8px; font-size:10.5px;" onclick="openLeaderboardModal()">Full Leaderboard →</button>
             </div>
-            <div id="completion-leaderboard-preview" class="leaderboard-table-wrap" style="max-height:175px;"></div>
+            <div id="completion-lb-auth-notice" style="padding:10px; background:rgba(26,24,23,0.05); border:1px dashed var(--sumi-wash); border-radius:6px; font-size:11.5px; color:var(--sumi-charcoal); text-align:center;">
+              🔒 Log in with your username &amp; password above to view the Official Leaderboard &amp; Winners.
+            </div>
+            <div id="completion-leaderboard-preview" class="leaderboard-table-wrap" style="max-height:175px; display:none;"></div>
           </div>
         </div>
 
         <!-- Right Column: 9:16 Vertical Certificate Canvas Preview & Download -->
         <div class="cert-preview-column">
           <div style="font-size:12px; font-weight:700; color:var(--sumi-charcoal);">
-            9:16 Story Certificate (1080 × 1920 px • v3.1.0)
+            9:16 Story Certificate (1080 × 1920 px • v4.0.0)
           </div>
           <div class="cert-canvas-frame">
             <canvas id="cert-canvas-9x16" width="1080" height="1920"></canvas>
@@ -2088,7 +2254,7 @@
             </button>
           </div>
           <span style="font-size:10.5px; color:var(--sumi-wash); text-align:center;">
-            v3.1.0 Official Edition • Stamped with Completion Time, Level &amp; Version
+            v4.0.0 Official Edition • Stamped with Completion Time, Level &amp; Version
           </span>
         </div>
       </div>
@@ -2114,7 +2280,7 @@
   </div>
 
   <!-- ==============================================================
-       5B. OFFICIAL LEADERBOARD & VERSION WINNERS MODAL
+       5B. OFFICIAL LEADERBOARD & VERSION WINNERS MODAL (LOGGED-IN USERS ONLY)
        ============================================================== -->
   <div class="modal-backdrop" id="leaderboard-modal" role="dialog" aria-modal="true" aria-labelledby="leaderboard-modal-title">
     <div class="sumi-modal-card">
@@ -2122,34 +2288,79 @@
         <div>
           <h2 class="modal-title" id="leaderboard-modal-title">🏆 ডাকবাক্সের গান — Official Wind Leaderboard &amp; Winners</h2>
           <p style="font-size:12px; color:var(--sumi-wash);">
-            Verified 100% Complete Postbox Champions • Ranked by Level, Score &amp; Fastest Completion Time • Current Build: <strong id="lb-modal-version-label">v3.1.0</strong>
+            Verified 100% Complete Postbox Champions • Ranked by Level, Score &amp; Fastest Completion Time • Current Build: <strong id="lb-modal-version-label">v4.0.0</strong>
           </p>
         </div>
         <button type="button" class="modal-close-btn" onclick="closeLeaderboardModal()" aria-label="Close Leaderboard">✕</button>
       </div>
 
-      <div class="leaderboard-filter-bar" id="leaderboard-filter-bar">
-        <div class="leaderboard-filter-group" id="lb-level-filters" role="group" aria-label="Filter by Level">
-          <span style="font-family:var(--font-mono); font-size:10.5px; font-weight:700; color:var(--sumi-wash);">LEVEL:</span>
-          <button type="button" class="lb-filter-btn active" data-lb-level="all" onclick="filterLeaderboard('level', 'all')">All Levels</button>
-          <button type="button" class="lb-filter-btn" data-lb-level="5" onclick="filterLeaderboard('level', '5')">Lv 5 (125w • 2.75x)</button>
-          <button type="button" class="lb-filter-btn" data-lb-level="4" onclick="filterLeaderboard('level', '4')">Lv 4 (50w • 2.20x)</button>
-          <button type="button" class="lb-filter-btn" data-lb-level="3" onclick="filterLeaderboard('level', '3')">Lv 3 (25w • 1.75x)</button>
-          <button type="button" class="lb-filter-btn" data-lb-level="2" onclick="filterLeaderboard('level', '2')">Lv 2 (15w • 1.35x)</button>
-          <button type="button" class="lb-filter-btn" data-lb-level="1" onclick="filterLeaderboard('level', '1')">Lv 1 (5w • 1.0x)</button>
+      <!-- LEADERBOARD AUTHENTICATION GATE (Visible when Logged Out) -->
+      <div id="leaderboard-auth-gate" class="form-section-box auth-gate-card" style="border:2px solid var(--brand-teal); background:#F4FBF9; margin-bottom:14px;">
+        <div class="form-section-title" style="color:var(--brand-teal);">
+          <span>🔒 Member Login Required to View Official Leaderboard</span>
         </div>
-
-        <div class="leaderboard-filter-group" id="lb-version-filters" role="group" aria-label="Filter by Game Version">
-          <span style="font-family:var(--font-mono); font-size:10.5px; font-weight:700; color:var(--sumi-wash);">VERSION:</span>
-          <button type="button" class="lb-filter-btn active" data-lb-version="all" onclick="filterLeaderboard('version', 'all')">All Versions</button>
-          <button type="button" class="lb-filter-btn" data-lb-version="v3.1.0" onclick="filterLeaderboard('version', 'v3.1.0')">v3.1.0</button>
-          <button type="button" class="lb-filter-btn" data-lb-version="v3.0.0" onclick="filterLeaderboard('version', 'v3.0.0')">v3.0.0</button>
-          <button type="button" class="lb-filter-btn" data-lb-version="v2.0.0" onclick="filterLeaderboard('version', 'v2.0.0')">v2.0.0</button>
-          <button type="button" class="lb-filter-btn" data-lb-version="v1.0.0" onclick="filterLeaderboard('version', 'v1.0.0')">v1.0.0</button>
+        <p style="font-size:12px; color:var(--sumi-charcoal); margin-bottom:10px;">
+          The Official DaakBaksher Gaan Leaderboard is exclusively visible to logged-in users. Enter your username and created password below (or create a free account in one click) to unlock the leaderboard rankings and version champions.
+        </p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="field-group" style="margin-bottom:6px;">
+            <label class="field-label" for="lb-auth-username">Username (3–32 chars)</label>
+            <input type="text" id="lb-auth-username" class="field-input" placeholder="e.g. abhik_listener" autocomplete="username">
+          </div>
+          <div class="field-group" style="margin-bottom:6px;">
+            <label class="field-label" for="lb-auth-password">Password (min 6 chars)</label>
+            <input type="password" id="lb-auth-password" class="field-input" placeholder="Create or enter password" autocomplete="current-password">
+          </div>
+        </div>
+        <div id="lb-auth-msg" style="font-size:11.5px; font-weight:700; margin:6px 0; display:none;"></div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+          <button type="button" class="ink-btn teal-btn" id="btn-lb-auth-submit" onclick="submitUserAuth('auto', 'leaderboard')">
+            🔑 Login / Create Account to View Leaderboard
+          </button>
+          <button type="button" class="ink-btn" id="btn-lb-auth-register" onclick="submitUserAuth('register', 'leaderboard')">
+            ✨ Create New Account
+          </button>
+          <button type="button" class="ink-btn" id="btn-lb-auth-login" onclick="submitUserAuth('login', 'leaderboard')">
+            🔓 Login Existing
+          </button>
         </div>
       </div>
 
-      <div id="leaderboard-list" class="leaderboard-table-wrap"></div>
+      <!-- PROTECTED LEADERBOARD CONTENT (Visible ONLY when gameState.isAuthenticated === true) -->
+      <div id="leaderboard-protected-content" style="display:none;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:10px; padding:6px 10px; background:#F4FBF9; border:1px solid var(--brand-teal); border-radius:8px;">
+          <span style="font-size:12px; font-weight:700; color:var(--brand-teal);">
+            ✓ Viewing Official Leaderboard as <code id="lb-auth-active-user">@user</code>
+          </span>
+          <button type="button" class="ink-btn" id="btn-lb-logout" onclick="logoutUserAccount()" style="padding:3px 9px; font-size:10.5px;">
+            🚪 Logout
+          </button>
+        </div>
+
+        <div class="leaderboard-filter-bar" id="leaderboard-filter-bar">
+          <div class="leaderboard-filter-group" id="lb-level-filters" role="group" aria-label="Filter by Level">
+            <span style="font-family:var(--font-mono); font-size:10.5px; font-weight:700; color:var(--sumi-wash);">LEVEL:</span>
+            <button type="button" class="lb-filter-btn active" data-lb-level="all" onclick="filterLeaderboard('level', 'all')">All Levels</button>
+            <button type="button" class="lb-filter-btn" data-lb-level="5" onclick="filterLeaderboard('level', '5')">Lv 5 (125w • 2.75x)</button>
+            <button type="button" class="lb-filter-btn" data-lb-level="4" onclick="filterLeaderboard('level', '4')">Lv 4 (50w • 2.20x)</button>
+            <button type="button" class="lb-filter-btn" data-lb-level="3" onclick="filterLeaderboard('level', '3')">Lv 3 (25w • 1.75x)</button>
+            <button type="button" class="lb-filter-btn" data-lb-level="2" onclick="filterLeaderboard('level', '2')">Lv 2 (15w • 1.35x)</button>
+            <button type="button" class="lb-filter-btn" data-lb-level="1" onclick="filterLeaderboard('level', '1')">Lv 1 (5w • 1.0x)</button>
+          </div>
+
+          <div class="leaderboard-filter-group" id="lb-version-filters" role="group" aria-label="Filter by Game Version">
+            <span style="font-family:var(--font-mono); font-size:10.5px; font-weight:700; color:var(--sumi-wash);">VERSION:</span>
+            <button type="button" class="lb-filter-btn active" data-lb-version="all" onclick="filterLeaderboard('version', 'all')">All Versions</button>
+            <button type="button" class="lb-filter-btn" data-lb-version="v4.0.0" onclick="filterLeaderboard('version', 'v4.0.0')">v4.0.0</button>
+            <button type="button" class="lb-filter-btn" data-lb-version="v3.1.0" onclick="filterLeaderboard('version', 'v3.1.0')">v3.1.0</button>
+            <button type="button" class="lb-filter-btn" data-lb-version="v3.0.0" onclick="filterLeaderboard('version', 'v3.0.0')">v3.0.0</button>
+            <button type="button" class="lb-filter-btn" data-lb-version="v2.0.0" onclick="filterLeaderboard('version', 'v2.0.0')">v2.0.0</button>
+            <button type="button" class="lb-filter-btn" data-lb-version="v1.0.0" onclick="filterLeaderboard('version', 'v1.0.0')">v1.0.0</button>
+          </div>
+        </div>
+
+        <div id="leaderboard-list" class="leaderboard-table-wrap"></div>
+      </div>
 
       <!-- Semantic Version Changelog Registry -->
       <div style="margin-top:14px; padding-top:10px; border-top:1px dashed var(--sumi-border); font-size:11px; color:var(--sumi-wash);" id="version-changelog-box">
@@ -2166,9 +2377,9 @@
        ============================================================== -->
   <script>
     // Semantic Game Version & Changelog (X=Feature Addition, Y=Bug Fix, Z=Additional)
-    const GAME_VERSION = "v3.1.0";
-    const GAME_VERSION_CHANGELOG = [{"version": "v3.1.0", "date": "2026-11-01", "summary": "Fixed FormSubmit email notification links for se7enxt@gmail.com by binding canonical public URLs (https://songs.abhikism.com/daakbaksher-gaan/game/), activating pre-verified multi-relay delivery with _cc, blocking local loopback Referer leakage, and adding live cloud sync.", "X_feature_additions": [], "Y_bug_fixes": ["Fixed broken local loopback link in FormSubmit emails to se7enxt@gmail.com by setting canonical _url and _next (https://songs.abhikism.com/daakbaksher-gaan/game/) and blocking direct browser FormSubmit calls from 127.0.0.1/localhost/file:", "Added pre-activated FormSubmit relay endpoint (b687eb538ef3e237f9cd4b038cd2a232) with _cc: se7enxt@gmail.com plus direct authenticated SMTP & cloud sync on backend so notifications arrive in Inbox without requiring activation link clicks"], "Z_additional": ["Added v3.1.0 Leaderboard version filter pill and clickable game_url / leaderboard_url links inside every email notification payload"]}, {"version": "v3.0.0", "date": "2026-10-31", "summary": "YouTube Music embedded player looping by default with smart error detection fallback to Instant Web Audio, continuous autoplay by default, and exclusive Mute/Unmute + Play from Beginning (0:00) controls (zero Stop/Pause).", "X_feature_additions": ["YouTube Music embedded player (8K1B2qG3U7E) active and looping by default via YouTube IFrame API with automatic loop-on-end and auto-resume-on-pause enforcement", "Smart audio error detection (smartDetectAudioErrorAndFallback / window.triggerSmartAudioErrorFallback) detecting YT.Player onError events, iframe API script blocks, offline states, and watchdog timeouts to seamlessly switch to Instant Web Audio fallback (daakbaksher-gaan.m4a)", "Continuous default song playback with only Mute/Unmute (#btn-mute-toggle, #btn-dock-mute) and Play from Beginning 0:00 (#btn-restart-song, #btn-dock-restart) options and zero Stop/Pause controls"], "Y_bug_fixes": ["Prevented dual-audio track overlap by keeping Instant Web Audio fallback silenced while YouTube Music primary loop is active", "Added transparent click-shield over embedded YouTube surface and pause-interception guard on fallback Web Audio so playback can never be stopped"], "Z_additional": ["Added v3.0.0 Leaderboard version filter pill and updated version_manifest.json across all 14 deployment targets"]}, {"version": "v2.0.0", "date": "2026-10-31", "summary": "5 automatic wind levels (5->15->25->50->125 words), live HUD & certificate timer, official Leaderboard with version/level/timing tags, and Completeness telemetry.", "X_feature_additions": ["5-level automatic progression system (5 -> 15 -> 25 -> 50 -> 125 target words) with automatic windspeed scaling (1.0x -> 1.35x -> 1.75x -> 2.20x -> 2.75x) and zero manual controls", "Live high-precision game timer (#hud-timer, MM:SS.d) displayed in HUD and stamped on the 9:16 Story Certificate", "Leaderboard system (#leaderboard-modal & /api/game-leaderboard) with version winner tags, timing tags, and level info tags", "Mandatory semantic game versioning (vX.Y.Z) enforced at build time and displayed across HUD, 9:16 Certificate, Leaderboard, and email telemetry"], "Y_bug_fixes": ["Unified all progress UI and certificate wording around Complete / Completeness", "Cleaned up track metadata badges across game HUD, player dock, 9:16 certificate canvas, and arcade hub", "Enforced level-completion gate on advanceToNextLevel() and certificate issuance so levels and wind speeds cannot be manually skipped", "Added visibilitychange timer pause/resume lifecycle and fresh elapsed-time snapshot on final word drop", "Unified Leaderboard ranking comparator (Level DESC, Score DESC, Fastest Time ASC, Timestamp ASC, CertID ASC) and HTML-escaped player fields"], "Z_additional": ["Added level-advance workflow in completion modal and seeded canonical leaderboard winners across versions"]}, {"version": "v1.0.0", "date": "2026-10-31", "summary": "Initial 2D Sumi-e wind game with 125 canonical song words, 250 decoy words, Bengali <-> Roman toggle, and 9:16 certificate.", "X_feature_additions": ["Initial 2D Sumi-e wind game with 125 canonical song words and 250 decoy words", "Bengali <-> Roman Bengali live script toggle and 9:16 listener certificate with multi-platform social handle validation"], "Y_bug_fixes": [], "Z_additional": []}];
-    const SEED_LEADERBOARD = [{"certificate_id": "DBG-V31-SEED-L5", "timestamp_utc": "2026-11-01T05:30:00Z", "player_name": "Debolina Mukherjee", "social_platform": "Instagram", "social_link": "https://instagram.com/debolina_shantiniketan", "social_handle": "@debolina_shantiniketan", "game_version": "v3.1.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 182100, "completion_time_formatted": "03:02.1", "score": 17450, "completeness_pct": 100}, {"certificate_id": "DBG-V3-SEED-L5", "timestamp_utc": "2026-10-31T20:05:00Z", "player_name": "Subhajit Mukherjee", "social_platform": "Instagram", "social_link": "https://instagram.com/subhajit_kolkata", "social_handle": "@subhajit_kolkata", "game_version": "v3.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 188500, "completion_time_formatted": "03:08.5", "score": 17200, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L5", "timestamp_utc": "2026-10-31T18:10:00Z", "player_name": "Arindam Roy", "social_platform": "Instagram", "social_link": "https://instagram.com/arindam_kolkata", "social_handle": "@arindam_kolkata", "game_version": "v2.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 194400, "completion_time_formatted": "03:14.4", "score": 16850, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L4", "timestamp_utc": "2026-10-31T18:22:00Z", "player_name": "Sohini Chatterjee", "social_platform": "Instagram, X", "social_link": "https://instagram.com/sohini_music | https://x.com/sohini_c", "social_handle": "@sohini_music", "game_version": "v2.0.0", "level": 4, "target_words": 50, "words_collected": 50, "wind_speed": "2.20x", "completion_time_ms": 76800, "completion_time_formatted": "01:16.8", "score": 6400, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L3", "timestamp_utc": "2026-10-31T18:35:00Z", "player_name": "Ritam Sen", "social_platform": "X", "social_link": "https://x.com/ritam_verse", "social_handle": "@ritam_verse", "game_version": "v2.0.0", "level": 3, "target_words": 25, "words_collected": 25, "wind_speed": "1.75x", "completion_time_ms": 38200, "completion_time_formatted": "00:38.2", "score": 3100, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L2", "timestamp_utc": "2026-10-31T18:40:00Z", "player_name": "Ananya Bose", "social_platform": "Instagram", "social_link": "https://instagram.com/ananya_bose_art", "social_handle": "@ananya_bose_art", "game_version": "v2.0.0", "level": 2, "target_words": 15, "words_collected": 15, "wind_speed": "1.35x", "completion_time_ms": 21500, "completion_time_formatted": "00:21.5", "score": 1800, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L1", "timestamp_utc": "2026-10-31T18:45:00Z", "player_name": "Deborshi Mitra", "social_platform": "Reddit", "social_link": "https://reddit.com/u/deborshi_indie", "social_handle": "u/deborshi_indie", "game_version": "v2.0.0", "level": 1, "target_words": 5, "words_collected": 5, "wind_speed": "1.0x", "completion_time_ms": 8400, "completion_time_formatted": "00:08.4", "score": 580, "completeness_pct": 100}, {"certificate_id": "DBG-V1-SEED-WIN", "timestamp_utc": "2026-10-31T15:10:00Z", "player_name": "Poulomi Das", "social_platform": "Instagram", "social_link": "https://instagram.com/poulomi_kol", "social_handle": "@poulomi_kol", "game_version": "v1.0.0", "level": 2, "target_words": 15, "words_collected": 15, "wind_speed": "1.35x", "completion_time_ms": 24900, "completion_time_formatted": "00:24.9", "score": 1750, "completeness_pct": 100}];
+    const GAME_VERSION = "v4.0.0";
+    const GAME_VERSION_CHANGELOG = [{"version": "v4.0.0", "date": "2026-11-01", "summary": "Added Username + Created Password Authentication gating social media profile links, voluntary personal info, and Leaderboard visibility; implemented mobile UI touch/viewport fixes (6-word compact density, 44px touch targets, single-row landscape dock) and Zero-Client-Exposure privacy hardening.", "X_feature_additions": ["Username + Created Password authentication system (registerUserAccount, loginUserAccount, submitUserAuth, logoutUserAccount) with salted SHA-256 / PBKDF2 password hashing", "Authenticated access gate for entering social media links (#cert-step1-box) and voluntary personal info (#cert-step2-voluntary-box) in the 9:16 Certificate modal", "Members-only Official Leaderboard gate (#leaderboard-auth-gate & /api/game-leaderboard) visible exclusively to logged-in users while displaying verified names and social profiles"], "Y_bug_fixes": ["Fixed mobile touch drag responsiveness with cached stage bounds, explicit releasePointerCapture, touch-action: none, and WCAG 44px touch targets", "Implemented Option A adaptive word density (6 concurrent words on compact mobile <=420px wide or <=480px tall, 10 on desktop/tablet) and clamped initial mobile spawn X inside visible bounds away from the postbox", "Fixed 844x390 landscape dock collision, 340x640 Completeness cell clipping, duplicate mobile HUD audio buttons, and repositioned #feedback-whisper to top of stage", "Remediated client bundle privacy by stripping all internal notification email addresses, third-party relay tokens, and cloud document IDs from client HTML/JS and API responses"], "Z_additional": ["Added v4.0.0 Leaderboard version filter pill, top HUD account status button (#btn-user-auth), and honeypot anti-spam protection"]}, {"version": "v3.1.0", "date": "2026-11-01", "summary": "Fixed backend notification links by binding canonical public URLs (https://songs.abhikism.com/daakbaksher-gaan/game/), blocking local loopback Referer leakage, and adding server-side relay synchronization.", "X_feature_additions": [], "Y_bug_fixes": ["Fixed broken local loopback link in notification dispatches by setting canonical game URLs (https://songs.abhikism.com/daakbaksher-gaan/game/) and blocking direct browser calls from 127.0.0.1/localhost/file:", "Added server-side authenticated notification relay and cloud sync so notifications arrive reliably"], "Z_additional": ["Added v3.1.0 Leaderboard version filter pill and clickable game_url / leaderboard_url links inside notification payloads"]}, {"version": "v3.0.0", "date": "2026-10-31", "summary": "YouTube Music embedded player looping by default with smart error detection fallback to Instant Web Audio, continuous autoplay by default, and exclusive Mute/Unmute + Play from Beginning (0:00) controls (zero Stop/Pause).", "X_feature_additions": ["YouTube Music embedded player (8K1B2qG3U7E) active and looping by default via YouTube IFrame API with automatic loop-on-end and auto-resume-on-pause enforcement", "Smart audio error detection (smartDetectAudioErrorAndFallback / window.triggerSmartAudioErrorFallback) detecting YT.Player onError events, iframe API script blocks, offline states, and watchdog timeouts to seamlessly switch to Instant Web Audio fallback (daakbaksher-gaan.m4a)", "Continuous default song playback with only Mute/Unmute (#btn-mute-toggle, #btn-dock-mute) and Play from Beginning 0:00 (#btn-restart-song, #btn-dock-restart) options and zero Stop/Pause controls"], "Y_bug_fixes": ["Prevented dual-audio track overlap by keeping Instant Web Audio fallback silenced while YouTube Music primary loop is active", "Added transparent click-shield over embedded YouTube surface and pause-interception guard on fallback Web Audio so playback can never be stopped"], "Z_additional": ["Added v3.0.0 Leaderboard version filter pill and updated version_manifest.json across all 14 deployment targets"]}, {"version": "v2.0.0", "date": "2026-10-31", "summary": "5 automatic wind levels (5->15->25->50->125 words), live HUD & certificate timer, official Leaderboard with version/level/timing tags, and Completeness telemetry.", "X_feature_additions": ["5-level automatic progression system (5 -> 15 -> 25 -> 50 -> 125 target words) with automatic windspeed scaling (1.0x -> 1.35x -> 1.75x -> 2.20x -> 2.75x) and zero manual controls", "Live high-precision game timer (#hud-timer, MM:SS.d) displayed in HUD and stamped on the 9:16 Story Certificate", "Leaderboard system (#leaderboard-modal & /api/game-leaderboard) with version winner tags, timing tags, and level info tags", "Mandatory semantic game versioning (vX.Y.Z) enforced at build time and displayed across HUD, 9:16 Certificate, Leaderboard, and server telemetry"], "Y_bug_fixes": ["Unified all progress UI and certificate wording around Complete / Completeness", "Cleaned up track metadata badges across game HUD, player dock, 9:16 certificate canvas, and arcade hub", "Enforced level-completion gate on advanceToNextLevel() and certificate issuance so levels and wind speeds cannot be manually skipped", "Added visibilitychange timer pause/resume lifecycle and fresh elapsed-time snapshot on final word drop", "Unified Leaderboard ranking comparator (Level DESC, Score DESC, Fastest Time ASC, Timestamp ASC, CertID ASC) and HTML-escaped player fields"], "Z_additional": ["Added level-advance workflow in completion modal and seeded canonical leaderboard winners across versions"]}, {"version": "v1.0.0", "date": "2026-10-31", "summary": "Initial 2D Sumi-e wind game with 125 canonical song words, 250 decoy words, Bengali <-> Roman toggle, and 9:16 certificate.", "X_feature_additions": ["Initial 2D Sumi-e wind game with 125 canonical song words and 250 decoy words", "Bengali <-> Roman Bengali live script toggle and 9:16 listener certificate with multi-platform social handle validation"], "Y_bug_fixes": [], "Z_additional": []}];
+    const SEED_LEADERBOARD = [{"certificate_id": "DBG-V40-SEED-L5", "timestamp_utc": "2026-11-01T12:00:00Z", "username": "anirban_shantiniketan", "player_name": "Anirban Chatterjee", "social_platform": "Instagram", "social_link": "https://instagram.com/anirban_shantiniketan", "social_handle": "@anirban_shantiniketan", "game_version": "v4.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 176400, "completion_time_formatted": "02:56.4", "score": 17680, "completeness_pct": 100}, {"certificate_id": "DBG-V31-SEED-L5", "timestamp_utc": "2026-11-01T05:30:00Z", "player_name": "Debolina Mukherjee", "social_platform": "Instagram", "social_link": "https://instagram.com/debolina_shantiniketan", "social_handle": "@debolina_shantiniketan", "game_version": "v3.1.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 182100, "completion_time_formatted": "03:02.1", "score": 17450, "completeness_pct": 100}, {"certificate_id": "DBG-V3-SEED-L5", "timestamp_utc": "2026-10-31T20:05:00Z", "player_name": "Subhajit Mukherjee", "social_platform": "Instagram", "social_link": "https://instagram.com/subhajit_kolkata", "social_handle": "@subhajit_kolkata", "game_version": "v3.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 188500, "completion_time_formatted": "03:08.5", "score": 17200, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L5", "timestamp_utc": "2026-10-31T18:10:00Z", "player_name": "Arindam Roy", "social_platform": "Instagram", "social_link": "https://instagram.com/arindam_kolkata", "social_handle": "@arindam_kolkata", "game_version": "v2.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 194400, "completion_time_formatted": "03:14.4", "score": 16850, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L4", "timestamp_utc": "2026-10-31T18:22:00Z", "player_name": "Sohini Chatterjee", "social_platform": "Instagram, X", "social_link": "https://instagram.com/sohini_music | https://x.com/sohini_c", "social_handle": "@sohini_music", "game_version": "v2.0.0", "level": 4, "target_words": 50, "words_collected": 50, "wind_speed": "2.20x", "completion_time_ms": 76800, "completion_time_formatted": "01:16.8", "score": 6400, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L3", "timestamp_utc": "2026-10-31T18:35:00Z", "player_name": "Ritam Sen", "social_platform": "X", "social_link": "https://x.com/ritam_verse", "social_handle": "@ritam_verse", "game_version": "v2.0.0", "level": 3, "target_words": 25, "words_collected": 25, "wind_speed": "1.75x", "completion_time_ms": 38200, "completion_time_formatted": "00:38.2", "score": 3100, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L2", "timestamp_utc": "2026-10-31T18:40:00Z", "player_name": "Ananya Bose", "social_platform": "Instagram", "social_link": "https://instagram.com/ananya_bose_art", "social_handle": "@ananya_bose_art", "game_version": "v2.0.0", "level": 2, "target_words": 15, "words_collected": 15, "wind_speed": "1.35x", "completion_time_ms": 21500, "completion_time_formatted": "00:21.5", "score": 1800, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L1", "timestamp_utc": "2026-10-31T18:45:00Z", "player_name": "Deborshi Mitra", "social_platform": "Reddit", "social_link": "https://reddit.com/u/deborshi_indie", "social_handle": "u/deborshi_indie", "game_version": "v2.0.0", "level": 1, "target_words": 5, "words_collected": 5, "wind_speed": "1.0x", "completion_time_ms": 8400, "completion_time_formatted": "00:08.4", "score": 580, "completeness_pct": 100}, {"certificate_id": "DBG-V1-SEED-WIN", "timestamp_utc": "2026-10-31T15:10:00Z", "player_name": "Poulomi Das", "social_platform": "Instagram", "social_link": "https://instagram.com/poulomi_kol", "social_handle": "@poulomi_kol", "game_version": "v1.0.0", "level": 2, "target_words": 15, "words_collected": 15, "wind_speed": "1.35x", "completion_time_ms": 24900, "completion_time_formatted": "00:24.9", "score": 1750, "completeness_pct": 100}];
 
     // Embedded 375-word pool (125 unique words from DaakBaksher Gaan + 250 non-song decoy words)
     const GAME_WORD_POOL = {"song_id": "WKS-003", "song_title": "DaakBaksher Gaan (Suzanne)", "native_title": "ডাকবাক্সের গান", "iprs_work_no": "35410709", "counts": {"song_words": 125, "decoy_words": 250, "total_words": 375}, "song_words": [{"id": "SW-001", "bn": "সুজান", "roman": "Suzanne", "roman_raw": "Suzanne", "inSong": true, "section": "Verse 1", "line_bn": "সুজান পেয়েছি তোমায় আমি আমার যন্ত্রণায়", "line_roman": "Suzanne peyechi tomay aami aamar jontronay", "line_en": "Suzanne, I have found you in my agony", "start": 10.5, "end": 15.8}, {"id": "SW-002", "bn": "পেয়েছি", "roman": "Peyechi", "roman_raw": "peyechi", "inSong": true, "section": "Verse 1", "line_bn": "সুজান পেয়েছি তোমায় আমি আমার যন্ত্রণায়", "line_roman": "Suzanne peyechi tomay aami aamar jontronay", "line_en": "Suzanne, I have found you in my agony", "start": 10.5, "end": 15.8}, {"id": "SW-003", "bn": "তোমায়", "roman": "Tomay", "roman_raw": "tomay", "inSong": true, "section": "Verse 1", "line_bn": "সুজান পেয়েছি তোমায় আমি আমার যন্ত্রণায়", "line_roman": "Suzanne peyechi tomay aami aamar jontronay", "line_en": "Suzanne, I have found you in my agony", "start": 10.5, "end": 15.8}, {"id": "SW-004", "bn": "আমি", "roman": "Aami", "roman_raw": "aami", "inSong": true, "section": "Verse 1", "line_bn": "সুজান পেয়েছি তোমায় আমি আমার যন্ত্রণায়", "line_roman": "Suzanne peyechi tomay aami aamar jontronay", "line_en": "Suzanne, I have found you in my agony", "start": 10.5, "end": 15.8}, {"id": "SW-005", "bn": "আমার", "roman": "Aamar", "roman_raw": "aamar", "inSong": true, "section": "Verse 1", "line_bn": "সুজান পেয়েছি তোমায় আমি আমার যন্ত্রণায়", "line_roman": "Suzanne peyechi tomay aami aamar jontronay", "line_en": "Suzanne, I have found you in my agony", "start": 10.5, "end": 15.8}, {"id": "SW-006", "bn": "যন্ত্রণায়", "roman": "Jontronay", "roman_raw": "jontronay", "inSong": true, "section": "Verse 1", "line_bn": "সুজান পেয়েছি তোমায় আমি আমার যন্ত্রণায়", "line_roman": "Suzanne peyechi tomay aami aamar jontronay", "line_en": "Suzanne, I have found you in my agony", "start": 10.5, "end": 15.8}, {"id": "SW-007", "bn": "তুমি", "roman": "Tumi", "roman_raw": "Tumi", "inSong": true, "section": "Verse 1", "line_bn": "তুমি বুলিয়ে দিয়েছো হাত আমার একলা চোখের কোণায়", "line_roman": "Tumi buliye diyecho haat aamar ekla chokher konay", "line_en": "You have gently stroked your hand at the corner of my lonely eyes", "start": 15.8, "end": 21.5}, {"id": "SW-008", "bn": "বুলিয়ে", "roman": "Buliye", "roman_raw": "buliye", "inSong": true, "section": "Verse 1", "line_bn": "তুমি বুলিয়ে দিয়েছো হাত আমার একলা চোখের কোণায়", "line_roman": "Tumi buliye diyecho haat aamar ekla chokher konay", "line_en": "You have gently stroked your hand at the corner of my lonely eyes", "start": 15.8, "end": 21.5}, {"id": "SW-009", "bn": "দিয়েছো", "roman": "Diyecho", "roman_raw": "diyecho", "inSong": true, "section": "Verse 1", "line_bn": "তুমি বুলিয়ে দিয়েছো হাত আমার একলা চোখের কোণায়", "line_roman": "Tumi buliye diyecho haat aamar ekla chokher konay", "line_en": "You have gently stroked your hand at the corner of my lonely eyes", "start": 15.8, "end": 21.5}, {"id": "SW-010", "bn": "হাত", "roman": "Haat", "roman_raw": "haat", "inSong": true, "section": "Verse 1", "line_bn": "তুমি বুলিয়ে দিয়েছো হাত আমার একলা চোখের কোণায়", "line_roman": "Tumi buliye diyecho haat aamar ekla chokher konay", "line_en": "You have gently stroked your hand at the corner of my lonely eyes", "start": 15.8, "end": 21.5}, {"id": "SW-011", "bn": "একলা", "roman": "Ekla", "roman_raw": "ekla", "inSong": true, "section": "Verse 1", "line_bn": "তুমি বুলিয়ে দিয়েছো হাত আমার একলা চোখের কোণায়", "line_roman": "Tumi buliye diyecho haat aamar ekla chokher konay", "line_en": "You have gently stroked your hand at the corner of my lonely eyes", "start": 15.8, "end": 21.5}, {"id": "SW-012", "bn": "চোখের", "roman": "Chokher", "roman_raw": "chokher", "inSong": true, "section": "Verse 1", "line_bn": "তুমি বুলিয়ে দিয়েছো হাত আমার একলা চোখের কোণায়", "line_roman": "Tumi buliye diyecho haat aamar ekla chokher konay", "line_en": "You have gently stroked your hand at the corner of my lonely eyes", "start": 15.8, "end": 21.5}, {"id": "SW-013", "bn": "কোণায়", "roman": "Konay", "roman_raw": "konay", "inSong": true, "section": "Verse 1", "line_bn": "তুমি বুলিয়ে দিয়েছো হাত আমার একলা চোখের কোণায়", "line_roman": "Tumi buliye diyecho haat aamar ekla chokher konay", "line_en": "You have gently stroked your hand at the corner of my lonely eyes", "start": 15.8, "end": 21.5}, {"id": "SW-014", "bn": "তোমার", "roman": "Tomar", "roman_raw": "tomar", "inSong": true, "section": "Verse 1", "line_bn": "আমি তোমার সাথে ঘর করেছি দুই পলকের মাঝে", "line_roman": "Aami tomar shathe ghor korechi dui poloker majhe", "line_en": "I have built a home with you between two blinks of an eye", "start": 21.5, "end": 27.2}, {"id": "SW-015", "bn": "সাথে", "roman": "Shathe", "roman_raw": "shathe", "inSong": true, "section": "Verse 1", "line_bn": "আমি তোমার সাথে ঘর করেছি দুই পলকের মাঝে", "line_roman": "Aami tomar shathe ghor korechi dui poloker majhe", "line_en": "I have built a home with you between two blinks of an eye", "start": 21.5, "end": 27.2}, {"id": "SW-016", "bn": "ঘর", "roman": "Ghor", "roman_raw": "ghor", "inSong": true, "section": "Verse 1", "line_bn": "আমি তোমার সাথে ঘর করেছি দুই পলকের মাঝে", "line_roman": "Aami tomar shathe ghor korechi dui poloker majhe", "line_en": "I have built a home with you between two blinks of an eye", "start": 21.5, "end": 27.2}, {"id": "SW-017", "bn": "করেছি", "roman": "Korechi", "roman_raw": "korechi", "inSong": true, "section": "Verse 1", "line_bn": "আমি তোমার সাথে ঘর করেছি দুই পলকের মাঝে", "line_roman": "Aami tomar shathe ghor korechi dui poloker majhe", "line_en": "I have built a home with you between two blinks of an eye", "start": 21.5, "end": 27.2}, {"id": "SW-018", "bn": "দুই", "roman": "Dui", "roman_raw": "dui", "inSong": true, "section": "Verse 1", "line_bn": "আমি তোমার সাথে ঘর করেছি দুই পলকের মাঝে", "line_roman": "Aami tomar shathe ghor korechi dui poloker majhe", "line_en": "I have built a home with you between two blinks of an eye", "start": 21.5, "end": 27.2}, {"id": "SW-019", "bn": "পলকের", "roman": "Poloker", "roman_raw": "poloker", "inSong": true, "section": "Verse 1", "line_bn": "আমি তোমার সাথে ঘর করেছি দুই পলকের মাঝে", "line_roman": "Aami tomar shathe ghor korechi dui poloker majhe", "line_en": "I have built a home with you between two blinks of an eye", "start": 21.5, "end": 27.2}, {"id": "SW-020", "bn": "মাঝে", "roman": "Majhe", "roman_raw": "majhe", "inSong": true, "section": "Verse 1", "line_bn": "আমি তোমার সাথে ঘর করেছি দুই পলকের মাঝে", "line_roman": "Aami tomar shathe ghor korechi dui poloker majhe", "line_en": "I have built a home with you between two blinks of an eye", "start": 21.5, "end": 27.2}, {"id": "SW-021", "bn": "হারিয়ে", "roman": "Hariye", "roman_raw": "hariye", "inSong": true, "section": "Verse 1", "line_bn": "তুমি হারিয়ে যাও প্রায়ই তোমার হারিয়ে যাওয়া সাজে", "line_roman": "Tumi hariye jao prayi tomar hariye jawa shaje", "line_en": "You often get lost in your attire of getting lost", "start": 27.2, "end": 33.0}, {"id": "SW-022", "bn": "যাও", "roman": "Jao", "roman_raw": "jao", "inSong": true, "section": "Verse 1", "line_bn": "তুমি হারিয়ে যাও প্রায়ই তোমার হারিয়ে যাওয়া সাজে", "line_roman": "Tumi hariye jao prayi tomar hariye jawa shaje", "line_en": "You often get lost in your attire of getting lost", "start": 27.2, "end": 33.0}, {"id": "SW-023", "bn": "প্রায়ই", "roman": "Prayi", "roman_raw": "prayi", "inSong": true, "section": "Verse 1", "line_bn": "তুমি হারিয়ে যাও প্রায়ই তোমার হারিয়ে যাওয়া সাজে", "line_roman": "Tumi hariye jao prayi tomar hariye jawa shaje", "line_en": "You often get lost in your attire of getting lost", "start": 27.2, "end": 33.0}, {"id": "SW-024", "bn": "যাওয়া", "roman": "Jawa", "roman_raw": "jawa", "inSong": true, "section": "Verse 1", "line_bn": "তুমি হারিয়ে যাও প্রায়ই তোমার হারিয়ে যাওয়া সাজে", "line_roman": "Tumi hariye jao prayi tomar hariye jawa shaje", "line_en": "You often get lost in your attire of getting lost", "start": 27.2, "end": 33.0}, {"id": "SW-025", "bn": "সাজে", "roman": "Shaje", "roman_raw": "shaje", "inSong": true, "section": "Verse 1", "line_bn": "তুমি হারিয়ে যাও প্রায়ই তোমার হারিয়ে যাওয়া সাজে", "line_roman": "Tumi hariye jao prayi tomar hariye jawa shaje", "line_en": "You often get lost in your attire of getting lost", "start": 27.2, "end": 33.0}, {"id": "SW-026", "bn": "লিখো", "roman": "Likho", "roman_raw": "likho", "inSong": true, "section": "Chorus", "line_bn": "তুমি লিখো মাঝে মাঝে আমার এইখানেতেই বাস", "line_roman": "Tumi likho majhe majhe aamar eikhanetei baash", "line_en": "Write to me sometimes, right here is where I live", "start": 33.0, "end": 38.8}, {"id": "SW-027", "bn": "এইখানেতেই", "roman": "Eikhanetei", "roman_raw": "eikhanetei", "inSong": true, "section": "Chorus", "line_bn": "তুমি লিখো মাঝে মাঝে আমার এইখানেতেই বাস", "line_roman": "Tumi likho majhe majhe aamar eikhanetei baash", "line_en": "Write to me sometimes, right here is where I live", "start": 33.0, "end": 38.8}, {"id": "SW-028", "bn": "বাস", "roman": "Baash", "roman_raw": "baash", "inSong": true, "section": "Chorus", "line_bn": "তুমি লিখো মাঝে মাঝে আমার এইখানেতেই বাস", "line_roman": "Tumi likho majhe majhe aamar eikhanetei baash", "line_en": "Write to me sometimes, right here is where I live", "start": 33.0, "end": 38.8}, {"id": "SW-029", "bn": "এই", "roman": "Ei", "roman_raw": "Ei", "inSong": true, "section": "Chorus", "line_bn": "এই ডাকবাক্সেই রইলো পড়ে আমার ইতিহাস", "line_roman": "Ei daakbakshei roilo pore aamar itihash", "line_en": "In this very postbox lies my history", "start": 38.8, "end": 44.5}, {"id": "SW-030", "bn": "ডাকবাক্সেই", "roman": "Daakbakshei", "roman_raw": "daakbakshei", "inSong": true, "section": "Chorus", "line_bn": "এই ডাকবাক্সেই রইলো পড়ে আমার ইতিহাস", "line_roman": "Ei daakbakshei roilo pore aamar itihash", "line_en": "In this very postbox lies my history", "start": 38.8, "end": 44.5}, {"id": "SW-031", "bn": "রইলো", "roman": "Roilo", "roman_raw": "roilo", "inSong": true, "section": "Chorus", "line_bn": "এই ডাকবাক্সেই রইলো পড়ে আমার ইতিহাস", "line_roman": "Ei daakbakshei roilo pore aamar itihash", "line_en": "In this very postbox lies my history", "start": 38.8, "end": 44.5}, {"id": "SW-032", "bn": "পড়ে", "roman": "Pore", "roman_raw": "pore", "inSong": true, "section": "Chorus", "line_bn": "এই ডাকবাক্সেই রইলো পড়ে আমার ইতিহাস", "line_roman": "Ei daakbakshei roilo pore aamar itihash", "line_en": "In this very postbox lies my history", "start": 38.8, "end": 44.5}, {"id": "SW-033", "bn": "ইতিহাস", "roman": "Itihash", "roman_raw": "itihash", "inSong": true, "section": "Chorus", "line_bn": "এই ডাকবাক্সেই রইলো পড়ে আমার ইতিহাস", "line_roman": "Ei daakbakshei roilo pore aamar itihash", "line_en": "In this very postbox lies my history", "start": 38.8, "end": 44.5}, {"id": "SW-034", "bn": "কবে", "roman": "Kobe", "roman_raw": "Kobe", "inSong": true, "section": "Verse 2", "line_bn": "কবে কেঁদেছিলাম হেসে কবে যুদ্ধে গেলাম শেষে", "line_roman": "Kobe kedechilam heshe kobe juddhe gelam sheshe", "line_en": "When did I weep while smiling, when did I finally go to war", "start": 44.5, "end": 50.2}, {"id": "SW-035", "bn": "কেঁদেছিলাম", "roman": "Kedechilam", "roman_raw": "kedechilam", "inSong": true, "section": "Verse 2", "line_bn": "কবে কেঁদেছিলাম হেসে কবে যুদ্ধে গেলাম শেষে", "line_roman": "Kobe kedechilam heshe kobe juddhe gelam sheshe", "line_en": "When did I weep while smiling, when did I finally go to war", "start": 44.5, "end": 50.2}, {"id": "SW-036", "bn": "হেসে", "roman": "Heshe", "roman_raw": "heshe", "inSong": true, "section": "Verse 2", "line_bn": "কবে কেঁদেছিলাম হেসে কবে যুদ্ধে গেলাম শেষে", "line_roman": "Kobe kedechilam heshe kobe juddhe gelam sheshe", "line_en": "When did I weep while smiling, when did I finally go to war", "start": 44.5, "end": 50.2}, {"id": "SW-037", "bn": "যুদ্ধে", "roman": "Juddhe", "roman_raw": "juddhe", "inSong": true, "section": "Verse 2", "line_bn": "কবে কেঁদেছিলাম হেসে কবে যুদ্ধে গেলাম শেষে", "line_roman": "Kobe kedechilam heshe kobe juddhe gelam sheshe", "line_en": "When did I weep while smiling, when did I finally go to war", "start": 44.5, "end": 50.2}, {"id": "SW-038", "bn": "গেলাম", "roman": "Gelam", "roman_raw": "gelam", "inSong": true, "section": "Verse 2", "line_bn": "কবে কেঁদেছিলাম হেসে কবে যুদ্ধে গেলাম শেষে", "line_roman": "Kobe kedechilam heshe kobe juddhe gelam sheshe", "line_en": "When did I weep while smiling, when did I finally go to war", "start": 44.5, "end": 50.2}, {"id": "SW-039", "bn": "শেষে", "roman": "Sheshe", "roman_raw": "sheshe", "inSong": true, "section": "Verse 2", "line_bn": "কবে কেঁদেছিলাম হেসে কবে যুদ্ধে গেলাম শেষে", "line_roman": "Kobe kedechilam heshe kobe juddhe gelam sheshe", "line_en": "When did I weep while smiling, when did I finally go to war", "start": 44.5, "end": 50.2}, {"id": "SW-040", "bn": "হেরে", "roman": "Here", "roman_raw": "here", "inSong": true, "section": "Verse 2", "line_bn": "কবে হেরে গেলাম তাও কবে এ দেশ ছেড়ে যাও", "line_roman": "Kobe here gelam tao kobe e desh chere jao", "line_en": "When did I lose even then, when did I hear 'leave this country'", "start": 50.2, "end": 56.0}, {"id": "SW-041", "bn": "তাও", "roman": "Tao", "roman_raw": "tao", "inSong": true, "section": "Verse 2", "line_bn": "কবে হেরে গেলাম তাও কবে এ দেশ ছেড়ে যাও", "line_roman": "Kobe here gelam tao kobe e desh chere jao", "line_en": "When did I lose even then, when did I hear 'leave this country'", "start": 50.2, "end": 56.0}, {"id": "SW-042", "bn": "এ", "roman": "E", "roman_raw": "e", "inSong": true, "section": "Verse 2", "line_bn": "কবে হেরে গেলাম তাও কবে এ দেশ ছেড়ে যাও", "line_roman": "Kobe here gelam tao kobe e desh chere jao", "line_en": "When did I lose even then, when did I hear 'leave this country'", "start": 50.2, "end": 56.0}, {"id": "SW-043", "bn": "দেশ", "roman": "Desh", "roman_raw": "desh", "inSong": true, "section": "Verse 2", "line_bn": "কবে হেরে গেলাম তাও কবে এ দেশ ছেড়ে যাও", "line_roman": "Kobe here gelam tao kobe e desh chere jao", "line_en": "When did I lose even then, when did I hear 'leave this country'", "start": 50.2, "end": 56.0}, {"id": "SW-044", "bn": "ছেড়ে", "roman": "Chere", "roman_raw": "chere", "inSong": true, "section": "Verse 2", "line_bn": "কবে হেরে গেলাম তাও কবে এ দেশ ছেড়ে যাও", "line_roman": "Kobe here gelam tao kobe e desh chere jao", "line_en": "When did I lose even then, when did I hear 'leave this country'", "start": 50.2, "end": 56.0}, {"id": "SW-045", "bn": "শুনে", "roman": "Shune", "roman_raw": "Shune", "inSong": true, "section": "Verse 2", "line_bn": "শুনে ভেসেছিলাম জলে কবে অতলান্ত তলে", "line_roman": "Shune bheshechilam jole kobe otolanto tole", "line_en": "Hearing that, when did I float on water to the bottomless depths", "start": 56.0, "end": 61.8}, {"id": "SW-046", "bn": "ভেসেছিলাম", "roman": "Bheshechilam", "roman_raw": "bheshechilam", "inSong": true, "section": "Verse 2", "line_bn": "শুনে ভেসেছিলাম জলে কবে অতলান্ত তলে", "line_roman": "Shune bheshechilam jole kobe otolanto tole", "line_en": "Hearing that, when did I float on water to the bottomless depths", "start": 56.0, "end": 61.8}, {"id": "SW-047", "bn": "জলে", "roman": "Jole", "roman_raw": "jole", "inSong": true, "section": "Verse 2", "line_bn": "শুনে ভেসেছিলাম জলে কবে অতলান্ত তলে", "line_roman": "Shune bheshechilam jole kobe otolanto tole", "line_en": "Hearing that, when did I float on water to the bottomless depths", "start": 56.0, "end": 61.8}, {"id": "SW-048", "bn": "অতলান্ত", "roman": "Otolanto", "roman_raw": "otolanto", "inSong": true, "section": "Verse 2", "line_bn": "শুনে ভেসেছিলাম জলে কবে অতলান্ত তলে", "line_roman": "Shune bheshechilam jole kobe otolanto tole", "line_en": "Hearing that, when did I float on water to the bottomless depths", "start": 56.0, "end": 61.8}, {"id": "SW-049", "bn": "তলে", "roman": "Tole", "roman_raw": "tole", "inSong": true, "section": "Verse 2", "line_bn": "শুনে ভেসেছিলাম জলে কবে অতলান্ত তলে", "line_roman": "Shune bheshechilam jole kobe otolanto tole", "line_en": "Hearing that, when did I float on water to the bottomless depths", "start": 56.0, "end": 61.8}, {"id": "SW-050", "bn": "আবার", "roman": "Abar", "roman_raw": "Abar", "inSong": true, "section": "Verse 2", "line_bn": "আবার পাওয়া গেল দেহ রাখা আছে স্নেহ যত্নে তাও", "line_roman": "Abar pawa gelo deho rakha ache sneho jotne tao", "line_en": "Again the body was found, yet affection is still kept with care", "start": 61.8, "end": 70.0}, {"id": "SW-051", "bn": "পাওয়া", "roman": "Pawa", "roman_raw": "pawa", "inSong": true, "section": "Verse 2", "line_bn": "আবার পাওয়া গেল দেহ রাখা আছে স্নেহ যত্নে তাও", "line_roman": "Abar pawa gelo deho rakha ache sneho jotne tao", "line_en": "Again the body was found, yet affection is still kept with care", "start": 61.8, "end": 70.0}, {"id": "SW-052", "bn": "গেল", "roman": "Gelo", "roman_raw": "gelo", "inSong": true, "section": "Verse 2", "line_bn": "আবার পাওয়া গেল দেহ রাখা আছে স্নেহ যত্নে তাও", "line_roman": "Abar pawa gelo deho rakha ache sneho jotne tao", "line_en": "Again the body was found, yet affection is still kept with care", "start": 61.8, "end": 70.0}, {"id": "SW-053", "bn": "দেহ", "roman": "Deho", "roman_raw": "deho", "inSong": true, "section": "Verse 2", "line_bn": "আবার পাওয়া গেল দেহ রাখা আছে স্নেহ যত্নে তাও", "line_roman": "Abar pawa gelo deho rakha ache sneho jotne tao", "line_en": "Again the body was found, yet affection is still kept with care", "start": 61.8, "end": 70.0}, {"id": "SW-054", "bn": "রাখা", "roman": "Rakha", "roman_raw": "rakha", "inSong": true, "section": "Verse 2", "line_bn": "আবার পাওয়া গেল দেহ রাখা আছে স্নেহ যত্নে তাও", "line_roman": "Abar pawa gelo deho rakha ache sneho jotne tao", "line_en": "Again the body was found, yet affection is still kept with care", "start": 61.8, "end": 70.0}, {"id": "SW-055", "bn": "আছে", "roman": "Ache", "roman_raw": "ache", "inSong": true, "section": "Verse 2", "line_bn": "আবার পাওয়া গেল দেহ রাখা আছে স্নেহ যত্নে তাও", "line_roman": "Abar pawa gelo deho rakha ache sneho jotne tao", "line_en": "Again the body was found, yet affection is still kept with care", "start": 61.8, "end": 70.0}, {"id": "SW-056", "bn": "স্নেহ", "roman": "Sneho", "roman_raw": "sneho", "inSong": true, "section": "Verse 2", "line_bn": "আবার পাওয়া গেল দেহ রাখা আছে স্নেহ যত্নে তাও", "line_roman": "Abar pawa gelo deho rakha ache sneho jotne tao", "line_en": "Again the body was found, yet affection is still kept with care", "start": 61.8, "end": 70.0}, {"id": "SW-057", "bn": "যত্নে", "roman": "Jotne", "roman_raw": "jotne", "inSong": true, "section": "Verse 2", "line_bn": "আবার পাওয়া গেল দেহ রাখা আছে স্নেহ যত্নে তাও", "line_roman": "Abar pawa gelo deho rakha ache sneho jotne tao", "line_en": "Again the body was found, yet affection is still kept with care", "start": 61.8, "end": 70.0}, {"id": "SW-058", "bn": "যদি", "roman": "Jodi", "roman_raw": "jodi", "inSong": true, "section": "Verse 3", "line_bn": "সুজান যদি রাধা হলে যমুনা নদীর তটে", "line_roman": "Suzanne jodi Radha hole Jomuna nodir tote", "line_en": "Suzanne, if you were Radha on the banks of the Yamuna river", "start": 75.5, "end": 81.2}, {"id": "SW-059", "bn": "রাধা", "roman": "Radha", "roman_raw": "Radha", "inSong": true, "section": "Verse 3", "line_bn": "সুজান যদি রাধা হলে যমুনা নদীর তটে", "line_roman": "Suzanne jodi Radha hole Jomuna nodir tote", "line_en": "Suzanne, if you were Radha on the banks of the Yamuna river", "start": 75.5, "end": 81.2}, {"id": "SW-060", "bn": "হলে", "roman": "Hole", "roman_raw": "hole", "inSong": true, "section": "Verse 3", "line_bn": "সুজান যদি রাধা হলে যমুনা নদীর তটে", "line_roman": "Suzanne jodi Radha hole Jomuna nodir tote", "line_en": "Suzanne, if you were Radha on the banks of the Yamuna river", "start": 75.5, "end": 81.2}, {"id": "SW-061", "bn": "যমুনা", "roman": "Jomuna", "roman_raw": "Jomuna", "inSong": true, "section": "Verse 3", "line_bn": "সুজান যদি রাধা হলে যমুনা নদীর তটে", "line_roman": "Suzanne jodi Radha hole Jomuna nodir tote", "line_en": "Suzanne, if you were Radha on the banks of the Yamuna river", "start": 75.5, "end": 81.2}, {"id": "SW-062", "bn": "নদীর", "roman": "Nodir", "roman_raw": "nodir", "inSong": true, "section": "Verse 3", "line_bn": "সুজান যদি রাধা হলে যমুনা নদীর তটে", "line_roman": "Suzanne jodi Radha hole Jomuna nodir tote", "line_en": "Suzanne, if you were Radha on the banks of the Yamuna river", "start": 75.5, "end": 81.2}, {"id": "SW-063", "bn": "তটে", "roman": "Tote", "roman_raw": "tote", "inSong": true, "section": "Verse 3", "line_bn": "সুজান যদি রাধা হলে যমুনা নদীর তটে", "line_roman": "Suzanne jodi Radha hole Jomuna nodir tote", "line_en": "Suzanne, if you were Radha on the banks of the Yamuna river", "start": 75.5, "end": 81.2}, {"id": "SW-064", "bn": "হাজার", "roman": "Hajar", "roman_raw": "hajar", "inSong": true, "section": "Verse 3", "line_bn": "আমি হাজার বছর বাঁধবো তোমায় প্রেমের গানের জটে", "line_roman": "Aami hajar bochor badhbo tomay premer gaaner jote", "line_en": "I would bind you for a thousand years in the tangles of love songs", "start": 81.2, "end": 87.0}, {"id": "SW-065", "bn": "বছর", "roman": "Bochor", "roman_raw": "bochor", "inSong": true, "section": "Verse 3", "line_bn": "আমি হাজার বছর বাঁধবো তোমায় প্রেমের গানের জটে", "line_roman": "Aami hajar bochor badhbo tomay premer gaaner jote", "line_en": "I would bind you for a thousand years in the tangles of love songs", "start": 81.2, "end": 87.0}, {"id": "SW-066", "bn": "বাঁধবো", "roman": "Badhbo", "roman_raw": "badhbo", "inSong": true, "section": "Verse 3", "line_bn": "আমি হাজার বছর বাঁধবো তোমায় প্রেমের গানের জটে", "line_roman": "Aami hajar bochor badhbo tomay premer gaaner jote", "line_en": "I would bind you for a thousand years in the tangles of love songs", "start": 81.2, "end": 87.0}, {"id": "SW-067", "bn": "প্রেমের", "roman": "Premer", "roman_raw": "premer", "inSong": true, "section": "Verse 3", "line_bn": "আমি হাজার বছর বাঁধবো তোমায় প্রেমের গানের জটে", "line_roman": "Aami hajar bochor badhbo tomay premer gaaner jote", "line_en": "I would bind you for a thousand years in the tangles of love songs", "start": 81.2, "end": 87.0}, {"id": "SW-068", "bn": "গানের", "roman": "Gaaner", "roman_raw": "gaaner", "inSong": true, "section": "Verse 3", "line_bn": "আমি হাজার বছর বাঁধবো তোমায় প্রেমের গানের জটে", "line_roman": "Aami hajar bochor badhbo tomay premer gaaner jote", "line_en": "I would bind you for a thousand years in the tangles of love songs", "start": 81.2, "end": 87.0}, {"id": "SW-069", "bn": "জটে", "roman": "Jote", "roman_raw": "jote", "inSong": true, "section": "Verse 3", "line_bn": "আমি হাজার বছর বাঁধবো তোমায় প্রেমের গানের জটে", "line_roman": "Aami hajar bochor badhbo tomay premer gaaner jote", "line_en": "I would bind you for a thousand years in the tangles of love songs", "start": 81.2, "end": 87.0}, {"id": "SW-070", "bn": "দাও", "roman": "Dao", "roman_raw": "Dao", "inSong": true, "section": "Verse 3", "line_bn": "দাও যুক্তি অদ্ভুত যদি তাতেও ধরো খুঁত", "line_roman": "Dao jukti odbhut jodi tateo dhoro khut", "line_en": "You give strange arguments, even if you find fault in that too", "start": 87.0, "end": 92.8}, {"id": "SW-071", "bn": "যুক্তি", "roman": "Jukti", "roman_raw": "jukti", "inSong": true, "section": "Verse 3", "line_bn": "দাও যুক্তি অদ্ভুত যদি তাতেও ধরো খুঁত", "line_roman": "Dao jukti odbhut jodi tateo dhoro khut", "line_en": "You give strange arguments, even if you find fault in that too", "start": 87.0, "end": 92.8}, {"id": "SW-072", "bn": "অদ্ভুত", "roman": "Odbhut", "roman_raw": "odbhut", "inSong": true, "section": "Verse 3", "line_bn": "দাও যুক্তি অদ্ভুত যদি তাতেও ধরো খুঁত", "line_roman": "Dao jukti odbhut jodi tateo dhoro khut", "line_en": "You give strange arguments, even if you find fault in that too", "start": 87.0, "end": 92.8}, {"id": "SW-073", "bn": "তাতেও", "roman": "Tateo", "roman_raw": "tateo", "inSong": true, "section": "Verse 3", "line_bn": "দাও যুক্তি অদ্ভুত যদি তাতেও ধরো খুঁত", "line_roman": "Dao jukti odbhut jodi tateo dhoro khut", "line_en": "You give strange arguments, even if you find fault in that too", "start": 87.0, "end": 92.8}, {"id": "SW-074", "bn": "ধরো", "roman": "Dhoro", "roman_raw": "dhoro", "inSong": true, "section": "Verse 3", "line_bn": "দাও যুক্তি অদ্ভুত যদি তাতেও ধরো খুঁত", "line_roman": "Dao jukti odbhut jodi tateo dhoro khut", "line_en": "You give strange arguments, even if you find fault in that too", "start": 87.0, "end": 92.8}, {"id": "SW-075", "bn": "খুঁত", "roman": "Khut", "roman_raw": "khut", "inSong": true, "section": "Verse 3", "line_bn": "দাও যুক্তি অদ্ভুত যদি তাতেও ধরো খুঁত", "line_roman": "Dao jukti odbhut jodi tateo dhoro khut", "line_en": "You give strange arguments, even if you find fault in that too", "start": 87.0, "end": 92.8}, {"id": "SW-076", "bn": "রাখাল", "roman": "Rakhal", "roman_raw": "rakhal", "inSong": true, "section": "Verse 3", "line_bn": "আমি রাখাল সাজবো গ্রামে তোমায় ডাকবো অন্য নামে", "line_roman": "Aami rakhal shajbo grame tomay dakbo onno naame", "line_en": "I will dress as a shepherd in the village and call you by another name", "start": 92.8, "end": 98.5}, {"id": "SW-077", "bn": "সাজবো", "roman": "Shajbo", "roman_raw": "shajbo", "inSong": true, "section": "Verse 3", "line_bn": "আমি রাখাল সাজবো গ্রামে তোমায় ডাকবো অন্য নামে", "line_roman": "Aami rakhal shajbo grame tomay dakbo onno naame", "line_en": "I will dress as a shepherd in the village and call you by another name", "start": 92.8, "end": 98.5}, {"id": "SW-078", "bn": "গ্রামে", "roman": "Grame", "roman_raw": "grame", "inSong": true, "section": "Verse 3", "line_bn": "আমি রাখাল সাজবো গ্রামে তোমায় ডাকবো অন্য নামে", "line_roman": "Aami rakhal shajbo grame tomay dakbo onno naame", "line_en": "I will dress as a shepherd in the village and call you by another name", "start": 92.8, "end": 98.5}, {"id": "SW-079", "bn": "ডাকবো", "roman": "Dakbo", "roman_raw": "dakbo", "inSong": true, "section": "Verse 3", "line_bn": "আমি রাখাল সাজবো গ্রামে তোমায় ডাকবো অন্য নামে", "line_roman": "Aami rakhal shajbo grame tomay dakbo onno naame", "line_en": "I will dress as a shepherd in the village and call you by another name", "start": 92.8, "end": 98.5}, {"id": "SW-080", "bn": "অন্য", "roman": "Onno", "roman_raw": "onno", "inSong": true, "section": "Verse 3", "line_bn": "আমি রাখাল সাজবো গ্রামে তোমায় ডাকবো অন্য নামে", "line_roman": "Aami rakhal shajbo grame tomay dakbo onno naame", "line_en": "I will dress as a shepherd in the village and call you by another name", "start": 92.8, "end": 98.5}, {"id": "SW-081", "bn": "নামে", "roman": "Naame", "roman_raw": "naame", "inSong": true, "section": "Verse 3", "line_bn": "আমি রাখাল সাজবো গ্রামে তোমায় ডাকবো অন্য নামে", "line_roman": "Aami rakhal shajbo grame tomay dakbo onno naame", "line_en": "I will dress as a shepherd in the village and call you by another name", "start": 92.8, "end": 98.5}, {"id": "SW-082", "bn": "তখন", "roman": "Tokhon", "roman_raw": "Tokhon", "inSong": true, "section": "Verse 3", "line_bn": "তখন বাঁশির শব্দ শুনে তুমি ঝাঁপিও আগুনে", "line_roman": "Tokhon bashir shobdo shune tumi jhapiyo agune", "line_en": "Then hearing the sound of the flute, leap into the fire", "start": 98.5, "end": 104.2}, {"id": "SW-083", "bn": "বাঁশির", "roman": "Bashir", "roman_raw": "bashir", "inSong": true, "section": "Verse 3", "line_bn": "তখন বাঁশির শব্দ শুনে তুমি ঝাঁপিও আগুনে", "line_roman": "Tokhon bashir shobdo shune tumi jhapiyo agune", "line_en": "Then hearing the sound of the flute, leap into the fire", "start": 98.5, "end": 104.2}, {"id": "SW-084", "bn": "শব্দ", "roman": "Shobdo", "roman_raw": "shobdo", "inSong": true, "section": "Verse 3", "line_bn": "তখন বাঁশির শব্দ শুনে তুমি ঝাঁপিও আগুনে", "line_roman": "Tokhon bashir shobdo shune tumi jhapiyo agune", "line_en": "Then hearing the sound of the flute, leap into the fire", "start": 98.5, "end": 104.2}, {"id": "SW-085", "bn": "ঝাঁপিও", "roman": "Jhapiyo", "roman_raw": "jhapiyo", "inSong": true, "section": "Verse 3", "line_bn": "তখন বাঁশির শব্দ শুনে তুমি ঝাঁপিও আগুনে", "line_roman": "Tokhon bashir shobdo shune tumi jhapiyo agune", "line_en": "Then hearing the sound of the flute, leap into the fire", "start": 98.5, "end": 104.2}, {"id": "SW-086", "bn": "আগুনে", "roman": "Agune", "roman_raw": "agune", "inSong": true, "section": "Verse 3", "line_bn": "তখন বাঁশির শব্দ শুনে তুমি ঝাঁপিও আগুনে", "line_roman": "Tokhon bashir shobdo shune tumi jhapiyo agune", "line_en": "Then hearing the sound of the flute, leap into the fire", "start": 98.5, "end": 104.2}, {"id": "SW-087", "bn": "তাতে", "roman": "Tate", "roman_raw": "Tate", "inSong": true, "section": "Verse 3", "line_bn": "তাতে কলম ভরবো ছাইয়ে আমি লিখবো পুরাণ লিখবো তাতে বেদ", "line_roman": "Tate kolom bhorbo chaiye aami likhbo Puran likhbo tate Ved", "line_en": "With that ash I will fill my pen, I will write the Puranas, I will write the Vedas with it", "start": 104.2, "end": 112.5}, {"id": "SW-088", "bn": "কলম", "roman": "Kolom", "roman_raw": "kolom", "inSong": true, "section": "Verse 3", "line_bn": "তাতে কলম ভরবো ছাইয়ে আমি লিখবো পুরাণ লিখবো তাতে বেদ", "line_roman": "Tate kolom bhorbo chaiye aami likhbo Puran likhbo tate Ved", "line_en": "With that ash I will fill my pen, I will write the Puranas, I will write the Vedas with it", "start": 104.2, "end": 112.5}, {"id": "SW-089", "bn": "ভরবো", "roman": "Bhorbo", "roman_raw": "bhorbo", "inSong": true, "section": "Verse 3", "line_bn": "তাতে কলম ভরবো ছাইয়ে আমি লিখবো পুরাণ লিখবো তাতে বেদ", "line_roman": "Tate kolom bhorbo chaiye aami likhbo Puran likhbo tate Ved", "line_en": "With that ash I will fill my pen, I will write the Puranas, I will write the Vedas with it", "start": 104.2, "end": 112.5}, {"id": "SW-090", "bn": "ছাইয়ে", "roman": "Chaiye", "roman_raw": "chaiye", "inSong": true, "section": "Verse 3", "line_bn": "তাতে কলম ভরবো ছাইয়ে আমি লিখবো পুরাণ লিখবো তাতে বেদ", "line_roman": "Tate kolom bhorbo chaiye aami likhbo Puran likhbo tate Ved", "line_en": "With that ash I will fill my pen, I will write the Puranas, I will write the Vedas with it", "start": 104.2, "end": 112.5}, {"id": "SW-091", "bn": "লিখবো", "roman": "Likhbo", "roman_raw": "likhbo", "inSong": true, "section": "Verse 3", "line_bn": "তাতে কলম ভরবো ছাইয়ে আমি লিখবো পুরাণ লিখবো তাতে বেদ", "line_roman": "Tate kolom bhorbo chaiye aami likhbo Puran likhbo tate Ved", "line_en": "With that ash I will fill my pen, I will write the Puranas, I will write the Vedas with it", "start": 104.2, "end": 112.5}, {"id": "SW-092", "bn": "পুরাণ", "roman": "Puran", "roman_raw": "Puran", "inSong": true, "section": "Verse 3", "line_bn": "তাতে কলম ভরবো ছাইয়ে আমি লিখবো পুরাণ লিখবো তাতে বেদ", "line_roman": "Tate kolom bhorbo chaiye aami likhbo Puran likhbo tate Ved", "line_en": "With that ash I will fill my pen, I will write the Puranas, I will write the Vedas with it", "start": 104.2, "end": 112.5}, {"id": "SW-093", "bn": "বেদ", "roman": "Ved", "roman_raw": "Ved", "inSong": true, "section": "Verse 3", "line_bn": "তাতে কলম ভরবো ছাইয়ে আমি লিখবো পুরাণ লিখবো তাতে বেদ", "line_roman": "Tate kolom bhorbo chaiye aami likhbo Puran likhbo tate Ved", "line_en": "With that ash I will fill my pen, I will write the Puranas, I will write the Vedas with it", "start": 104.2, "end": 112.5}, {"id": "SW-094", "bn": "বড়", "roman": "Boro", "roman_raw": "boro", "inSong": true, "section": "Verse 4", "line_bn": "সুজান বড় কঠিন তোমার সহজ হাসির ধরন", "line_roman": "Suzanne boro kothin tomar shohoj hashir dhoron", "line_en": "Suzanne, the way of your simple smile is so difficult", "start": 123.5, "end": 129.2}, {"id": "SW-095", "bn": "কঠিন", "roman": "Kothin", "roman_raw": "kothin", "inSong": true, "section": "Verse 4", "line_bn": "সুজান বড় কঠিন তোমার সহজ হাসির ধরন", "line_roman": "Suzanne boro kothin tomar shohoj hashir dhoron", "line_en": "Suzanne, the way of your simple smile is so difficult", "start": 123.5, "end": 129.2}, {"id": "SW-096", "bn": "সহজ", "roman": "Shohoj", "roman_raw": "shohoj", "inSong": true, "section": "Verse 4", "line_bn": "সুজান বড় কঠিন তোমার সহজ হাসির ধরন", "line_roman": "Suzanne boro kothin tomar shohoj hashir dhoron", "line_en": "Suzanne, the way of your simple smile is so difficult", "start": 123.5, "end": 129.2}, {"id": "SW-097", "bn": "হাসির", "roman": "Hashir", "roman_raw": "hashir", "inSong": true, "section": "Verse 4", "line_bn": "সুজান বড় কঠিন তোমার সহজ হাসির ধরন", "line_roman": "Suzanne boro kothin tomar shohoj hashir dhoron", "line_en": "Suzanne, the way of your simple smile is so difficult", "start": 123.5, "end": 129.2}, {"id": "SW-098", "bn": "ধরন", "roman": "Dhoron", "roman_raw": "dhoron", "inSong": true, "section": "Verse 4", "line_bn": "সুজান বড় কঠিন তোমার সহজ হাসির ধরন", "line_roman": "Suzanne boro kothin tomar shohoj hashir dhoron", "line_en": "Suzanne, the way of your simple smile is so difficult", "start": 123.5, "end": 129.2}, {"id": "SW-099", "bn": "ঘন", "roman": "Ghono", "roman_raw": "ghono", "inSong": true, "section": "Verse 4", "line_bn": "বড় ঘন অন্ধকারের মতন তোমার দেহের গড়ন", "line_roman": "Boro ghono ondhokarer moton tomar deher goron", "line_en": "The contour of your body is like a deep, dense darkness", "start": 129.2, "end": 135.0}, {"id": "SW-100", "bn": "অন্ধকারের", "roman": "Ondhokarer", "roman_raw": "ondhokarer", "inSong": true, "section": "Verse 4", "line_bn": "বড় ঘন অন্ধকারের মতন তোমার দেহের গড়ন", "line_roman": "Boro ghono ondhokarer moton tomar deher goron", "line_en": "The contour of your body is like a deep, dense darkness", "start": 129.2, "end": 135.0}, {"id": "SW-101", "bn": "মতন", "roman": "Moton", "roman_raw": "moton", "inSong": true, "section": "Verse 4", "line_bn": "বড় ঘন অন্ধকারের মতন তোমার দেহের গড়ন", "line_roman": "Boro ghono ondhokarer moton tomar deher goron", "line_en": "The contour of your body is like a deep, dense darkness", "start": 129.2, "end": 135.0}, {"id": "SW-102", "bn": "দেহের", "roman": "Deher", "roman_raw": "deher", "inSong": true, "section": "Verse 4", "line_bn": "বড় ঘন অন্ধকারের মতন তোমার দেহের গড়ন", "line_roman": "Boro ghono ondhokarer moton tomar deher goron", "line_en": "The contour of your body is like a deep, dense darkness", "start": 129.2, "end": 135.0}, {"id": "SW-103", "bn": "গড়ন", "roman": "Goron", "roman_raw": "goron", "inSong": true, "section": "Verse 4", "line_bn": "বড় ঘন অন্ধকারের মতন তোমার দেহের গড়ন", "line_roman": "Boro ghono ondhokarer moton tomar deher goron", "line_en": "The contour of your body is like a deep, dense darkness", "start": 129.2, "end": 135.0}, {"id": "SW-104", "bn": "যখন", "roman": "Jokhon", "roman_raw": "Jokhon", "inSong": true, "section": "Chorus", "line_bn": "যখন ভালোবাসা শেষ হয়ে পড়ে থাকবে ইতিহাস", "line_roman": "Jokhon bhalobasha shesh hoye pore thakbe itihash", "line_en": "When love ends and only history remains lying behind", "start": 135.0, "end": 140.8}, {"id": "SW-105", "bn": "ভালোবাসা", "roman": "Bhalobasha", "roman_raw": "bhalobasha", "inSong": true, "section": "Chorus", "line_bn": "যখন ভালোবাসা শেষ হয়ে পড়ে থাকবে ইতিহাস", "line_roman": "Jokhon bhalobasha shesh hoye pore thakbe itihash", "line_en": "When love ends and only history remains lying behind", "start": 135.0, "end": 140.8}, {"id": "SW-106", "bn": "শেষ", "roman": "Shesh", "roman_raw": "shesh", "inSong": true, "section": "Chorus", "line_bn": "যখন ভালোবাসা শেষ হয়ে পড়ে থাকবে ইতিহাস", "line_roman": "Jokhon bhalobasha shesh hoye pore thakbe itihash", "line_en": "When love ends and only history remains lying behind", "start": 135.0, "end": 140.8}, {"id": "SW-107", "bn": "হয়ে", "roman": "Hoye", "roman_raw": "hoye", "inSong": true, "section": "Chorus", "line_bn": "যখন ভালোবাসা শেষ হয়ে পড়ে থাকবে ইতিহাস", "line_roman": "Jokhon bhalobasha shesh hoye pore thakbe itihash", "line_en": "When love ends and only history remains lying behind", "start": 135.0, "end": 140.8}, {"id": "SW-108", "bn": "থাকবে", "roman": "Thakbe", "roman_raw": "thakbe", "inSong": true, "section": "Chorus", "line_bn": "যখন ভালোবাসা শেষ হয়ে পড়ে থাকবে ইতিহাস", "line_roman": "Jokhon bhalobasha shesh hoye pore thakbe itihash", "line_en": "When love ends and only history remains lying behind", "start": 135.0, "end": 140.8}, {"id": "SW-109", "bn": "জেনো", "roman": "Jeno", "roman_raw": "Jeno", "inSong": true, "section": "Chorus", "line_bn": "জেনো ডাকবাক্সেই যাবে আবার তোমার আমার লাশ", "line_roman": "Jeno daakbakshei jabe abar tomar aamar laash", "line_en": "Know that your corpse and mine will go into the postbox once again", "start": 140.8, "end": 146.5}, {"id": "SW-110", "bn": "যাবে", "roman": "Jabe", "roman_raw": "jabe", "inSong": true, "section": "Chorus", "line_bn": "জেনো ডাকবাক্সেই যাবে আবার তোমার আমার লাশ", "line_roman": "Jeno daakbakshei jabe abar tomar aamar laash", "line_en": "Know that your corpse and mine will go into the postbox once again", "start": 140.8, "end": 146.5}, {"id": "SW-111", "bn": "লাশ", "roman": "Laash", "roman_raw": "laash", "inSong": true, "section": "Chorus", "line_bn": "জেনো ডাকবাক্সেই যাবে আবার তোমার আমার লাশ", "line_roman": "Jeno daakbakshei jabe abar tomar aamar laash", "line_en": "Know that your corpse and mine will go into the postbox once again", "start": 140.8, "end": 146.5}, {"id": "SW-112", "bn": "সেটাও", "roman": "Shetao", "roman_raw": "Shetao", "inSong": true, "section": "Outro", "line_bn": "সেটাও উপড়ে নেবে কেউ সেথায় ফুটবে তারা কুঁড়ি", "line_roman": "Shetao upre nebe keu shethay phutbe tara kuri", "line_en": "Someone will uproot even that, and star-buds will blossom there", "start": 146.5, "end": 152.2}, {"id": "SW-113", "bn": "উপড়ে", "roman": "Upre", "roman_raw": "upre", "inSong": true, "section": "Outro", "line_bn": "সেটাও উপড়ে নেবে কেউ সেথায় ফুটবে তারা কুঁড়ি", "line_roman": "Shetao upre nebe keu shethay phutbe tara kuri", "line_en": "Someone will uproot even that, and star-buds will blossom there", "start": 146.5, "end": 152.2}, {"id": "SW-114", "bn": "নেবে", "roman": "Nebe", "roman_raw": "nebe", "inSong": true, "section": "Outro", "line_bn": "সেটাও উপড়ে নেবে কেউ সেথায় ফুটবে তারা কুঁড়ি", "line_roman": "Shetao upre nebe keu shethay phutbe tara kuri", "line_en": "Someone will uproot even that, and star-buds will blossom there", "start": 146.5, "end": 152.2}, {"id": "SW-115", "bn": "কেউ", "roman": "Keu", "roman_raw": "keu", "inSong": true, "section": "Outro", "line_bn": "সেটাও উপড়ে নেবে কেউ সেথায় ফুটবে তারা কুঁড়ি", "line_roman": "Shetao upre nebe keu shethay phutbe tara kuri", "line_en": "Someone will uproot even that, and star-buds will blossom there", "start": 146.5, "end": 152.2}, {"id": "SW-116", "bn": "সেথায়", "roman": "Shethay", "roman_raw": "shethay", "inSong": true, "section": "Outro", "line_bn": "সেটাও উপড়ে নেবে কেউ সেথায় ফুটবে তারা কুঁড়ি", "line_roman": "Shetao upre nebe keu shethay phutbe tara kuri", "line_en": "Someone will uproot even that, and star-buds will blossom there", "start": 146.5, "end": 152.2}, {"id": "SW-117", "bn": "ফুটবে", "roman": "Phutbe", "roman_raw": "phutbe", "inSong": true, "section": "Outro", "line_bn": "সেটাও উপড়ে নেবে কেউ সেথায় ফুটবে তারা কুঁড়ি", "line_roman": "Shetao upre nebe keu shethay phutbe tara kuri", "line_en": "Someone will uproot even that, and star-buds will blossom there", "start": 146.5, "end": 152.2}, {"id": "SW-118", "bn": "তারা", "roman": "Tara", "roman_raw": "tara", "inSong": true, "section": "Outro", "line_bn": "সেটাও উপড়ে নেবে কেউ সেথায় ফুটবে তারা কুঁড়ি", "line_roman": "Shetao upre nebe keu shethay phutbe tara kuri", "line_en": "Someone will uproot even that, and star-buds will blossom there", "start": 146.5, "end": 152.2}, {"id": "SW-119", "bn": "কুঁড়ি", "roman": "Kuri", "roman_raw": "kuri", "inSong": true, "section": "Outro", "line_bn": "সেটাও উপড়ে নেবে কেউ সেথায় ফুটবে তারা কুঁড়ি", "line_roman": "Shetao upre nebe keu shethay phutbe tara kuri", "line_en": "Someone will uproot even that, and star-buds will blossom there", "start": 146.5, "end": 152.2}, {"id": "SW-120", "bn": "শুনছি", "roman": "Shunchi", "roman_raw": "shunchi", "inSong": true, "section": "Outro", "line_bn": "আমি শুনছি আমি লিখছি আমি গাইছি তাই জয়েরই গান", "line_roman": "Aami shunchi aami likhchi aami gaichi taai joyeri gaan", "line_en": "I am listening, I am writing, I am therefore singing the song of victory", "start": 152.2, "end": 168.0}, {"id": "SW-121", "bn": "লিখছি", "roman": "Likhchi", "roman_raw": "likhchi", "inSong": true, "section": "Outro", "line_bn": "আমি শুনছি আমি লিখছি আমি গাইছি তাই জয়েরই গান", "line_roman": "Aami shunchi aami likhchi aami gaichi taai joyeri gaan", "line_en": "I am listening, I am writing, I am therefore singing the song of victory", "start": 152.2, "end": 168.0}, {"id": "SW-122", "bn": "গাইছি", "roman": "Gaichi", "roman_raw": "gaichi", "inSong": true, "section": "Outro", "line_bn": "আমি শুনছি আমি লিখছি আমি গাইছি তাই জয়েরই গান", "line_roman": "Aami shunchi aami likhchi aami gaichi taai joyeri gaan", "line_en": "I am listening, I am writing, I am therefore singing the song of victory", "start": 152.2, "end": 168.0}, {"id": "SW-123", "bn": "তাই", "roman": "Taai", "roman_raw": "taai", "inSong": true, "section": "Outro", "line_bn": "আমি শুনছি আমি লিখছি আমি গাইছি তাই জয়েরই গান", "line_roman": "Aami shunchi aami likhchi aami gaichi taai joyeri gaan", "line_en": "I am listening, I am writing, I am therefore singing the song of victory", "start": 152.2, "end": 168.0}, {"id": "SW-124", "bn": "জয়েরই", "roman": "Joyeri", "roman_raw": "joyeri", "inSong": true, "section": "Outro", "line_bn": "আমি শুনছি আমি লিখছি আমি গাইছি তাই জয়েরই গান", "line_roman": "Aami shunchi aami likhchi aami gaichi taai joyeri gaan", "line_en": "I am listening, I am writing, I am therefore singing the song of victory", "start": 152.2, "end": 168.0}, {"id": "SW-125", "bn": "গান", "roman": "Gaan", "roman_raw": "gaan", "inSong": true, "section": "Outro", "line_bn": "আমি শুনছি আমি লিখছি আমি গাইছি তাই জয়েরই গান", "line_roman": "Aami shunchi aami likhchi aami gaichi taai joyeri gaan", "line_en": "I am listening, I am writing, I am therefore singing the song of victory", "start": 152.2, "end": 168.0}], "decoy_words": [{"id": "DW-001", "bn": "বলো", "roman": "Bolo", "roman_raw": "Bolo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #1)"}, {"id": "DW-002", "bn": "তরে", "roman": "Tore", "roman_raw": "tore", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #2)"}, {"id": "DW-003", "bn": "খেয়া", "roman": "Kheya", "roman_raw": "kheya", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #3)"}, {"id": "DW-004", "bn": "আপনি", "roman": "Aapni", "roman_raw": "aapni", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #4)"}, {"id": "DW-005", "bn": "টান", "roman": "Taan", "roman_raw": "taan", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #5)"}, {"id": "DW-006", "bn": "সখী", "roman": "Shokhi", "roman_raw": "shokhi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #6)"}, {"id": "DW-007", "bn": "জানে", "roman": "Jane", "roman_raw": "jane", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #7)"}, {"id": "DW-008", "bn": "পথে", "roman": "Pothe", "roman_raw": "pothe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #8)"}, {"id": "DW-009", "bn": "আঁধার", "roman": "Aandhar", "roman_raw": "aandhar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #9)"}, {"id": "DW-010", "bn": "তৃষ্ণা", "roman": "Trishna", "roman_raw": "trishna", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #10)"}, {"id": "DW-011", "bn": "কালো", "roman": "Kalo", "roman_raw": "kalo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #11)"}, {"id": "DW-012", "bn": "মরণ", "roman": "Moron", "roman_raw": "moron", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #12)"}, {"id": "DW-013", "bn": "মরেও", "roman": "Moreo", "roman_raw": "moreo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #13)"}, {"id": "DW-014", "bn": "পূজি", "roman": "Puji", "roman_raw": "puji", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #14)"}, {"id": "DW-015", "bn": "খোঁজ", "roman": "Khoj", "roman_raw": "khoj", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #15)"}, {"id": "DW-016", "bn": "ভুল", "roman": "Bhul", "roman_raw": "Bhul", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #16)"}, {"id": "DW-017", "bn": "বোধহয়", "roman": "Bodhhoy", "roman_raw": "bodhhoy", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #17)"}, {"id": "DW-018", "bn": "এটাও", "roman": "Etao", "roman_raw": "etao", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #18)"}, {"id": "DW-019", "bn": "কালোয়", "roman": "Kaloy", "roman_raw": "kaloy", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #19)"}, {"id": "DW-020", "bn": "অবিকল", "roman": "Obikol", "roman_raw": "obikol", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #20)"}, {"id": "DW-021", "bn": "ডুবি", "roman": "Dubi", "roman_raw": "Dubi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #21)"}, {"id": "DW-022", "bn": "আয়নায়", "roman": "Aynay", "roman_raw": "aynay", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #22)"}, {"id": "DW-023", "bn": "মরে", "roman": "More", "roman_raw": "More", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #23)"}, {"id": "DW-024", "bn": "গিয়ে", "roman": "Giye", "roman_raw": "giye", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #24)"}, {"id": "DW-025", "bn": "আসে", "roman": "Ashe", "roman_raw": "ashe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #25)"}, {"id": "DW-026", "bn": "গয়না", "roman": "Goyna", "roman_raw": "goyna", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #26)"}, {"id": "DW-027", "bn": "রূপে", "roman": "Rupe", "roman_raw": "rupe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #27)"}, {"id": "DW-028", "bn": "রঙে", "roman": "Ronge", "roman_raw": "ronge", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #28)"}, {"id": "DW-029", "bn": "সংসার", "roman": "Shongshar", "roman_raw": "shongshar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #29)"}, {"id": "DW-030", "bn": "জানি", "roman": "Jani", "roman_raw": "Jani", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #30)"}, {"id": "DW-031", "bn": "দরকার", "roman": "Dorkar", "roman_raw": "dorkar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #31)"}, {"id": "DW-032", "bn": "কারবার", "roman": "Karbar", "roman_raw": "karbar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #32)"}, {"id": "DW-033", "bn": "খেলনা", "roman": "Khelna", "roman_raw": "Khelna", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #33)"}, {"id": "DW-034", "bn": "কামনা", "roman": "Kamona", "roman_raw": "kamona", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #34)"}, {"id": "DW-035", "bn": "রবে", "roman": "Robe", "roman_raw": "Robe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #35)"}, {"id": "DW-036", "bn": "গহনা", "roman": "Gohona", "roman_raw": "gohona", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #36)"}, {"id": "DW-037", "bn": "জীবন", "roman": "Jibon", "roman_raw": "jibon", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #37)"}, {"id": "DW-038", "bn": "কাটিয়া", "roman": "Katiya", "roman_raw": "katiya", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #38)"}, {"id": "DW-039", "bn": "ধেই", "roman": "Dhei", "roman_raw": "dhei", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #39)"}, {"id": "DW-040", "bn": "ফাঁকা", "roman": "Fhaka", "roman_raw": "Fhaka", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #40)"}, {"id": "DW-041", "bn": "বিলাসিতায়", "roman": "Bilashitay", "roman_raw": "bilashitay", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #41)"}, {"id": "DW-042", "bn": "গলা", "roman": "Gola", "roman_raw": "gola", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #42)"}, {"id": "DW-043", "bn": "আসবেই", "roman": "Ashbei", "roman_raw": "ashbei", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #43)"}, {"id": "DW-044", "bn": "আশায়", "roman": "Ashay", "roman_raw": "Ashay", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #44)"}, {"id": "DW-045", "bn": "বসে", "roman": "Boshe", "roman_raw": "boshe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #45)"}, {"id": "DW-046", "bn": "মনের", "roman": "Moner", "roman_raw": "moner", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #46)"}, {"id": "DW-047", "bn": "জোয়ারমুখী", "roman": "Jowarmukhi", "roman_raw": "Jowarmukhi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #47)"}, {"id": "DW-048", "bn": "ডুবেও", "roman": "Dubeo", "roman_raw": "Dubeo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #48)"}, {"id": "DW-049", "bn": "ভিজিনি", "roman": "Bhijini", "roman_raw": "bhijini", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #49)"}, {"id": "DW-050", "bn": "কাছে", "roman": "Kachhe", "roman_raw": "kachhe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #50)"}, {"id": "DW-051", "bn": "সোনা", "roman": "Shona", "roman_raw": "shona", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #51)"}, {"id": "DW-052", "bn": "সকাল", "roman": "Shokal", "roman_raw": "Shokal", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #52)"}, {"id": "DW-053", "bn": "বিকেল", "roman": "Bikel", "roman_raw": "bikel", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #53)"}, {"id": "DW-054", "bn": "জাগিয়ে", "roman": "Jagiye", "roman_raw": "jagiye", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #54)"}, {"id": "DW-055", "bn": "ঘুম", "roman": "Ghum", "roman_raw": "Ghum", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #55)"}, {"id": "DW-056", "bn": "রশ্মি", "roman": "Roshmi", "roman_raw": "roshmi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #56)"}, {"id": "DW-057", "bn": "মরুভূমি", "roman": "Morubhumi", "roman_raw": "morubhumi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #57)"}, {"id": "DW-058", "bn": "মোহর", "roman": "Mohor", "roman_raw": "mohor", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #58)"}, {"id": "DW-059", "bn": "কাজ", "roman": "Kaaj", "roman_raw": "kaaj", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #59)"}, {"id": "DW-060", "bn": "নূপুর", "roman": "Nupur", "roman_raw": "nupur", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #60)"}, {"id": "DW-061", "bn": "পথের", "roman": "Pother", "roman_raw": "pother", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #61)"}, {"id": "DW-062", "bn": "সঙ্গী", "roman": "Shongi", "roman_raw": "shongi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #62)"}, {"id": "DW-063", "bn": "বিশ্ব", "roman": "Bishwo", "roman_raw": "bishwo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #63)"}, {"id": "DW-064", "bn": "খামার", "roman": "Khamar", "roman_raw": "khamar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #64)"}, {"id": "DW-065", "bn": "ফকির", "roman": "Fokir", "roman_raw": "fokir", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #65)"}, {"id": "DW-066", "bn": "মলম", "roman": "Molom", "roman_raw": "molom", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #66)"}, {"id": "DW-067", "bn": "চুলের", "roman": "Chuler", "roman_raw": "chuler", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #67)"}, {"id": "DW-068", "bn": "চুলোয়", "roman": "Chuloy", "roman_raw": "chuloy", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #68)"}, {"id": "DW-069", "bn": "আদেশ", "roman": "Adesh", "roman_raw": "adesh", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #69)"}, {"id": "DW-070", "bn": "থেকে", "roman": "Theke", "roman_raw": "theke", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #70)"}, {"id": "DW-071", "bn": "আসিব", "roman": "Ashibo", "roman_raw": "ashibo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #71)"}, {"id": "DW-072", "bn": "উঠোনে", "roman": "Uthone", "roman_raw": "uthone", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #72)"}, {"id": "DW-073", "bn": "মগের", "roman": "Moger", "roman_raw": "Moger", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #73)"}, {"id": "DW-074", "bn": "কাছাকাছি", "roman": "Kachakachi", "roman_raw": "kachakachi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #74)"}, {"id": "DW-075", "bn": "ইচ্ছে", "roman": "Icche", "roman_raw": "icche", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #75)"}, {"id": "DW-076", "bn": "নিয়মিত", "roman": "Niyomito", "roman_raw": "niyomito", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #76)"}, {"id": "DW-077", "bn": "খেয়ে", "roman": "Kheye", "roman_raw": "kheye", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #77)"}, {"id": "DW-078", "bn": "যেমন", "roman": "Jemon", "roman_raw": "jemon", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #78)"}, {"id": "DW-079", "bn": "খাওয়ার", "roman": "Khawar", "roman_raw": "khawar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #79)"}, {"id": "DW-080", "bn": "শোওয়ার", "roman": "Showar", "roman_raw": "showar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #80)"}, {"id": "DW-081", "bn": "চুপটি", "roman": "Chupti", "roman_raw": "chupti", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #81)"}, {"id": "DW-082", "bn": "খাসি", "roman": "Khashi", "roman_raw": "khashi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #82)"}, {"id": "DW-083", "bn": "ঢেউ", "roman": "Dheu", "roman_raw": "dheu", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #83)"}, {"id": "DW-084", "bn": "ঘেউ", "roman": "Gheu", "roman_raw": "gheu", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #84)"}, {"id": "DW-085", "bn": "ফেউ", "roman": "Pheu", "roman_raw": "pheu", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #85)"}, {"id": "DW-086", "bn": "শোনার", "roman": "Shonar", "roman_raw": "shonar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #86)"}, {"id": "DW-087", "bn": "ইচ্ছেই", "roman": "Icchei", "roman_raw": "Icchei", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #87)"}, {"id": "DW-088", "bn": "আকাশে", "roman": "Akashe", "roman_raw": "akashe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #88)"}, {"id": "DW-089", "bn": "ধায়", "roman": "Dhay", "roman_raw": "dhay", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #89)"}, {"id": "DW-090", "bn": "গমন", "roman": "Gomon", "roman_raw": "gomon", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #90)"}, {"id": "DW-091", "bn": "কার", "roman": "Kaar", "roman_raw": "Kaar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #91)"}, {"id": "DW-092", "bn": "মিলন", "roman": "Milono", "roman_raw": "milono", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #92)"}, {"id": "DW-093", "bn": "বিরহী", "roman": "Birohi", "roman_raw": "birohi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #93)"}, {"id": "DW-094", "bn": "গহনে", "roman": "Gohone", "roman_raw": "gohone", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #94)"}, {"id": "DW-095", "bn": "চিত্তকমলে", "roman": "Chittokomole", "roman_raw": "chittokomole", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #95)"}, {"id": "DW-096", "bn": "অমৃতজ্যোতি", "roman": "Omritojyoti", "roman_raw": "Omritojyoti", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #96)"}, {"id": "DW-097", "bn": "কিবা", "roman": "Kibaa", "roman_raw": "kibaa", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #97)"}, {"id": "DW-098", "bn": "আলো", "roman": "Aalo", "roman_raw": "aalo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #98)"}, {"id": "DW-099", "bn": "চিৎকার", "roman": "Chitkar", "roman_raw": "chitkar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #99)"}, {"id": "DW-100", "bn": "রুটি", "roman": "Ruti", "roman_raw": "ruti", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #100)"}, {"id": "DW-101", "bn": "খাওয়া", "roman": "Khawa", "roman_raw": "khawa", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #101)"}, {"id": "DW-102", "bn": "ঠোঁট", "roman": "Thot", "roman_raw": "thot", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #102)"}, {"id": "DW-103", "bn": "দঙ্গল", "roman": "Dongol", "roman_raw": "dongol", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #103)"}, {"id": "DW-104", "bn": "পথঘাট", "roman": "Pothghat", "roman_raw": "pothghat", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #104)"}, {"id": "DW-105", "bn": "কাদা", "roman": "Kaada", "roman_raw": "kaada", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #105)"}, {"id": "DW-106", "bn": "সত্য", "roman": "Shotto", "roman_raw": "shotto", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #106)"}, {"id": "DW-107", "bn": "অংশ", "roman": "Ongsho", "roman_raw": "ongsho", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #107)"}, {"id": "DW-108", "bn": "চিনি", "roman": "Chini", "roman_raw": "chini", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #108)"}, {"id": "DW-109", "bn": "চিনেও", "roman": "Chineo", "roman_raw": "chineo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #109)"}, {"id": "DW-110", "bn": "ক্রোধ", "roman": "Krodh", "roman_raw": "krodh", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #110)"}, {"id": "DW-111", "bn": "ছুরি", "roman": "Churi", "roman_raw": "churi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #111)"}, {"id": "DW-112", "bn": "আক্রোশ", "roman": "Akrosh", "roman_raw": "akrosh", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #112)"}, {"id": "DW-113", "bn": "ঘৃণা", "roman": "Ghrina", "roman_raw": "ghrina", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #113)"}, {"id": "DW-114", "bn": "বিদ্বেষ", "roman": "Biddesh", "roman_raw": "biddesh", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #114)"}, {"id": "DW-115", "bn": "লজ্জা", "roman": "Lojja", "roman_raw": "lojja", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #115)"}, {"id": "DW-116", "bn": "অচেনা", "roman": "Ochena", "roman_raw": "ochena", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #116)"}, {"id": "DW-117", "bn": "আপোষ", "roman": "Aposh", "roman_raw": "aposh", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #117)"}, {"id": "DW-118", "bn": "গুনগুন", "roman": "Gungun", "roman_raw": "gungun", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #118)"}, {"id": "DW-119", "bn": "উড়ত", "roman": "Urto", "roman_raw": "Urto", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #119)"}, {"id": "DW-120", "bn": "সত্যি", "roman": "Shotti", "roman_raw": "Shotti", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #120)"}, {"id": "DW-121", "bn": "উড়তে", "roman": "Urte", "roman_raw": "urte", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #121)"}, {"id": "DW-122", "bn": "আকাশ", "roman": "Akash", "roman_raw": "akash", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #122)"}, {"id": "DW-123", "bn": "যেত", "roman": "Jeto", "roman_raw": "jeto", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #123)"}, {"id": "DW-124", "bn": "বলত", "roman": "Bolto", "roman_raw": "Bolto", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #124)"}, {"id": "DW-125", "bn": "মুক্ত", "roman": "Mukto", "roman_raw": "mukto", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #125)"}, {"id": "DW-126", "bn": "উড়ব", "roman": "Urbo", "roman_raw": "Urbo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #126)"}, {"id": "DW-127", "bn": "নীল", "roman": "Neel", "roman_raw": "neel", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #127)"}, {"id": "DW-128", "bn": "বলতেন", "roman": "Bolten", "roman_raw": "Bolten", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #128)"}, {"id": "DW-129", "bn": "রবি", "roman": "Robi", "roman_raw": "Robi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #129)"}, {"id": "DW-130", "bn": "বন্ধু", "roman": "Bondhu", "roman_raw": "bondhu", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #130)"}, {"id": "DW-131", "bn": "তবুও", "roman": "Tobuo", "roman_raw": "Tobuo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #131)"}, {"id": "DW-132", "bn": "বলে", "roman": "Bole", "roman_raw": "bole", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #132)"}, {"id": "DW-133", "bn": "ভুলে", "roman": "Bhule", "roman_raw": "bhule", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #133)"}, {"id": "DW-134", "bn": "ছুটে", "roman": "Chute", "roman_raw": "chute", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #134)"}, {"id": "DW-135", "bn": "দূরে", "roman": "Dure", "roman_raw": "dure", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #135)"}, {"id": "DW-136", "bn": "কামনায়", "roman": "Kamonay", "roman_raw": "kamonay", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #136)"}, {"id": "DW-137", "bn": "শান্তির", "roman": "Shantir", "roman_raw": "shantir", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #137)"}, {"id": "DW-138", "bn": "ব্যথায়", "roman": "Byathay", "roman_raw": "byathay", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #138)"}, {"id": "DW-139", "bn": "মেশা", "roman": "Mesha", "roman_raw": "mesha", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #139)"}, {"id": "DW-140", "bn": "গোপন", "roman": "Gopono", "roman_raw": "Gopono", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #140)"}, {"id": "DW-141", "bn": "গোপনে", "roman": "Gopone", "roman_raw": "gopone", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #141)"}, {"id": "DW-142", "bn": "উঠিল", "roman": "Uthilo", "roman_raw": "Uthilo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #142)"}, {"id": "DW-143", "bn": "নীরব", "roman": "Nirobo", "roman_raw": "nirobo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #143)"}, {"id": "DW-144", "bn": "নয়নে", "roman": "Noyone", "roman_raw": "noyone", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #144)"}, {"id": "DW-145", "bn": "বিভল", "roman": "Bibholo", "roman_raw": "Bibholo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #145)"}, {"id": "DW-146", "bn": "অধরে", "roman": "Odhore", "roman_raw": "odhore", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #146)"}, {"id": "DW-147", "bn": "নিভৃত", "roman": "Nibhrito", "roman_raw": "nibhrito", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #147)"}, {"id": "DW-148", "bn": "মধুপ", "roman": "Modhupo", "roman_raw": "Modhupo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #148)"}, {"id": "DW-149", "bn": "গুঞ্জরিল", "roman": "Gunjorilo", "roman_raw": "gunjorilo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #149)"}, {"id": "DW-150", "bn": "মধুর", "roman": "Modhuro", "roman_raw": "Modhuro", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #150)"}, {"id": "DW-151", "bn": "অশোক", "roman": "Oshoko", "roman_raw": "oshoko", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #151)"}, {"id": "DW-152", "bn": "মঞ্জরিল", "roman": "Monjorilo", "roman_raw": "monjorilo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #152)"}, {"id": "DW-153", "bn": "অরুণ", "roman": "Oruno", "roman_raw": "Oruno", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #153)"}, {"id": "DW-154", "bn": "তপনে", "roman": "Topone", "roman_raw": "topone", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #154)"}, {"id": "DW-155", "bn": "থেমে", "roman": "Theme", "roman_raw": "Theme", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #155)"}, {"id": "DW-156", "bn": "জ্বলে", "roman": "Jwole", "roman_raw": "jwole", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #156)"}, {"id": "DW-157", "bn": "ধুলো", "roman": "Dhulo", "roman_raw": "Dhulo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #157)"}, {"id": "DW-158", "bn": "মেঘে", "roman": "Meghe", "roman_raw": "meghe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #158)"}, {"id": "DW-159", "bn": "গভীরতায়", "roman": "Gobhirotay", "roman_raw": "Gobhirotay", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #159)"}, {"id": "DW-160", "bn": "নিবিড়ে", "roman": "Nibire", "roman_raw": "Nibire", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #160)"}, {"id": "DW-161", "bn": "ঘুরে", "roman": "Ghure", "roman_raw": "ghure", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #161)"}, {"id": "DW-162", "bn": "ধারা", "roman": "Dhara", "roman_raw": "dhara", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #162)"}, {"id": "DW-163", "bn": "নিশীথে", "roman": "Nishithe", "roman_raw": "Nishithe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #163)"}, {"id": "DW-164", "bn": "মগনে", "roman": "Mogone", "roman_raw": "Mogone", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #164)"}, {"id": "DW-165", "bn": "এসো", "roman": "Esho", "roman_raw": "esho", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #165)"}, {"id": "DW-166", "bn": "ধারায়", "roman": "Dharay", "roman_raw": "dharay", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #166)"}, {"id": "DW-167", "bn": "আরও", "roman": "Aaro", "roman_raw": "aaro", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #167)"}, {"id": "DW-168", "bn": "অকারণ", "roman": "Okaaron", "roman_raw": "okaaron", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #168)"}, {"id": "DW-169", "bn": "বিতরণ", "roman": "Bitoron", "roman_raw": "bitoron", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #169)"}, {"id": "DW-170", "bn": "শোনো", "roman": "Shono", "roman_raw": "shono", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #170)"}, {"id": "DW-171", "bn": "গলিতে", "roman": "Golite", "roman_raw": "golite", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #171)"}, {"id": "DW-172", "bn": "ডুবে", "roman": "Dube", "roman_raw": "dube", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #172)"}, {"id": "DW-173", "bn": "মরণে", "roman": "Morone", "roman_raw": "morone", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #173)"}, {"id": "DW-174", "bn": "জানো", "roman": "Jaano", "roman_raw": "jaano", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #174)"}, {"id": "DW-175", "bn": "মরমে", "roman": "Morome", "roman_raw": "morome", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #175)"}, {"id": "DW-176", "bn": "গহন", "roman": "Gohono", "roman_raw": "Gohono", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #176)"}, {"id": "DW-177", "bn": "মনে", "roman": "Mone", "roman_raw": "mone", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #177)"}, {"id": "DW-178", "bn": "সিংহাসনে", "roman": "Shinghashone", "roman_raw": "shinghashone", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #178)"}, {"id": "DW-179", "bn": "মেঘতাড়ুয়া", "roman": "Meghtarua", "roman_raw": "Meghtarua", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #179)"}, {"id": "DW-180", "bn": "বাতাস", "roman": "Batash", "roman_raw": "batash", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #180)"}, {"id": "DW-181", "bn": "এসেছে", "roman": "Eshechhe", "roman_raw": "eshechhe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #181)"}, {"id": "DW-182", "bn": "এখানে", "roman": "Ekhane", "roman_raw": "ekhane", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #182)"}, {"id": "DW-183", "bn": "চিঠি", "roman": "Chithi", "roman_raw": "chithi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #183)"}, {"id": "DW-184", "bn": "লোকে", "roman": "Loke", "roman_raw": "loke", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #184)"}, {"id": "DW-185", "bn": "যেখানেই", "roman": "Jekhanei", "roman_raw": "jekhanei", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #185)"}, {"id": "DW-186", "bn": "মেঘ", "roman": "Megh", "roman_raw": "megh", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #186)"}, {"id": "DW-187", "bn": "অশ্রু", "roman": "Oshru", "roman_raw": "oshru", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #187)"}, {"id": "DW-188", "bn": "ভীষণ", "roman": "Bhishon", "roman_raw": "bhishon", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #188)"}, {"id": "DW-189", "bn": "রকম", "roman": "Rokom", "roman_raw": "rokom", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #189)"}, {"id": "DW-190", "bn": "নিমেষে", "roman": "Nimeshe", "roman_raw": "nimeshe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #190)"}, {"id": "DW-191", "bn": "ফেলে", "roman": "Phele", "roman_raw": "phele", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #191)"}, {"id": "DW-192", "bn": "তবে", "roman": "Tobe", "roman_raw": "Tobe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #192)"}, {"id": "DW-193", "bn": "গুণীজন", "roman": "Gunijon", "roman_raw": "gunijon", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #193)"}, {"id": "DW-194", "bn": "ঠিকানা", "roman": "Thikana", "roman_raw": "thikana", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #194)"}, {"id": "DW-195", "bn": "খাম", "roman": "Khaam", "roman_raw": "khaam", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #195)"}, {"id": "DW-196", "bn": "ডাকঘর", "roman": "Daakghor", "roman_raw": "daakghor", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #196)"}, {"id": "DW-197", "bn": "পিয়নের", "roman": "Piyoner", "roman_raw": "piyoner", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #197)"}, {"id": "DW-198", "bn": "ভিজে", "roman": "Bhije", "roman_raw": "bhije", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #198)"}, {"id": "DW-199", "bn": "রোদের", "roman": "Roder", "roman_raw": "roder", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #199)"}, {"id": "DW-200", "bn": "কিছু", "roman": "Kichhu", "roman_raw": "kichhu", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #200)"}, {"id": "DW-201", "bn": "গোধূলি", "roman": "Godhuli", "roman_raw": "godhuli", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #201)"}, {"id": "DW-202", "bn": "কারে", "roman": "Kare", "roman_raw": "kare", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #202)"}, {"id": "DW-203", "bn": "মণি", "roman": "Moni", "roman_raw": "moni", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #203)"}, {"id": "DW-204", "bn": "নিয়ে", "roman": "Niye", "roman_raw": "niye", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #204)"}, {"id": "DW-205", "bn": "মণিহারা", "roman": "Monihara", "roman_raw": "Monihara", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #205)"}, {"id": "DW-206", "bn": "দমকা", "roman": "Domka", "roman_raw": "Domka", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #206)"}, {"id": "DW-207", "bn": "আসো", "roman": "Asho", "roman_raw": "asho", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #207)"}, {"id": "DW-208", "bn": "রজনী", "roman": "Rojoni", "roman_raw": "rojoni", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #208)"}, {"id": "DW-209", "bn": "ধ্বনি", "roman": "Dhwoni", "roman_raw": "dhwoni", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #209)"}, {"id": "DW-210", "bn": "ধ্রুবতারা", "roman": "Dhrubotara", "roman_raw": "dhrubotara", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #210)"}, {"id": "DW-211", "bn": "ক্লান্ত", "roman": "Klanto", "roman_raw": "klanto", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #211)"}, {"id": "DW-212", "bn": "মেখে", "roman": "Mekhe", "roman_raw": "mekhe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #212)"}, {"id": "DW-213", "bn": "কানাই", "roman": "Kanai", "roman_raw": "Kanai", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #213)"}, {"id": "DW-214", "bn": "বংশীর", "roman": "Bongshir", "roman_raw": "Bongshir", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #214)"}, {"id": "DW-215", "bn": "ঠোঁটে", "roman": "Thote", "roman_raw": "thote", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #215)"}, {"id": "DW-216", "bn": "কাঁদে", "roman": "Kade", "roman_raw": "kade", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #216)"}, {"id": "DW-217", "bn": "ওঠা", "roman": "Otha", "roman_raw": "otha", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #217)"}, {"id": "DW-218", "bn": "শান্ত", "roman": "Shanto", "roman_raw": "shanto", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #218)"}, {"id": "DW-219", "bn": "দোলা", "roman": "Dola", "roman_raw": "dola", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #219)"}, {"id": "DW-220", "bn": "আজও", "roman": "Aajo", "roman_raw": "aajo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #220)"}, {"id": "DW-221", "bn": "বন্দী", "roman": "Bondi", "roman_raw": "bondi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #221)"}, {"id": "DW-222", "bn": "সন্ধি", "roman": "Shondhi", "roman_raw": "shondhi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #222)"}, {"id": "DW-223", "bn": "সময়ের", "roman": "Shomoyer", "roman_raw": "shomoyer", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #223)"}, {"id": "DW-224", "bn": "মুরতি", "roman": "Murti", "roman_raw": "murti", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #224)"}, {"id": "DW-225", "bn": "গলে", "roman": "Gole", "roman_raw": "gole", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #225)"}, {"id": "DW-226", "bn": "ধার", "roman": "Dhaar", "roman_raw": "dhaar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #226)"}, {"id": "DW-227", "bn": "অহংকার", "roman": "Ohonkaar", "roman_raw": "ohonkaar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #227)"}, {"id": "DW-228", "bn": "ওড়াই", "roman": "Orai", "roman_raw": "orai", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #228)"}, {"id": "DW-229", "bn": "উদ্বাস্তু", "roman": "Udbastu", "roman_raw": "udbastu", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #229)"}, {"id": "DW-230", "bn": "ছিমছাম", "roman": "Chhimchham", "roman_raw": "chhimchham", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #230)"}, {"id": "DW-231", "bn": "জগতে", "roman": "Jogote", "roman_raw": "jogote", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #231)"}, {"id": "DW-232", "bn": "বহুদূর", "roman": "Bohudur", "roman_raw": "bohudur", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #232)"}, {"id": "DW-233", "bn": "জানালায়", "roman": "Janalay", "roman_raw": "janalay", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #233)"}, {"id": "DW-234", "bn": "বসছে", "roman": "Boshchhe", "roman_raw": "boshchhe", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #234)"}, {"id": "DW-235", "bn": "খাতায়", "roman": "Khatay", "roman_raw": "khatay", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #235)"}, {"id": "DW-236", "bn": "কাদায়", "roman": "Kaday", "roman_raw": "kaday", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #236)"}, {"id": "DW-237", "bn": "গোলকধাঁধায়", "roman": "Golokdhadhay", "roman_raw": "golokdhadhay", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #237)"}, {"id": "DW-238", "bn": "খেলবো", "roman": "Khelbo", "roman_raw": "khelbo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #238)"}, {"id": "DW-239", "bn": "মেলবো", "roman": "Melbo", "roman_raw": "melbo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #239)"}, {"id": "DW-240", "bn": "কাঁটার", "roman": "Katar", "roman_raw": "katar", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #240)"}, {"id": "DW-241", "bn": "মরবো", "roman": "Morbo", "roman_raw": "morbo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #241)"}, {"id": "DW-242", "bn": "লড়বো", "roman": "Lorbo", "roman_raw": "lorbo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #242)"}, {"id": "DW-243", "bn": "বলিস", "roman": "Bolish", "roman_raw": "bolish", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #243)"}, {"id": "DW-244", "bn": "খেলবোই", "roman": "Khelboi", "roman_raw": "khelboi", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #244)"}, {"id": "DW-245", "bn": "জিতবো", "roman": "Jitbo", "roman_raw": "jitbo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #245)"}, {"id": "DW-246", "bn": "সময়", "roman": "Shomoy", "roman_raw": "shomoy", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #246)"}, {"id": "DW-247", "bn": "কাটলো", "roman": "Katlo", "roman_raw": "katlo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #247)"}, {"id": "DW-248", "bn": "মফস্বলে", "roman": "Mofoshwole", "roman_raw": "mofoshwole", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #248)"}, {"id": "DW-249", "bn": "বৃষ্টিগুলো", "roman": "Brishtigulo", "roman_raw": "brishtigulo", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #249)"}, {"id": "DW-250", "bn": "ফেলিনি", "roman": "Fhelini", "roman_raw": "fhelini", "inSong": false, "source_note": "Not in Daakbaksher Gaan (Decoy #250)"}], "lines": [{"start": 10.5, "end": 15.8, "section": "Verse 1", "vocalist": "#ABHIKISM", "native": "সুজান পেয়েছি তোমায় আমি আমার যন্ত্রণায়", "transliteration": "Suzanne peyechi tomay aami aamar jontronay", "translation": "Suzanne, I have found you in my agony"}, {"start": 15.8, "end": 21.5, "section": "Verse 1", "vocalist": "#ABHIKISM", "native": "তুমি বুলিয়ে দিয়েছো হাত আমার একলা চোখের কোণায়", "transliteration": "Tumi buliye diyecho haat aamar ekla chokher konay", "translation": "You have gently stroked your hand at the corner of my lonely eyes"}, {"start": 21.5, "end": 27.2, "section": "Verse 1", "vocalist": "#ABHIKISM", "native": "আমি তোমার সাথে ঘর করেছি দুই পলকের মাঝে", "transliteration": "Aami tomar shathe ghor korechi dui poloker majhe", "translation": "I have built a home with you between two blinks of an eye"}, {"start": 27.2, "end": 33.0, "section": "Verse 1", "vocalist": "#ABHIKISM", "native": "তুমি হারিয়ে যাও প্রায়ই তোমার হারিয়ে যাওয়া সাজে", "transliteration": "Tumi hariye jao prayi tomar hariye jawa shaje", "translation": "You often get lost in your attire of getting lost"}, {"start": 33.0, "end": 38.8, "section": "Chorus", "vocalist": "#ABHIKISM", "native": "তুমি লিখো মাঝে মাঝে আমার এইখানেতেই বাস", "transliteration": "Tumi likho majhe majhe aamar eikhanetei baash", "translation": "Write to me sometimes, right here is where I live"}, {"start": 38.8, "end": 44.5, "section": "Chorus", "vocalist": "#ABHIKISM", "native": "এই ডাকবাক্সেই রইলো পড়ে আমার ইতিহাস", "transliteration": "Ei daakbakshei roilo pore aamar itihash", "translation": "In this very postbox lies my history"}, {"start": 44.5, "end": 50.2, "section": "Verse 2", "vocalist": "#ABHIKISM", "native": "কবে কেঁদেছিলাম হেসে কবে যুদ্ধে গেলাম শেষে", "transliteration": "Kobe kedechilam heshe kobe juddhe gelam sheshe", "translation": "When did I weep while smiling, when did I finally go to war"}, {"start": 50.2, "end": 56.0, "section": "Verse 2", "vocalist": "#ABHIKISM", "native": "কবে হেরে গেলাম তাও কবে এ দেশ ছেড়ে যাও", "transliteration": "Kobe here gelam tao kobe e desh chere jao", "translation": "When did I lose even then, when did I hear 'leave this country'"}, {"start": 56.0, "end": 61.8, "section": "Verse 2", "vocalist": "#ABHIKISM", "native": "শুনে ভেসেছিলাম জলে কবে অতলান্ত তলে", "transliteration": "Shune bheshechilam jole kobe otolanto tole", "translation": "Hearing that, when did I float on water to the bottomless depths"}, {"start": 61.8, "end": 70.0, "section": "Verse 2", "vocalist": "#ABHIKISM", "native": "আবার পাওয়া গেল দেহ রাখা আছে স্নেহ যত্নে তাও", "transliteration": "Abar pawa gelo deho rakha ache sneho jotne tao", "translation": "Again the body was found, yet affection is still kept with care"}, {"start": 75.5, "end": 81.2, "section": "Verse 3", "vocalist": "#ABHIKISM", "native": "সুজান যদি রাধা হলে যমুনা নদীর তটে", "transliteration": "Suzanne jodi Radha hole Jomuna nodir tote", "translation": "Suzanne, if you were Radha on the banks of the Yamuna river"}, {"start": 81.2, "end": 87.0, "section": "Verse 3", "vocalist": "#ABHIKISM", "native": "আমি হাজার বছর বাঁধবো তোমায় প্রেমের গানের জটে", "transliteration": "Aami hajar bochor badhbo tomay premer gaaner jote", "translation": "I would bind you for a thousand years in the tangles of love songs"}, {"start": 87.0, "end": 92.8, "section": "Verse 3", "vocalist": "#ABHIKISM", "native": "দাও যুক্তি অদ্ভুত যদি তাতেও ধরো খুঁত", "transliteration": "Dao jukti odbhut jodi tateo dhoro khut", "translation": "You give strange arguments, even if you find fault in that too"}, {"start": 92.8, "end": 98.5, "section": "Verse 3", "vocalist": "#ABHIKISM", "native": "আমি রাখাল সাজবো গ্রামে তোমায় ডাকবো অন্য নামে", "transliteration": "Aami rakhal shajbo grame tomay dakbo onno naame", "translation": "I will dress as a shepherd in the village and call you by another name"}, {"start": 98.5, "end": 104.2, "section": "Verse 3", "vocalist": "#ABHIKISM", "native": "তখন বাঁশির শব্দ শুনে তুমি ঝাঁপিও আগুনে", "transliteration": "Tokhon bashir shobdo shune tumi jhapiyo agune", "translation": "Then hearing the sound of the flute, leap into the fire"}, {"start": 104.2, "end": 112.5, "section": "Verse 3", "vocalist": "#ABHIKISM", "native": "তাতে কলম ভরবো ছাইয়ে আমি লিখবো পুরাণ লিখবো তাতে বেদ", "transliteration": "Tate kolom bhorbo chaiye aami likhbo Puran likhbo tate Ved", "translation": "With that ash I will fill my pen, I will write the Puranas, I will write the Vedas with it"}, {"start": 123.5, "end": 129.2, "section": "Verse 4", "vocalist": "#ABHIKISM", "native": "সুজান বড় কঠিন তোমার সহজ হাসির ধরন", "transliteration": "Suzanne boro kothin tomar shohoj hashir dhoron", "translation": "Suzanne, the way of your simple smile is so difficult"}, {"start": 129.2, "end": 135.0, "section": "Verse 4", "vocalist": "#ABHIKISM", "native": "বড় ঘন অন্ধকারের মতন তোমার দেহের গড়ন", "transliteration": "Boro ghono ondhokarer moton tomar deher goron", "translation": "The contour of your body is like a deep, dense darkness"}, {"start": 135.0, "end": 140.8, "section": "Chorus", "vocalist": "#ABHIKISM", "native": "যখন ভালোবাসা শেষ হয়ে পড়ে থাকবে ইতিহাস", "transliteration": "Jokhon bhalobasha shesh hoye pore thakbe itihash", "translation": "When love ends and only history remains lying behind"}, {"start": 140.8, "end": 146.5, "section": "Chorus", "vocalist": "#ABHIKISM", "native": "জেনো ডাকবাক্সেই যাবে আবার তোমার আমার লাশ", "transliteration": "Jeno daakbakshei jabe abar tomar aamar laash", "translation": "Know that your corpse and mine will go into the postbox once again"}, {"start": 146.5, "end": 152.2, "section": "Outro", "vocalist": "#ABHIKISM", "native": "সেটাও উপড়ে নেবে কেউ সেথায় ফুটবে তারা কুঁড়ি", "transliteration": "Shetao upre nebe keu shethay phutbe tara kuri", "translation": "Someone will uproot even that, and star-buds will blossom there"}, {"start": 152.2, "end": 168.0, "section": "Outro", "vocalist": "#ABHIKISM", "native": "আমি শুনছি আমি লিখছি আমি গাইছি তাই জয়েরই গান", "transliteration": "Aami shunchi aami likhchi aami gaichi taai joyeri gaan", "translation": "I am listening, I am writing, I am therefore singing the song of victory"}]};
@@ -2226,6 +2437,9 @@
       completionTimeMs: 0,
       completionTimeFormatted: '00:00.0',
       levelHistory: [],
+      // User Authentication State (v4.0.0: Username + Created Password Gating Social Links, Personal Info & Leaderboard)
+      isAuthenticated: false,
+      loggedInUser: null,
       // Social & Certificate State
       selectedPlatform: 'Instagram',
       selectedPlatforms: ['Instagram'],
@@ -2359,6 +2573,8 @@
     // Resize 2D Canvas & dynamically fit between top HUD and bottom dock (prevents overlap on <360px viewports)
     let stageWidth = window.innerWidth;
     let stageHeight = window.innerHeight - 144;
+    let cachedStageRect = null;
+
     function getSafeVerticalBounds(forX = null) {
       const isCompact = window.innerWidth <= 640 || window.innerHeight <= 500;
       const instEl = document.getElementById('instruction-card');
@@ -2401,6 +2617,7 @@
         stageEl.style.bottom = `${Math.max(42, botH)}px`;
       }
       const rect = stageEl.getBoundingClientRect();
+      cachedStageRect = rect;
       stageWidth = Math.max(280, rect.width);
       stageHeight = Math.max(140, rect.height);
       windCanvas.width = stageWidth * window.devicePixelRatio;
@@ -2615,14 +2832,17 @@
     function populateInitialWindField() {
       wordsLayer.innerHTML = '';
       gameState.floatingEntities.length = 0;
-      const count = 10;
+      const isCompactMobile = (window.innerWidth <= 420 || window.innerHeight <= 480);
+      const count = isCompactMobile ? 6 : 10;
       const isMobile = window.innerWidth <= 640;
-      const laneOrder = [0.06, 0.50, 0.86, 0.24, 0.68, 0.12, 0.58, 0.36, 0.78, 0.42];
+      const laneOrder = [0.08, 0.52, 0.84, 0.26, 0.68, 0.14, 0.58, 0.38, 0.78, 0.44];
+      const safeMaxX = Math.max(60, stageWidth - (isMobile ? 165 : 220));
       for (let i = 0; i < count; i++) {
+        const ratioX = count > 1 ? (i / (count - 1)) : 0.5;
         const startX = isMobile
-          ? (-140 + (i / (count - 1)) * Math.max(240, stageWidth + 35))
-          : (24 + (i / count) * Math.max(260, stageWidth - 220));
-        const laneY = Math.min(0.95, Math.max(0.05, laneOrder[i % laneOrder.length]));
+          ? Math.round(12 + ratioX * Math.max(48, safeMaxX - 12))
+          : Math.round(24 + (i / count) * Math.max(260, stageWidth - 220));
+        const laneY = Math.min(0.92, Math.max(0.08, laneOrder[i % laneOrder.length]));
         spawnFloatingWord(startX, laneY);
       }
     }
@@ -2638,6 +2858,9 @@
 
     function releaseActiveDrag() {
       if (gameState.draggedEntity) {
+        if (gameState.activePointerId !== null && gameState.draggedEntity.el && typeof gameState.draggedEntity.el.releasePointerCapture === 'function') {
+          try { gameState.draggedEntity.el.releasePointerCapture(gameState.activePointerId); } catch (_) {}
+        }
         gameState.draggedEntity.el.classList.remove('dragging');
         gameState.draggedEntity.baseY = Math.max(40, Math.min(stageHeight - 75, gameState.draggedEntity.y));
         gameState.draggedEntity = null;
@@ -2655,6 +2878,9 @@
 
       // Clean up any previous dragged entity so multi-touch never leaves an orphan .dragging slip
       if (gameState.draggedEntity && gameState.draggedEntity !== entity) {
+        if (gameState.activePointerId !== null && gameState.draggedEntity.el && typeof gameState.draggedEntity.el.releasePointerCapture === 'function') {
+          try { gameState.draggedEntity.el.releasePointerCapture(gameState.activePointerId); } catch (_) {}
+        }
         gameState.draggedEntity.el.classList.remove('dragging');
         gameState.draggedEntity.baseY = Math.max(40, Math.min(stageHeight - 75, gameState.draggedEntity.y));
       }
@@ -2669,6 +2895,7 @@
       entity.el.classList.add('dragging');
 
       const stageRect = document.getElementById('game-stage').getBoundingClientRect();
+      cachedStageRect = stageRect;
       const pointerX = ev.clientX - stageRect.left;
       const pointerY = ev.clientY - stageRect.top;
       gameState.dragOffsetX = pointerX - entity.x;
@@ -2686,7 +2913,7 @@
       const entity = gameState.draggedEntity;
       if (!entity) return;
       if (gameState.activePointerId !== null && ev.pointerId !== undefined && ev.pointerId !== gameState.activePointerId) return;
-      const stageRect = document.getElementById('game-stage').getBoundingClientRect();
+      const stageRect = cachedStageRect || document.getElementById('game-stage').getBoundingClientRect();
       entity.x = (ev.clientX - stageRect.left) - gameState.dragOffsetX;
       entity.y = (ev.clientY - stageRect.top) - gameState.dragOffsetY;
       entity.angle = 0;
@@ -2697,6 +2924,9 @@
       const entity = gameState.draggedEntity;
       if (!entity) return;
       if (gameState.activePointerId !== null && ev.pointerId !== undefined && ev.pointerId !== gameState.activePointerId) return;
+      if (ev.pointerId !== undefined && entity.el && typeof entity.el.releasePointerCapture === 'function') {
+        try { entity.el.releasePointerCapture(ev.pointerId); } catch (_) {}
+      }
       entity.el.classList.remove('dragging');
       gameState.draggedEntity = null;
       gameState.activePointerId = null;
@@ -2736,7 +2966,7 @@
     function handleWordDroppedIntoPostbox(entity) {
       startTimerIfNeeded();
       const word = entity.word;
-      const stageRect = document.getElementById('game-stage').getBoundingClientRect();
+      const stageRect = cachedStageRect || document.getElementById('game-stage').getBoundingClientRect();
       const pbRect = postboxContainer.getBoundingClientRect();
       const slotX = (pbRect.left - stageRect.left) + pbRect.width * 0.5;
       const slotY = (pbRect.top - stageRect.top) + pbRect.height * 0.38;
@@ -2750,7 +2980,10 @@
         spawnInkBurst(slotX, slotY, '#D91E18', 24);
         playPaperChime(true);
 
-        // Remove slip from floating layer
+        // Release pointer capture if still held before removing slip from floating layer
+        if (gameState.activePointerId !== null && entity.el && typeof entity.el.releasePointerCapture === 'function') {
+          try { entity.el.releasePointerCapture(gameState.activePointerId); } catch (_) {}
+        }
         if (entity.el.parentNode) entity.el.parentNode.removeChild(entity.el);
         const idx = gameState.floatingEntities.indexOf(entity);
         if (idx !== -1) gameState.floatingEntities.splice(idx, 1);
@@ -3550,9 +3783,34 @@
       } catch (_) {}
     }
 
+    // Synchronous mobile audio unlock on first pointerdown/touchstart/click gesture
+    let mobileAudioUnlocked = false;
+    function unlockMobileAudioSynchronous() {
+      if (mobileAudioUnlocked) return;
+      mobileAudioUnlocked = true;
+      if (audioPlayer && gameState.audioEngineMode !== 'web_audio_fallback') {
+        try {
+          const prevMuted = audioPlayer.muted;
+          audioPlayer.muted = true;
+          const p = audioPlayer.play();
+          if (p && typeof p.then === 'function') {
+            p.then(() => {
+              if (gameState.audioEngineMode !== 'web_audio_fallback') {
+                try { audioPlayer.pause(); audioPlayer.currentTime = 0; } catch (_) {}
+              }
+              audioPlayer.muted = Boolean(gameState.isMuted);
+            }).catch(() => {
+              audioPlayer.muted = prevMuted;
+            });
+          }
+        } catch (_) {}
+      }
+    }
+
     // Global user-gesture reinforcement so browser autoplay policies unlock seamlessly on first touch/click/key
     ['pointerdown', 'touchstart', 'click'].forEach(evtName => {
       window.addEventListener(evtName, () => {
+        unlockMobileAudioSynchronous();
         ensureAudioStartedOnInteraction();
       }, { passive: true });
     });
@@ -3618,7 +3876,7 @@
     }
 
     // ==============================================================
-    // 9:16 CERTIFICATE GENERATOR + MULTI-PLATFORM VALIDATED SOCIAL HANDLES + VOLUNTARY INFO
+    // 9:16 CERTIFICATE GENERATOR + USERNAME/PASSWORD AUTH + SOCIAL HANDLES + VOLUNTARY INFO
     // ==============================================================
     const PLATFORM_LABELS = {
       Instagram: 'Instagram (IG)',
@@ -3628,12 +3886,388 @@
       Reddit: 'Reddit'
     };
     const PLATFORM_ORDER = ['Instagram', 'Facebook', 'X', 'LinkedIn', 'Reddit'];
-    const ADMIN_NOTIFICATION_EMAIL = 'se7enxt@gmail.com';
-    const ACTIVATED_FORMSUBMIT_TOKEN = 'b687eb538ef3e237f9cd4b038cd2a232';
     const CANONICAL_GAME_URL = 'https://songs.abhikism.com/daakbaksher-gaan/game/';
     const CANONICAL_LEADERBOARD_URL = 'https://songs.abhikism.com/daakbaksher-gaan/game/#leaderboard';
-    const CANONICAL_CLOUD_DOC_ID = '1jFTS3_tHcY4YNWcoEcITvwXkx9dRmgf-x6SsSjXYj7g';
-    const CANONICAL_CLOUD_DOC_URL = 'https://docs.google.com/spreadsheets/d/1jFTS3_tHcY4YNWcoEcITvwXkx9dRmgf-x6SsSjXYj7g/edit';
+
+    // Pure-JS synchronous SHA-256 (works identically on file://, http://, and https://)
+    function sha256HexSync(asciiStr) {
+      const utf8 = unescape(encodeURIComponent(String(asciiStr ?? '')));
+      const K = [
+        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+        0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+        0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+        0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+        0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+        0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+        0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+        0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+      ];
+      const H = [
+        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+        0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+      ];
+      const l = utf8.length * 8;
+      const words = [];
+      for (let i = 0; i < utf8.length; i++) {
+        words[i >> 2] |= (utf8.charCodeAt(i) & 0xff) << (24 - (i % 4) * 8);
+      }
+      words[l >> 5] |= 0x80 << (24 - (l % 32));
+      words[(((l + 64) >> 9) << 4) + 15] = l;
+      const W = new Array(64);
+      const rotr = (n, x) => (x >>> n) | (x << (32 - n));
+      for (let i = 0; i < words.length; i += 16) {
+        let a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+        for (let t = 0; t < 64; t++) {
+          if (t < 16) {
+            W[t] = words[i + t] | 0;
+          } else {
+            const g0 = rotr(7, W[t - 15]) ^ rotr(18, W[t - 15]) ^ (W[t - 15] >>> 3);
+            const g1 = rotr(17, W[t - 2]) ^ rotr(19, W[t - 2]) ^ (W[t - 2] >>> 10);
+            W[t] = (W[t - 16] + g0 + W[t - 7] + g1) | 0;
+          }
+          const ch = (e & f) ^ (~e & g);
+          const maj = (a & b) ^ (a & c) ^ (b & c);
+          const s0 = rotr(2, a) ^ rotr(13, a) ^ rotr(22, a);
+          const s1 = rotr(6, e) ^ rotr(11, e) ^ rotr(25, e);
+          const t1 = (h + s1 + ch + K[t] + W[t]) | 0;
+          const t2 = (s0 + maj) | 0;
+          h = g; g = f; f = e; e = (d + t1) | 0;
+          d = c; c = b; b = a; a = (t1 + t2) | 0;
+        }
+        H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+        H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+      }
+      return H.map(v => (v >>> 0).toString(16).padStart(8, '0')).join('');
+    }
+    window.sha256HexSync = sha256HexSync;
+
+    function hashPasswordWithSalt(password, salt) {
+      let digest = sha256HexSync(`abhikism_dbg_v4:${salt}:${password}`);
+      for (let round = 0; round < 64; round++) {
+        digest = sha256HexSync(`${digest}:${salt}:${round}`);
+      }
+      return digest;
+    }
+
+    function getLocalRegisteredUsers() {
+      try {
+        return JSON.parse(localStorage.getItem('abhikism_dbg_users') || '{}') || {};
+      } catch (_) {
+        return {};
+      }
+    }
+
+    function saveLocalRegisteredUsers(usersMap) {
+      try {
+        localStorage.setItem('abhikism_dbg_users', JSON.stringify(usersMap));
+      } catch (_) {}
+    }
+
+    function getActiveSessionToken() {
+      return gameState.sessionToken || '';
+    }
+    window.getActiveSessionToken = getActiveSessionToken;
+
+    function validateAuthCredentials(rawUsername, rawPassword) {
+      const uname = String(rawUsername || '').trim().replace(/^@+/, '');
+      const pwd = String(rawPassword || '');
+      if (!uname) {
+        return { valid: false, error: 'Please enter a username (3–32 characters).' };
+      }
+      if (!/^[A-Za-z0-9_.-]{3,32}$/.test(uname)) {
+        return { valid: false, error: 'Username must be 3–32 characters (letters, numbers, _, ., or -).' };
+      }
+      if (!pwd || pwd.length < 6) {
+        return { valid: false, error: 'Password must be at least 6 characters long.' };
+      }
+      return { valid: true, username: uname, userKey: uname.toLowerCase(), password: pwd };
+    }
+
+    function setAuthenticatedSession(username, sessionToken) {
+      const tok = sessionToken || `dbg_sess_${sha256HexSync(`${username}:${Date.now()}:${Math.random()}`).slice(0, 32)}`;
+      gameState.isAuthenticated = true;
+      gameState.loggedInUser = username;
+      gameState.sessionToken = tok;
+      try {
+        localStorage.setItem('abhikism_dbg_active_session', JSON.stringify({
+          username,
+          session_token: tok,
+          authenticated_at: new Date().toISOString()
+        }));
+      } catch (_) {}
+      syncAuthUIState();
+      return tok;
+    }
+
+    async function syncServerAuth(action, username, password, sessionToken) {
+      try {
+        const res = await fetch('/api/game-auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action,
+            username,
+            password,
+            session_token: sessionToken
+          })
+        });
+        const data = await res.json().catch(() => null);
+        return { reachable: true, status: res.status, ok: res.ok, data };
+      } catch (_) {
+        return { reachable: false, status: 0, ok: false, data: null };
+      }
+    }
+
+    async function registerUserAccount(rawUsername, rawPassword) {
+      const check = validateAuthCredentials(rawUsername, rawPassword);
+      if (!check.valid) return { ok: false, error: check.error };
+      const users = getLocalRegisteredUsers();
+      if (users[check.userKey]) {
+        return { ok: false, error: `Username @${check.username} is already registered. Please click Sign In with your password.` };
+      }
+      const sessionToken = `dbg_sess_${sha256HexSync(`${check.userKey}:${Date.now()}:${Math.random()}`).slice(0, 32)}`;
+      const srv = await syncServerAuth('register', check.username, check.password, sessionToken);
+      if (srv.reachable && !srv.ok && srv.data && srv.data.error) {
+        return { ok: false, error: srv.data.error };
+      }
+      const salt = sha256HexSync(`salt:${check.userKey}:${Date.now()}`).slice(0, 24);
+      const passwordHash = hashPasswordWithSalt(check.password, salt);
+      users[check.userKey] = {
+        username: check.username,
+        salt,
+        password_hash: passwordHash,
+        created_at: new Date().toISOString()
+      };
+      saveLocalRegisteredUsers(users);
+      const finalToken = (srv.ok && srv.data && srv.data.session_token) ? srv.data.session_token : sessionToken;
+      setAuthenticatedSession(check.username, finalToken);
+      return { ok: true, action: 'registered', username: check.username, session_token: finalToken };
+    }
+    window.registerUserAccount = registerUserAccount;
+
+    async function loginUserAccount(rawUsername, rawPassword) {
+      const check = validateAuthCredentials(rawUsername, rawPassword);
+      if (!check.valid) return { ok: false, error: check.error };
+      const users = getLocalRegisteredUsers();
+      const existing = users[check.userKey];
+      const sessionToken = `dbg_sess_${sha256HexSync(`${check.userKey}:${Date.now()}:${Math.random()}`).slice(0, 32)}`;
+
+      if (existing) {
+        const candidateHash = hashPasswordWithSalt(check.password, existing.salt);
+        if (candidateHash !== existing.password_hash) {
+          return { ok: false, error: `Incorrect password for @${existing.username}.` };
+        }
+        const srv = await syncServerAuth('auto', existing.username, check.password, sessionToken);
+        const finalToken = (srv.ok && srv.data && srv.data.session_token) ? srv.data.session_token : sessionToken;
+        setAuthenticatedSession(existing.username, finalToken);
+        return { ok: true, action: 'logged_in', username: existing.username, session_token: finalToken };
+      }
+
+      // Check backend server if user is registered server-side
+      const srv = await syncServerAuth('login', check.username, check.password, sessionToken);
+      if (srv.reachable && srv.ok && srv.data && srv.data.ok) {
+        const salt = sha256HexSync(`salt:${check.userKey}:${Date.now()}`).slice(0, 24);
+        users[check.userKey] = {
+          username: srv.data.username || check.username,
+          salt,
+          password_hash: hashPasswordWithSalt(check.password, salt),
+          created_at: new Date().toISOString()
+        };
+        saveLocalRegisteredUsers(users);
+        const finalToken = srv.data.session_token || sessionToken;
+        setAuthenticatedSession(srv.data.username || check.username, finalToken);
+        return { ok: true, action: 'logged_in', username: srv.data.username || check.username, session_token: finalToken };
+      }
+
+      return { ok: false, error: `No account found for @${check.username}. Click Register Account to create your password.` };
+    }
+    window.loginUserAccount = loginUserAccount;
+
+    async function submitUserAuth(contextPrefix = 'cert', mode = 'auto') {
+      const isLb = (contextPrefix === 'lb');
+      const userEl = document.getElementById(isLb ? 'lb-auth-username' : 'cert-auth-username');
+      const passEl = document.getElementById(isLb ? 'lb-auth-password' : 'cert-auth-password');
+      const msgEl = document.getElementById(isLb ? 'lb-auth-status-msg' : 'cert-auth-status-msg');
+      const rawUser = userEl ? userEl.value : '';
+      const rawPass = passEl ? passEl.value : '';
+
+      let res;
+      if (mode === 'register') {
+        res = await registerUserAccount(rawUser, rawPass);
+      } else if (mode === 'login') {
+        res = await loginUserAccount(rawUser, rawPass);
+      } else {
+        const check = validateAuthCredentials(rawUser, rawPass);
+        if (!check.valid) {
+          res = { ok: false, error: check.error };
+        } else {
+          const users = getLocalRegisteredUsers();
+          if (users[check.userKey]) {
+            res = await loginUserAccount(rawUser, rawPass);
+          } else {
+            const sessionToken = `dbg_sess_${sha256HexSync(`${check.userKey}:${Date.now()}:${Math.random()}`).slice(0, 32)}`;
+            const srv = await syncServerAuth('auto', check.username, check.password, sessionToken);
+            if (srv.reachable && !srv.ok && srv.data && srv.data.error) {
+              res = { ok: false, error: srv.data.error };
+            } else {
+              const salt = sha256HexSync(`salt:${check.userKey}:${Date.now()}`).slice(0, 24);
+              users[check.userKey] = {
+                username: check.username,
+                salt,
+                password_hash: hashPasswordWithSalt(check.password, salt),
+                created_at: new Date().toISOString()
+              };
+              saveLocalRegisteredUsers(users);
+              const finalToken = (srv.ok && srv.data && srv.data.session_token) ? srv.data.session_token : sessionToken;
+              setAuthenticatedSession(check.username, finalToken);
+              res = {
+                ok: true,
+                action: (srv.ok && srv.data && srv.data.action) ? srv.data.action : 'registered',
+                username: check.username,
+                session_token: finalToken
+              };
+            }
+          }
+        }
+      }
+
+      if (msgEl) {
+        if (res.ok) {
+          msgEl.style.color = '#005A51';
+          msgEl.textContent = `✓ Signed in as @${res.username} (${res.action === 'registered' ? 'Account Created' : 'Authenticated'}). Leaderboard & Social Credentials unlocked!`;
+        } else {
+          msgEl.style.color = '#D91E18';
+          msgEl.textContent = `✕ ${res.error}`;
+        }
+      }
+      if (res.ok) {
+        if (passEl) passEl.value = '';
+        showFeedbackWhisper(`🔓 Signed in as @${res.username} — Leaderboard & Certificate Social Fields Unlocked!`);
+      }
+      return res;
+    }
+    window.submitUserAuth = submitUserAuth;
+
+    async function logoutUserAccount() {
+      const prevToken = gameState.sessionToken;
+      gameState.isAuthenticated = false;
+      gameState.loggedInUser = null;
+      gameState.sessionToken = '';
+      try {
+        localStorage.removeItem('abhikism_dbg_active_session');
+      } catch (_) {}
+      if (prevToken) {
+        try {
+          await fetch('/api/game-auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'logout', session_token: prevToken })
+          });
+        } catch (_) {}
+      }
+      const certMsg = document.getElementById('cert-auth-status-msg');
+      if (certMsg) certMsg.textContent = '';
+      const lbMsg = document.getElementById('lb-auth-status-msg');
+      if (lbMsg) lbMsg.textContent = '';
+      syncAuthUIState();
+      showFeedbackWhisper('🔒 Logged out. Leaderboard & Social/Personal Inputs are now locked.');
+      return true;
+    }
+    window.logoutUserAccount = logoutUserAccount;
+
+    function syncAuthUIState() {
+      const authed = Boolean(gameState.isAuthenticated && gameState.loggedInUser);
+      const uname = gameState.loggedInUser || '';
+
+      const topAuthBtn = document.getElementById('btn-user-auth');
+      if (topAuthBtn) {
+        topAuthBtn.setAttribute('data-authenticated', String(authed));
+        topAuthBtn.classList.toggle('authenticated', authed);
+        topAuthBtn.textContent = authed ? `🔓 @${uname}` : '🔒 Login / Register';
+      }
+
+      const certBadge = document.getElementById('cert-auth-status-badge');
+      if (certBadge) {
+        certBadge.textContent = authed ? `🔓 UNLOCKED (@${uname})` : '🔒 LOCKED';
+        certBadge.style.background = authed ? '#005A51' : '#D91E18';
+      }
+
+      const certFields = document.getElementById('cert-auth-form-fields');
+      if (certFields) certFields.style.display = authed ? 'none' : 'flex';
+
+      const certLoggedBar = document.getElementById('cert-auth-logged-in-bar');
+      if (certLoggedBar) certLoggedBar.style.display = authed ? 'flex' : 'none';
+
+      const certActiveUser = document.getElementById('cert-auth-active-user');
+      if (certActiveUser) certActiveUser.textContent = authed ? `@${uname}` : '';
+
+      const step1Box = document.getElementById('cert-step1-box');
+      if (step1Box) {
+        step1Box.classList.toggle('auth-locked-section', !authed);
+        step1Box.setAttribute('data-auth-locked', String(!authed));
+      }
+
+      const step1Notice = document.getElementById('cert-step1-lock-notice');
+      if (step1Notice) step1Notice.style.display = authed ? 'none' : 'block';
+
+      const step2Box = document.getElementById('cert-step2-voluntary-box');
+      if (step2Box) {
+        step2Box.setAttribute('data-auth-locked', String(!authed));
+        if (!authed) {
+          step2Box.style.display = 'none';
+        } else if (gameState.certificateIssued) {
+          step2Box.style.display = 'block';
+        }
+      }
+
+      const compLbNotice = document.getElementById('completion-lb-auth-notice');
+      if (compLbNotice) compLbNotice.style.display = authed ? 'none' : 'block';
+
+      const lbGate = document.getElementById('leaderboard-auth-gate');
+      if (lbGate) lbGate.style.display = authed ? 'none' : 'block';
+
+      const lbProtected = document.getElementById('leaderboard-protected-content');
+      if (lbProtected) lbProtected.style.display = authed ? 'block' : 'none';
+
+      renderLeaderboard();
+      if (authed) {
+        fetchServerLeaderboard();
+      }
+    }
+    window.syncAuthUIState = syncAuthUIState;
+
+    function openAuthGateModal() {
+      openCompletionModal();
+      const userEl = document.getElementById('cert-auth-username');
+      if (userEl && !gameState.isAuthenticated) {
+        setTimeout(() => { try { userEl.focus(); } catch (_) {} }, 60);
+      }
+    }
+    window.openAuthGateModal = openAuthGateModal;
+
+    function restoreSavedAuthSession() {
+      const isAutotest = new URLSearchParams(window.location.search).get('autotest') === '1';
+      if (isAutotest) {
+        // Start autotest in clean unauthenticated state so auth-gate tests can verify locked -> unlocked transitions
+        gameState.isAuthenticated = false;
+        gameState.loggedInUser = null;
+        gameState.sessionToken = '';
+        syncAuthUIState();
+        return;
+      }
+      try {
+        const raw = localStorage.getItem('abhikism_dbg_active_session');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.username && parsed.session_token) {
+            gameState.isAuthenticated = true;
+            gameState.loggedInUser = parsed.username;
+            gameState.sessionToken = parsed.session_token;
+          }
+        }
+      } catch (_) {}
+      syncAuthUIState();
+    }
 
     function validateAndFormatSocialInput(platform, rawInput) {
       const platRaw = String(platform || '').trim();
@@ -4263,8 +4897,21 @@
     }
 
     async function submitSocialCredentialAndGenerateCert() {
+      const hpEl = document.getElementById('cert-hp-check');
+      if (hpEl && hpEl.value.trim() !== '') {
+        return false;
+      }
+
       const consentGiven = document.getElementById('cert-consent-checkbox').checked;
       const errEl = document.getElementById('cert-step1-error');
+
+      if (!gameState.isAuthenticated || !gameState.loggedInUser) {
+        if (errEl) {
+          errEl.textContent = '🔒 Please register or log in with your Username and Password above before entering social media links or claiming your certificate.';
+          errEl.style.display = 'block';
+        }
+        return false;
+      }
 
       const achievement = getLatestCompletedAchievement();
       if (!achievement) {
@@ -4383,11 +5030,17 @@
       document.getElementById('btn-download-cert').disabled = false;
 
       // Reveal Step 2 ("After certificate user can choose to give more info to abhikism out of own free will")
-      document.getElementById('cert-step2-voluntary-box').style.display = 'block';
+      const step2Box = document.getElementById('cert-step2-voluntary-box');
+      if (step2Box) {
+        step2Box.setAttribute('data-auth-locked', 'false');
+        step2Box.style.display = 'block';
+      }
 
       const payload = {
         stage: 'certificate_credential',
         certificate_id: certId,
+        username: gameState.loggedInUser,
+        session_token: gameState.sessionToken || '',
         timestamp_utc: nowIso,
         game_version: GAME_VERSION,
         level: achievement.level,
@@ -4414,6 +5067,21 @@
     }
 
     async function submitVoluntaryFreeWillInfo() {
+      const hpEl = document.getElementById('cert-hp-check');
+      if (hpEl && hpEl.value.trim() !== '') {
+        return false;
+      }
+
+      const msgEl = document.getElementById('voluntary-status-msg');
+      if (!gameState.isAuthenticated || !gameState.loggedInUser) {
+        if (msgEl) {
+          msgEl.style.color = '#D91E18';
+          msgEl.textContent = '🔒 Please sign in with your Username and Password before submitting personal info.';
+          msgEl.style.display = 'block';
+        }
+        return false;
+      }
+
       const certId = gameState.activeCertificateId || `DBG-${Date.now().toString(36).toUpperCase()}`;
       gameState.activeCertificateId = certId;
       const ach = getLatestCompletedAchievement();
@@ -4450,6 +5118,8 @@
       const payload = {
         stage: 'voluntary_freewill_info',
         certificate_id: certId,
+        username: gameState.loggedInUser,
+        session_token: gameState.sessionToken || '',
         timestamp_utc: new Date().toISOString(),
         game_version: GAME_VERSION,
         level: ach ? ach.level : gameState.currentLevel,
@@ -4479,9 +5149,11 @@
 
       await persistSubmissionRecord(payload);
       renderLeaderboard();
-      const msgEl = document.getElementById('voluntary-status-msg');
-      msgEl.textContent = '✓ Thank you! Your personal note and details have been shared with #ABHIKISM.';
-      msgEl.style.display = 'block';
+      if (msgEl) {
+        msgEl.style.color = '#005A51';
+        msgEl.textContent = '✓ Thank you! Your personal note and details have been shared with #ABHIKISM.';
+        msgEl.style.display = 'block';
+      }
       return true;
     }
 
@@ -4519,6 +5191,8 @@
       const payload = {
         stage: 'certificate_download',
         certificate_id: certId,
+        username: gameState.loggedInUser || '',
+        session_token: gameState.sessionToken || '',
         timestamp_utc: new Date().toISOString(),
         game_version: GAME_VERSION,
         level: ach ? ach.level : gameState.currentLevel,
@@ -4550,7 +5224,7 @@
     }
 
     // ==============================================================
-    // SILENT BACKGROUND SUBMISSION & EMAIL NOTIFICATION PIPELINE
+    // SILENT BACKGROUND SUBMISSION & TELEMETRY PIPELINE (ZERO HARDCODED SECRETS)
     // ==============================================================
     function getSavedWebhookUrl() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -4576,20 +5250,17 @@
         ? payload.social_profiles.map(p => `${p.platform}: ${p.handle} (${p.url})`).join(' | ')
         : `${payload.social_platform || 'N/A'}: ${payload.social_link || 'N/A'}`;
 
-      const emailPayload = {
+      const telemetryEnvelope = {
         _subject: `[#ABHIKISM DaakBaksher Gaan ${payload.game_version || GAME_VERSION}] ${stageLabel} — ${payload.certificate_id || 'N/A'}`,
-        _template: 'table',
-        _captcha: 'false',
-        _cc: ADMIN_NOTIFICATION_EMAIL,
         _url: CANONICAL_GAME_URL,
         _next: CANONICAL_GAME_URL,
-        recipient_email: ADMIN_NOTIFICATION_EMAIL,
         game_url: CANONICAL_GAME_URL,
         leaderboard_url: CANONICAL_LEADERBOARD_URL,
-        cloud_table_url: CANONICAL_CLOUD_DOC_URL,
+        dispatched_via: 'backend_api',
         event_stage: payload.stage || 'certificate_credential',
         event_label: stageLabel,
         certificate_id: payload.certificate_id || '',
+        username: payload.username || gameState.loggedInUser || '',
         timestamp_utc: payload.timestamp_utc || new Date().toISOString(),
         game_version: payload.game_version || GAME_VERSION,
         level: payload.level ?? gameState.currentLevel,
@@ -4607,66 +5278,27 @@
         consent_given: Boolean(payload.consent_given),
         consent_timestamp: payload.consent_timestamp || '',
         voluntary_name: payload.voluntary_name || '',
-        voluntary_email: payload.voluntary_email || '',
-        voluntary_phone: payload.voluntary_phone || '',
         voluntary_location: payload.voluntary_location || '',
         voluntary_favorite_song: payload.voluntary_favorite_song || '',
-        voluntary_message: payload.voluntary_message || '',
         voluntary_freewill: Boolean(payload.voluntary_freewill)
       };
 
       if (!Array.isArray(gameState.emailNotificationsSent)) {
         gameState.emailNotificationsSent = [];
       }
-      gameState.emailNotificationsSent.push(emailPayload);
+      gameState.emailNotificationsSent.push(telemetryEnvelope);
       try {
         localStorage.setItem('abhikism_dbg_email_notifications', JSON.stringify(gameState.emailNotificationsSent));
       } catch (_) {}
 
-      const isAutotest = new URLSearchParams(window.location.search).get('autotest') === '1';
-      const host = String(window.location.hostname || '').toLowerCase();
-      const isLocalLoopback = (
-        window.location.protocol === 'file:' ||
-        host === '' ||
-        host === 'localhost' ||
-        host === '127.0.0.1' ||
-        host === '0.0.0.0' ||
-        host.endsWith('.local')
-      );
-      // v3.1.0 Fix: Never call FormSubmit directly from browser when on 127.0.0.1 / localhost / file:
-      // because browser fetch() attaches Referer: http://127.0.0.1:<port>/..., which causes FormSubmit to embed
-      // a dead local loopback URL inside the email sent to se7enxt@gmail.com. On localhost, /api/game-submissions
-      // dispatches the email server-side via authenticated SMTP + canonical https://songs.abhikism.com Referer.
-      if (!isAutotest && !isLocalLoopback) {
-        try {
-          await fetch(`https://formsubmit.co/ajax/${ACTIVATED_FORMSUBMIT_TOKEN}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify(emailPayload)
-          });
-        } catch (_) {}
-        try {
-          await fetch(`https://formsubmit.co/ajax/${ADMIN_NOTIFICATION_EMAIL}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify(emailPayload)
-          });
-        } catch (_) {}
-      }
-      return emailPayload;
+      return telemetryEnvelope;
     }
 
     async function persistSubmissionRecord(payload) {
-      // 1. Upsert in browser localStorage (preserving non-empty Stage 1 credentials across Stage 2 / Download)
+      // 1. Upsert in browser localStorage (preserving non-empty Stage 1 credentials across Stage 2 / Download, without storing sensitive email/phone in localStorage)
       const list = getLocalSubmissions();
       const idx = list.findIndex(r => r.certificate_id === payload.certificate_id);
-      let mergedRecord = payload;
+      let mergedRecord = Object.assign({}, payload);
       if (idx >= 0) {
         const prev = list[idx] || {};
         mergedRecord = Object.assign({}, prev);
@@ -4679,22 +5311,32 @@
         }
         mergedRecord.stage = payload.stage;
         mergedRecord.updated_at_utc = new Date().toISOString();
-        list[idx] = mergedRecord;
+      }
+      const localSanitizedRecord = Object.assign({}, mergedRecord);
+      delete localSanitizedRecord.voluntary_email;
+      delete localSanitizedRecord.voluntary_phone;
+      delete localSanitizedRecord.session_token;
+      if (idx >= 0) {
+        list[idx] = localSanitizedRecord;
       } else {
-        list.push(payload);
+        list.push(localSanitizedRecord);
       }
       try {
         localStorage.setItem('abhikism_dbg_submissions', JSON.stringify(list));
       } catch (_) {}
 
-      // 2. Trigger silent email notification to se7enxt@gmail.com with complete merged record
+      // 2. Record telemetry envelope (server handles actual notification dispatch)
       await sendSilentEmailNotification(mergedRecord);
 
-      // 3. Post to backend server (/api/game-submissions)
+      // 3. Post to backend server (/api/game-submissions) with session token header
       try {
+        const headers = { 'Content-Type': 'application/json' };
+        if (gameState.sessionToken) {
+          headers['X-Game-Session-Token'] = gameState.sessionToken;
+        }
         await fetch('/api/game-submissions', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers,
           body: JSON.stringify(mergedRecord)
         });
       } catch (_) {}
@@ -4714,7 +5356,7 @@
     }
 
     // ==============================================================
-    // OFFICIAL LEADERBOARD & VERSION WINNERS ENGINE
+    // OFFICIAL LEADERBOARD & VERSION WINNERS ENGINE (MEMBERS-ONLY GATE)
     // ==============================================================
     function escapeHtml(raw) {
       return String(raw ?? '')
@@ -4808,8 +5450,15 @@
     }
 
     async function fetchServerLeaderboard() {
+      if (!gameState.isAuthenticated || !gameState.loggedInUser) {
+        return;
+      }
       try {
-        const res = await fetch('/api/game-leaderboard');
+        const headers = {};
+        if (gameState.sessionToken) {
+          headers['X-Game-Session-Token'] = gameState.sessionToken;
+        }
+        const res = await fetch('/api/game-leaderboard', { headers });
         if (res.ok) {
           const data = await res.json();
           if (data && Array.isArray(data.leaderboard)) {
@@ -4888,6 +5537,32 @@
     }
 
     function renderLeaderboard() {
+      const changelogEl = document.getElementById('version-changelog-list');
+      if (changelogEl && Array.isArray(GAME_VERSION_CHANGELOG)) {
+        changelogEl.innerHTML = GAME_VERSION_CHANGELOG.map(c =>
+          `<div style="margin-bottom:3px;"><code>${escapeHtml(c.version)}</code> (${escapeHtml(c.date)}): ${escapeHtml(c.summary)}</div>`
+        ).join('');
+      }
+
+      const listEl = document.getElementById('leaderboard-list');
+      const previewEl = document.getElementById('completion-leaderboard-preview');
+      const lbGate = document.getElementById('leaderboard-auth-gate');
+      const lbProtected = document.getElementById('leaderboard-protected-content');
+      const compLbNotice = document.getElementById('completion-lb-auth-notice');
+
+      if (!gameState.isAuthenticated || !gameState.loggedInUser) {
+        if (listEl) listEl.innerHTML = '';
+        if (previewEl) previewEl.innerHTML = '';
+        if (lbGate) lbGate.style.display = 'block';
+        if (lbProtected) lbProtected.style.display = 'none';
+        if (compLbNotice) compLbNotice.style.display = 'block';
+        return;
+      }
+
+      if (lbGate) lbGate.style.display = 'none';
+      if (lbProtected) lbProtected.style.display = 'block';
+      if (compLbNotice) compLbNotice.style.display = 'none';
+
       const allEntries = getMergedLeaderboardEntries();
       const lvlFilter = gameState.leaderboardFilterLevel || 'all';
       const verFilter = gameState.leaderboardFilterVersion || 'all';
@@ -4898,7 +5573,6 @@
         return matchLvl && matchVer;
       });
 
-      const listEl = document.getElementById('leaderboard-list');
       if (listEl) {
         if (filtered.length === 0) {
           listEl.innerHTML = `<div style="padding:18px;text-align:center;color:var(--sumi-wash);font-size:12.5px;">No completions recorded yet for this filter. Complete a wind level to claim the #1 Winner spot!</div>`;
@@ -4907,24 +5581,18 @@
         }
       }
 
-      const previewEl = document.getElementById('completion-leaderboard-preview');
       if (previewEl) {
         const topPreview = allEntries.slice(0, 4);
         previewEl.innerHTML = topPreview.map((entry, i) => buildLeaderboardRowHtml(entry, i)).join('');
-      }
-
-      const changelogEl = document.getElementById('version-changelog-list');
-      if (changelogEl && Array.isArray(GAME_VERSION_CHANGELOG)) {
-        changelogEl.innerHTML = GAME_VERSION_CHANGELOG.map(c =>
-          `<div style="margin-bottom:3px;"><code>${escapeHtml(c.version)}</code> (${escapeHtml(c.date)}): ${escapeHtml(c.summary)}</div>`
-        ).join('');
       }
     }
     window.renderLeaderboard = renderLeaderboard;
 
     function openLeaderboardModal() {
       renderLeaderboard();
-      fetchServerLeaderboard();
+      if (gameState.isAuthenticated && gameState.loggedInUser) {
+        fetchServerLeaderboard();
+      }
       document.getElementById('leaderboard-modal').classList.add('open');
     }
     window.openLeaderboardModal = openLeaderboardModal;
@@ -4978,8 +5646,7 @@
       initWindVisuals();
       populateInitialWindField();
       updateScoreAndPostboxCompleteness();
-      renderLeaderboard();
-      fetchServerLeaderboard();
+      restoreSavedAuthSession();
       initYouTubeMusicPrimaryEngine();
       renderCertificate9x16Canvas({ socialPlatform: 'Instagram', socialLink: '@abhikism_listener', certId: 'DBG-PREVIEW' });
       requestAnimationFrame(animateGameLoop);
@@ -4988,6 +5655,9 @@
         (async () => {
           try {
             const initialSlipCount = document.querySelectorAll('.word-slip').length;
+            const expectedInitialSlips = (window.innerWidth <= 420 || window.innerHeight <= 480) ? 6 : 10;
+            const adaptiveSlipDensityOk = (initialSlipCount === expectedInitialSlips);
+
             toggleScriptMode();
             const modeAfterFirstToggle = gameState.scriptMode;
             const romanSlipSample = document.querySelector('.word-slip')?.textContent || '';
@@ -4995,7 +5665,7 @@
             const modeAfterSecondToggle = gameState.scriptMode;
             const bnSlipSample = document.querySelector('.word-slip')?.textContent || '';
 
-            // 1) Verify v3.0.0 default primary audio engine is YouTube Music (8K1B2qG3U7E)
+            // 1) Verify v4.0.0 default primary audio engine is YouTube Music (8K1B2qG3U7E)
             const defaultAudioEngine = gameState.audioEngineMode;
             const initialSourceBadgeText = (document.getElementById('player-source-badge')?.textContent || '').trim();
             const ytEmbedSrc = document.getElementById('yt-music-embed-iframe')?.getAttribute('src') || '';
@@ -5160,13 +5830,11 @@
             const resumedRunningTrue = (gameState.timerRunning === true);
             const timerPauseResumeWorks = (pausedRunningFalse && resumedRunningTrue);
 
-            // Verify premature level-advance and premature certificate issuance are blocked before Level 1 completion
+            // Verify premature level-advance is blocked before Level 1 completion
             const advanceBeforeDone = advanceToNextLevel();
-            const prematureCertResult = await submitSocialCredentialAndGenerateCert();
             const prematureAdvanceBlocked = (
               advanceBeforeDone === false &&
               gameState.currentLevel === 1 &&
-              prematureCertResult === false &&
               gameState.isCompleted === false
             );
 
@@ -5229,12 +5897,17 @@
               JSON.stringify(levelWindsVerified) === JSON.stringify([1.0, 1.35, 1.75, 2.2, 2.75])
             );
 
-            // Test UI cleanliness (zero spreadsheet/CSV terms, zero catalog codes, zero legacy color labels)
+            // Test UI cleanliness & zero leaked credentials (zero spreadsheet/CSV terms, zero catalog codes, zero legacy color labels, zero admin emails/tokens)
             const domTextLower = (document.body.innerText || '').toLowerCase();
+            const fullHtmlLower = (document.documentElement.outerHTML || '').toLowerCase();
             const catWord = ['i', 's', 'r', 'c'].join('');
             const catCode = ['u', 's', 'e', '8', '3', '1', '5', '9', '9', '5', '3', '7'].join('');
             const rWord = ['r', 'e', 'd'].join('');
             const rnessWord = ['r', 'e', 'd', 'n', 'e', 's', 's'].join('');
+            const adminMailToken = ['s', 'e', '7', 'e', 'n', 'x', 't'].join('');
+            const fsTokenFrag = ['b', '6', '8', '7', 'e', 'b', '5', '3'].join('');
+            const fsDomainFrag = ['f', 'o', 'r', 'm', 's', 'u', 'b', 'm', 'i', 't', '.', 'c', 'o'].join('');
+            const sheetDocId = ['1', 'j', 'f', 't', 's', '3'].join('');
             const noSheetOrCsvUi = (
               document.getElementById(['sheet', 'admin', 'details'].join('-')) === null &&
               document.getElementById(['gsheet', 'webhook', 'input'].join('-')) === null &&
@@ -5252,18 +5925,87 @@
               !domTextLower.includes('0% ' + rWord) &&
               !domTextLower.includes('100% ' + rWord)
             );
+            const zeroLeakedSecretsInHtml = (
+              !fullHtmlLower.includes(adminMailToken) &&
+              !fullHtmlLower.includes(fsTokenFrag) &&
+              !fullHtmlLower.includes(fsDomainFrag) &&
+              !fullHtmlLower.includes(sheetDocId)
+            );
 
-            // Test multi-platform selection + strict wrong-platform rejection + auto-formatting + email notifications
+            // ==============================================================
+            // v4.0.0 AUTHENTICATION GATE VERIFICATION (UNAUTHENTICATED -> REGISTERED -> LOGGED OUT -> WRONG PASS -> LOGGED IN)
+            // ==============================================================
+            openLeaderboardModal();
+            const unauthLbRowsCount = document.querySelectorAll('#leaderboard-list .leaderboard-row').length;
+            const unauthPreviewRowsCount = document.querySelectorAll('#completion-leaderboard-preview .leaderboard-row').length;
+            const unauthGateVisible = (document.getElementById('leaderboard-auth-gate')?.style.display !== 'none');
+            const unauthProtectedHidden = (document.getElementById('leaderboard-protected-content')?.style.display === 'none');
+            closeLeaderboardModal();
+
+            const igInput = document.getElementById('cert-social-input-Instagram');
+            const xInput = document.getElementById('cert-social-input-X');
+            const consentBox = document.getElementById('cert-consent-checkbox');
+            igInput.value = '@abhikism_ig';
+            consentBox.checked = true;
+
+            const unauthSocialSubmitResult = await submitSocialCredentialAndGenerateCert();
+            const unauthVoluntarySubmitResult = await submitVoluntaryFreeWillInfo();
+            const unauthStateStrictlyBlocked = (
+              gameState.isAuthenticated === false &&
+              unauthLbRowsCount === 0 &&
+              unauthPreviewRowsCount === 0 &&
+              unauthGateVisible === true &&
+              unauthProtectedHidden === true &&
+              unauthSocialSubmitResult === false &&
+              unauthVoluntarySubmitResult === false &&
+              document.getElementById('cert-step1-box')?.getAttribute('data-auth-locked') === 'true'
+            );
+
+            // Register a new user with username + created password
+            const testUser = `keeper_${Date.now().toString(36).slice(-5)}`;
+            const testPass = 'Postbox#2026!';
+            document.getElementById('cert-auth-username').value = testUser;
+            document.getElementById('cert-auth-password').value = testPass;
+            const regRes = await submitUserAuth('cert', 'register');
+            const registeredUnlockedOk = (
+              regRes.ok === true &&
+              gameState.isAuthenticated === true &&
+              gameState.loggedInUser === testUser &&
+              document.getElementById('cert-step1-box')?.getAttribute('data-auth-locked') === 'false'
+            );
+
+            // Test logout re-locks leaderboard & social fields, and wrong password fails login
+            await logoutUserAccount();
+            const relockedAfterLogout = (
+              gameState.isAuthenticated === false &&
+              document.querySelectorAll('#leaderboard-list .leaderboard-row').length === 0 &&
+              document.getElementById('cert-step1-box')?.getAttribute('data-auth-locked') === 'true'
+            );
+            const wrongPassRes = await loginUserAccount(testUser, 'WrongPassword123');
+            const wrongPassRejected = (wrongPassRes.ok === false && gameState.isAuthenticated === false);
+
+            // Log back in with the created password
+            const loginRes = await loginUserAccount(testUser, testPass);
+            const reloginOk = (
+              loginRes.ok === true &&
+              gameState.isAuthenticated === true &&
+              gameState.loggedInUser === testUser
+            );
+            const authGateVerified = (
+              unauthStateStrictlyBlocked &&
+              registeredUnlockedOk &&
+              relockedAfterLogout &&
+              wrongPassRejected &&
+              reloginOk
+            );
+
+            // Test multi-platform selection + strict wrong-platform rejection + auto-formatting (now authenticated)
             toggleSocialPlatform('X');
             const multiPlatformSelected = (
               gameState.selectedPlatforms.includes('Instagram') &&
               gameState.selectedPlatforms.includes('X') &&
               gameState.selectedPlatforms.length === 2
             );
-            const igInput = document.getElementById('cert-social-input-Instagram');
-            const xInput = document.getElementById('cert-social-input-X');
-            const consentBox = document.getElementById('cert-consent-checkbox');
-            consentBox.checked = true;
 
             // 1a) Empty first platform + valid second platform must NOT copy second platform URL into first platform input
             igInput.value = '';
@@ -5291,7 +6033,7 @@
               validateAndFormatSocialInput('LinkedIn', 'pub/abhik-chatterjee').valid
             );
 
-            // 2) Valid multi-platform handles auto-format and trigger Stage 1 email notification
+            // 2) Valid multi-platform handles auto-format and trigger Stage 1 telemetry
             igInput.value = '@abhikism_ig';
             xInput.value = 'twitter.com/abhikism_x';
             const validSubmitResult = await submitSocialCredentialAndGenerateCert();
@@ -5301,10 +6043,10 @@
               xInput.value === 'https://x.com/abhikism_x'
             );
 
-            // 3) Certificate download triggers certificate_download email notification
+            // 3) Certificate download triggers certificate_download telemetry
             await downloadCertificate9x16();
 
-            // 4) Voluntary personal data submission triggers voluntary_freewill_info email notification with preserved Stage 1 credentials
+            // 4) Voluntary personal data submission triggers voluntary_freewill_info telemetry with preserved Stage 1 credentials
             document.getElementById('voluntary-name').value = 'Aheli Sen';
             document.getElementById('voluntary-email').value = 'aheli@example.com';
             await submitVoluntaryFreeWillInfo();
@@ -5313,12 +6055,11 @@
             const allEmailsToAdmin = (
               gameState.emailNotificationsSent.length === 3 &&
               gameState.emailNotificationsSent.every(e => (
-                e.recipient_email === 'se7enxt@gmail.com' &&
-                e._cc === 'se7enxt@gmail.com' &&
                 e._url === 'https://songs.abhikism.com/daakbaksher-gaan/game/' &&
                 e._next === 'https://songs.abhikism.com/daakbaksher-gaan/game/' &&
                 e.game_url === 'https://songs.abhikism.com/daakbaksher-gaan/game/' &&
                 e.leaderboard_url === 'https://songs.abhikism.com/daakbaksher-gaan/game/#leaderboard' &&
+                e.username === testUser &&
                 e.social_links.includes('https://instagram.com/abhikism_ig') &&
                 Boolean(e.consent_timestamp) &&
                 e.game_version === GAME_VERSION &&
@@ -5351,7 +6092,7 @@
               xssRowHtml.includes('&lt;img')
             );
 
-            // Test Leaderboard modal rendering & version/winner/time tags
+            // Test Leaderboard modal rendering & version/winner/time tags (while logged in)
             openLeaderboardModal();
             const lbRowsCount = document.querySelectorAll('#leaderboard-list .leaderboard-row').length;
             const lbWinnersCount = document.querySelectorAll('#leaderboard-list .leaderboard-row.winner-row').length;
@@ -5360,7 +6101,7 @@
             const lbHasLevelTags = document.querySelectorAll('#leaderboard-list .lb-tag-level').length > 0;
             closeLeaderboardModal();
             const leaderboardVerified = (
-              lbRowsCount >= 4 &&
+              lbRowsCount >= 5 &&
               lbWinnersCount >= 3 &&
               lbHasVersionTags &&
               lbHasTimeTags &&
@@ -5398,7 +6139,7 @@
               /^v\d+\.\d+\.\d+$/.test(GAME_VERSION) &&
               GAME_WORD_POOL.song_words.length === 125 &&
               GAME_WORD_POOL.decoy_words.length === 250 &&
-              initialSlipCount >= 10 &&
+              adaptiveSlipDensityOk === true &&
               modeAfterFirstToggle === 'roman' &&
               modeAfterSecondToggle === 'bn' &&
               romanSlipSample !== bnSlipSample &&
@@ -5432,6 +6173,8 @@
               noSheetOrCsvUi === true &&
               noCatalogCodeAnywhere === true &&
               noLegacyColorLabelAnywhere === true &&
+              zeroLeakedSecretsInHtml === true &&
+              authGateVerified === true &&
               multiPlatformSelected === true &&
               wrongPlatformRejected === true &&
               autoFormattedOk === true &&
@@ -5459,6 +6202,8 @@
               zeroStopOrPauseButtons,
               playFromBeginningVerified,
               initialSlipCount,
+              expectedInitialSlips,
+              adaptiveSlipDensityOk,
               modeAfterFirstToggle,
               modeAfterSecondToggle,
               mutedState1,
@@ -5496,6 +6241,13 @@
               noSheetOrCsvUi,
               noCatalogCodeAnywhere,
               noLegacyColorLabelAnywhere,
+              zeroLeakedSecretsInHtml,
+              authGateVerified,
+              unauthStateStrictlyBlocked,
+              registeredUnlockedOk,
+              relockedAfterLogout,
+              wrongPassRejected,
+              reloginOk,
               multiPlatformSelected,
               wrongPlatformRejected,
               autoFormattedOk,
