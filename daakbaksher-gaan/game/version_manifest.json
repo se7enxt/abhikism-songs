@@ -1,18 +1,37 @@
 {
   "game_id": "WKS-003",
   "title": "DaakBaksher Gaan — 2D Sumi-e Wind Game",
-  "version": "v5.0.0",
+  "version": "v6.0.0",
   "semver": {
     "game": "daakbaksher-gaan",
     "song_id": "WKS-003",
-    "current_version": "v5.0.0",
+    "current_version": "v6.0.0",
     "semver": {
-      "X_feature": 5,
+      "X_feature": 6,
       "Y_bugfix": 0,
       "Z_additional": 0
     },
     "schema_rule": "vX.Y.Z — X: Feature Addition, Y: Bug Fix, Z: Additional",
     "changelog": [
+      {
+        "version": "v6.0.0",
+        "date": "2026-11-03",
+        "summary": "Level-based wrong word penalty progression (0%, 20%, 100%, 200%, 500%), time-scaled speed scoring (round((Raw Score / Seconds) * 100)), tightened authentic Hanko fingerprint seal, wax dot mark removal from envelope slips, username placeholder cleanup, authenticated-only version registry, and arcade portal launch for games.abhikism.com.",
+        "X_feature_additions": [
+          "Level-based wrong word penalties: Level 1 (0%), Level 2 (20% = 20 pts), Level 3 (100% = 100 pts), Level 4 (200% = 200 pts), Level 5 (500% = 500 pts)",
+          "Arcade Speed Index scoring: Final Score = round((Raw Score / Elapsed Seconds) * 100), massively rewarding fast completions",
+          "Launched games.abhikism.com Arcade Hub featuring Daakbaksher Gaan as the featured #1 game with level badges and direct play link"
+        ],
+        "Y_bug_fixes": [
+          "Tightened authentic Hanko double square frame (156px) around the #ABHIKISM fingerprint seal on the 9:16 certificate",
+          "Removed wax seal dot mark from floating word envelope flaps for clean vector paper folds",
+          "Changed username input placeholder to 'e.g. username' (replacing 'e.g. abhik_listener')",
+          "Gated Semantic Versioning Registry so it is only visible to logged-in users inside the Leaderboard modal"
+        ],
+        "Z_additional": [
+          "Added v6.0.0 Leaderboard version filter pill and comprehensive automated test suite coverage for penalty progression and speed scoring"
+        ]
+      },
       {
         "version": "v5.0.0",
         "date": "2026-11-02",
@@ -155,6 +174,25 @@
     }
   ],
   "changelog": [
+    {
+      "version": "v6.0.0",
+      "date": "2026-11-03",
+      "summary": "Level-based wrong word penalty progression (0%, 20%, 100%, 200%, 500%), time-scaled speed scoring (round((Raw Score / Seconds) * 100)), tightened authentic Hanko fingerprint seal, wax dot mark removal from envelope slips, username placeholder cleanup, authenticated-only version registry, and arcade portal launch for games.abhikism.com.",
+      "X_feature_additions": [
+        "Level-based wrong word penalties: Level 1 (0%), Level 2 (20% = 20 pts), Level 3 (100% = 100 pts), Level 4 (200% = 200 pts), Level 5 (500% = 500 pts)",
+        "Arcade Speed Index scoring: Final Score = round((Raw Score / Elapsed Seconds) * 100), massively rewarding fast completions",
+        "Launched games.abhikism.com Arcade Hub featuring Daakbaksher Gaan as the featured #1 game with level badges and direct play link"
+      ],
+      "Y_bug_fixes": [
+        "Tightened authentic Hanko double square frame (156px) around the #ABHIKISM fingerprint seal on the 9:16 certificate",
+        "Removed wax seal dot mark from floating word envelope flaps for clean vector paper folds",
+        "Changed username input placeholder to 'e.g. username' (replacing 'e.g. abhik_listener')",
+        "Gated Semantic Versioning Registry so it is only visible to logged-in users inside the Leaderboard modal"
+      ],
+      "Z_additional": [
+        "Added v6.0.0 Leaderboard version filter pill and comprehensive automated test suite coverage for penalty progression and speed scoring"
+      ]
+    },
     {
       "version": "v5.0.0",
       "date": "2026-11-02",
