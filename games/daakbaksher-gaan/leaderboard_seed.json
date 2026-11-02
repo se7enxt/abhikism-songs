@@ -1,5 +1,23 @@
 [
   {
+    "certificate_id": "DBG-V50-SEED-L5",
+    "timestamp_utc": "2026-11-02T06:00:00Z",
+    "username": "ritwick_shantiniketan",
+    "player_name": "Ritwick Sen",
+    "social_platform": "Instagram",
+    "social_link": "https://instagram.com/ritwick_shantiniketan",
+    "social_handle": "@ritwick_shantiniketan",
+    "game_version": "v5.0.0",
+    "level": 5,
+    "target_words": 125,
+    "words_collected": 125,
+    "wind_speed": "2.75x",
+    "completion_time_ms": 172500,
+    "completion_time_formatted": "02:52.5",
+    "score": 18000,
+    "completeness_pct": 100
+  },
+  {
     "certificate_id": "DBG-V41-SEED-L5",
     "timestamp_utc": "2026-11-01T16:15:00Z",
     "username": "ritwick_shantiniketan",

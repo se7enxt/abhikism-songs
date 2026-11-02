@@ -1,18 +1,34 @@
 {
   "game_id": "WKS-003",
   "title": "DaakBaksher Gaan — 2D Sumi-e Wind Game",
-  "version": "v4.1.0",
+  "version": "v5.0.0",
   "semver": {
     "game": "daakbaksher-gaan",
     "song_id": "WKS-003",
-    "current_version": "v4.1.0",
+    "current_version": "v5.0.0",
     "semver": {
-      "X_feature": 4,
-      "Y_bugfix": 1,
+      "X_feature": 5,
+      "Y_bugfix": 0,
       "Z_additional": 0
     },
     "schema_rule": "vX.Y.Z — X: Feature Addition, Y: Bug Fix, Z: Additional",
     "changelog": [
+      {
+        "version": "v5.0.0",
+        "date": "2026-11-02",
+        "summary": "UI refinements for Daakbaksher Gaan (postbox plaque cleaned up with centered percentage indicator, envelope-shaped floating word slips with postal flap styling), user self-service data viewing and soft-deletion portal (user.abhikism.com), and privacy hardening.",
+        "X_feature_additions": [
+          "Official #ABHIKISM fingerprint Hanko seal stamped on 9:16 Certificate of Authenticity",
+          "User self-service data viewing and soft-deletion portal deployed at user.abhikism.com with active view filtering",
+          "Envelope-shaped floating word slips with postal flap styling and WCAG touch compliance"
+        ],
+        "Y_bug_fixes": [
+          "Postbox plaque cleaned up: removed 'abhikism' and 'daakbaksho' text, centered completion percentage indicator"
+        ],
+        "Z_additional": [
+          "Added v5.0.0 Leaderboard version filter pill and extended 9-test automated test suite"
+        ]
+      },
       {
         "version": "v4.1.0",
         "date": "2026-11-01",
@@ -139,6 +155,22 @@
     }
   ],
   "changelog": [
+    {
+      "version": "v5.0.0",
+      "date": "2026-11-02",
+      "summary": "UI refinements for Daakbaksher Gaan (postbox plaque cleaned up with centered percentage indicator, envelope-shaped floating word slips with postal flap styling), user self-service data viewing and soft-deletion portal (user.abhikism.com), and privacy hardening.",
+      "X_feature_additions": [
+        "Official #ABHIKISM fingerprint Hanko seal stamped on 9:16 Certificate of Authenticity",
+        "User self-service data viewing and soft-deletion portal deployed at user.abhikism.com with active view filtering",
+        "Envelope-shaped floating word slips with postal flap styling and WCAG touch compliance"
+      ],
+      "Y_bug_fixes": [
+        "Postbox plaque cleaned up: removed 'abhikism' and 'daakbaksho' text, centered completion percentage indicator"
+      ],
+      "Z_additional": [
+        "Added v5.0.0 Leaderboard version filter pill and extended 9-test automated test suite"
+      ]
+    },
     {
       "version": "v4.1.0",
       "date": "2026-11-01",
