@@ -1,18 +1,39 @@
 {
   "game_id": "WKS-003",
   "title": "DaakBaksher Gaan — 2D Sumi-e Wind Game",
-  "version": "v6.1.0",
+  "version": "v7.0.0",
   "semver": {
     "game": "daakbaksher-gaan",
     "song_id": "WKS-003",
-    "current_version": "v6.1.0",
+    "current_version": "v7.0.0",
     "semver": {
-      "X_feature": 6,
-      "Y_bugfix": 1,
+      "X_feature": 7,
+      "Y_bugfix": 0,
       "Z_additional": 0
     },
     "schema_rule": "vX.Y.Z — X: Feature Addition, Y: Bug Fix, Z: Additional",
     "changelog": [
+      {
+        "version": "v7.0.0",
+        "date": "2026-11-04",
+        "summary": "Full Saul Bass constructivist linocut visual redesign matching official poster (Option 3), pure dark mode palette with high-contrast toggle, proportional responsive physics engine, angular papercut wave horizon, and Option 1 origami folded envelope word slips with unified bilingual typography.",
+        "X_feature_additions": [
+          "Saul Bass Constructivist Redesign: Complete visual overhaul matching official poster (ABHIKISM_VISUAL_PosterOpt3DaakBaksherGaanSaulBass_v2.0_20261013_FINAL.jpg) featuring inky void black (#0E0F12), Saul Bass crimson (#C7242B), aged woodblock cream (#F5EFE1), and warm ochre (#E5CF98)",
+          "Linocut Victorian Pillar Postbox: Authentic Saul Bass silhouette with faceted dome cap, dentil trim collar, cream contour linocut outline (#F5EFE1), glowing letter cavity, and center enamel plaque",
+          "Angular Horizon Waves: Multi-layered constructivist papercut wave silhouettes (#E5CF98 ochre, #C7242B crimson, and #0E0F12 inky silhouette with cream crest trim) anchoring the stage baseline",
+          "Origami Folded Envelopes: Option 1 geometric folded cream paper slips with triangular fold flap, diagonal creases, and crimson corner fold accent",
+          "Unified Bilingual Typography: Identical layout for both song words and decoy words (bold Bengali script + uppercase English romanization, zero decoy labeling)",
+          "Saul Bass Dark Mode & High-Contrast Toggle: Permanent dark aesthetic with one-click toggle (#btn-theme-toggle) between Classic Saul Bass Noir and High-Contrast Graphic Noir"
+        ],
+        "Y_bug_fixes": [
+          "Eliminated awkward window resize jumping by removing abrupt (entity.x / prevW) * stageWidth coordinate recalculations and transitioning to smooth normalized vertical lane distribution (laneRatio)",
+          "Implemented proportional postbox scaling using CSS clamp() (clamp(140px, 16vw, 195px)) to prevent collision with top HUD on small viewports",
+          "Removed redundant single-script romanisation toggle button in favor of unified bilingual origami envelopes"
+        ],
+        "Z_additional": [
+          "Added v7.0.0 Leaderboard version filter pill, updated version badges across HUD and certificate canvas, and comprehensive test suite validation for v7.0.0"
+        ]
+      },
       {
         "version": "v6.1.0",
         "date": "2026-11-04",
@@ -189,6 +210,27 @@
     }
   ],
   "changelog": [
+    {
+      "version": "v7.0.0",
+      "date": "2026-11-04",
+      "summary": "Full Saul Bass constructivist linocut visual redesign matching official poster (Option 3), pure dark mode palette with high-contrast toggle, proportional responsive physics engine, angular papercut wave horizon, and Option 1 origami folded envelope word slips with unified bilingual typography.",
+      "X_feature_additions": [
+        "Saul Bass Constructivist Redesign: Complete visual overhaul matching official poster (ABHIKISM_VISUAL_PosterOpt3DaakBaksherGaanSaulBass_v2.0_20261013_FINAL.jpg) featuring inky void black (#0E0F12), Saul Bass crimson (#C7242B), aged woodblock cream (#F5EFE1), and warm ochre (#E5CF98)",
+        "Linocut Victorian Pillar Postbox: Authentic Saul Bass silhouette with faceted dome cap, dentil trim collar, cream contour linocut outline (#F5EFE1), glowing letter cavity, and center enamel plaque",
+        "Angular Horizon Waves: Multi-layered constructivist papercut wave silhouettes (#E5CF98 ochre, #C7242B crimson, and #0E0F12 inky silhouette with cream crest trim) anchoring the stage baseline",
+        "Origami Folded Envelopes: Option 1 geometric folded cream paper slips with triangular fold flap, diagonal creases, and crimson corner fold accent",
+        "Unified Bilingual Typography: Identical layout for both song words and decoy words (bold Bengali script + uppercase English romanization, zero decoy labeling)",
+        "Saul Bass Dark Mode & High-Contrast Toggle: Permanent dark aesthetic with one-click toggle (#btn-theme-toggle) between Classic Saul Bass Noir and High-Contrast Graphic Noir"
+      ],
+      "Y_bug_fixes": [
+        "Eliminated awkward window resize jumping by removing abrupt (entity.x / prevW) * stageWidth coordinate recalculations and transitioning to smooth normalized vertical lane distribution (laneRatio)",
+        "Implemented proportional postbox scaling using CSS clamp() (clamp(140px, 16vw, 195px)) to prevent collision with top HUD on small viewports",
+        "Removed redundant single-script romanisation toggle button in favor of unified bilingual origami envelopes"
+      ],
+      "Z_additional": [
+        "Added v7.0.0 Leaderboard version filter pill, updated version badges across HUD and certificate canvas, and comprehensive test suite validation for v7.0.0"
+      ]
+    },
     {
       "version": "v6.1.0",
       "date": "2026-11-04",
