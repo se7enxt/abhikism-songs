@@ -1,18 +1,33 @@
 {
   "game_id": "WKS-003",
   "title": "DaakBaksher Gaan — 2D Sumi-e Wind Game",
-  "version": "v6.0.0",
+  "version": "v6.1.0",
   "semver": {
     "game": "daakbaksher-gaan",
     "song_id": "WKS-003",
-    "current_version": "v6.0.0",
+    "current_version": "v6.1.0",
     "semver": {
       "X_feature": 6,
-      "Y_bugfix": 0,
+      "Y_bugfix": 1,
       "Z_additional": 0
     },
     "schema_rule": "vX.Y.Z — X: Feature Addition, Y: Bug Fix, Z: Additional",
     "changelog": [
+      {
+        "version": "v6.1.0",
+        "date": "2026-11-04",
+        "summary": "Fixed broken canonical streaming links (verified Spotify track 5ZrfaZ8vM5pXGJaee4NKW1 & YouTube Music track mPZvSvhKr88) and eliminated mobile tab reload/crash triggers (throttled 60 FPS postMessage IPC to 250ms interval, removed top-navigation sandbox vulnerability, and removed getElementById monkey-patching).",
+        "X_feature_additions": [],
+        "Y_bug_fixes": [
+          "Replaced placeholder/search DSP links with verified canonical URLs: Spotify (5ZrfaZ8vM5pXGJaee4NKW1), YouTube Music (mPZvSvhKr88), and YouTube Video (mPZvSvhKr88) across game dock, embed tray, and onelink discography",
+          "Eliminated 60 FPS postMessage IPC flooding in requestAnimationFrame by moving syncYouTubeTelemetryTick to a throttled 250ms interval active only during YouTube playback",
+          "Removed allow-top-navigation-by-user-activation sandbox permission from Apple Music embed iframe to prevent accidental top-level mobile page navigation and reloads",
+          "Removed global document.getElementById monkey-patching to restore native DOM lookup performance in mobile WebKit/Blink"
+        ],
+        "Z_additional": [
+          "Added v6.1.0 Leaderboard version filter pill and updated all test suite assertions to v6.1.0 with canonical DSP track verification"
+        ]
+      },
       {
         "version": "v6.0.0",
         "date": "2026-11-03",
@@ -174,6 +189,21 @@
     }
   ],
   "changelog": [
+    {
+      "version": "v6.1.0",
+      "date": "2026-11-04",
+      "summary": "Fixed broken canonical streaming links (verified Spotify track 5ZrfaZ8vM5pXGJaee4NKW1 & YouTube Music track mPZvSvhKr88) and eliminated mobile tab reload/crash triggers (throttled 60 FPS postMessage IPC to 250ms interval, removed top-navigation sandbox vulnerability, and removed getElementById monkey-patching).",
+      "X_feature_additions": [],
+      "Y_bug_fixes": [
+        "Replaced placeholder/search DSP links with verified canonical URLs: Spotify (5ZrfaZ8vM5pXGJaee4NKW1), YouTube Music (mPZvSvhKr88), and YouTube Video (mPZvSvhKr88) across game dock, embed tray, and onelink discography",
+        "Eliminated 60 FPS postMessage IPC flooding in requestAnimationFrame by moving syncYouTubeTelemetryTick to a throttled 250ms interval active only during YouTube playback",
+        "Removed allow-top-navigation-by-user-activation sandbox permission from Apple Music embed iframe to prevent accidental top-level mobile page navigation and reloads",
+        "Removed global document.getElementById monkey-patching to restore native DOM lookup performance in mobile WebKit/Blink"
+      ],
+      "Z_additional": [
+        "Added v6.1.0 Leaderboard version filter pill and updated all test suite assertions to v6.1.0 with canonical DSP track verification"
+      ]
+    },
     {
       "version": "v6.0.0",
       "date": "2026-11-03",
