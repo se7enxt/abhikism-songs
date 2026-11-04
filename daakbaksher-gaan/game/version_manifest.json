@@ -1,18 +1,33 @@
 {
   "game_id": "WKS-003",
   "title": "DaakBaksher Gaan — 2D Sumi-e Wind Game",
-  "version": "v7.0.0",
+  "version": "v7.1.0",
   "semver": {
     "game": "daakbaksher-gaan",
     "song_id": "WKS-003",
-    "current_version": "v7.0.0",
+    "current_version": "v7.1.0",
     "semver": {
       "X_feature": 7,
-      "Y_bugfix": 0,
+      "Y_bugfix": 1,
       "Z_additional": 0
     },
     "schema_rule": "vX.Y.Z — X: Feature Addition, Y: Bug Fix, Z: Additional",
     "changelog": [
+      {
+        "version": "v7.1.0",
+        "date": "2026-11-04",
+        "summary": "Restored authentic Saul Bass linocut crimson postbox base silhouette matching official poster, fixed dark-mode contrast across HUD pills, Auth gates, Leaderboard rows, Lexicon chips, and mobile breakpoints, and aligned games.abhikism.com Arcade Hub with the Saul Bass noir aesthetic.",
+        "X_feature_additions": [],
+        "Y_bug_fixes": [
+          "Fixed postbox 0% base color override in updateScoreAndPostboxCompleteness() so the Victorian pillar box renders in shadowed Saul Bass woodcut crimson (#8E181E -> #C7242B) with linocut black plinth/collar instead of legacy stone-beige",
+          "Fixed white-on-cream contrast regressions on .back-songs-link, .modal-close-btn, .lb-rank-badge, .lb-tag-level, .lb-tag-score, and logged-in @username badges",
+          "Replaced legacy light card backgrounds (#FFFFFF / #F4FBF9 / #FAF7F2) in Leaderboard rows, Auth gates, Social input rows, Lexicon chips, and mobile instruction banner with high-contrast Saul Bass noir surfaces",
+          "Removed redundant outer mobile padding on .floating-word-slip so bilingual text stays centered beneath the origami envelope fold flap"
+        ],
+        "Z_additional": [
+          "Upgraded games.abhikism.com Arcade Hub to match the Saul Bass constructivist noir identity with High-Contrast toggle and v7.1.0 version filter pill"
+        ]
+      },
       {
         "version": "v7.0.0",
         "date": "2026-11-04",
@@ -210,6 +225,21 @@
     }
   ],
   "changelog": [
+    {
+      "version": "v7.1.0",
+      "date": "2026-11-04",
+      "summary": "Restored authentic Saul Bass linocut crimson postbox base silhouette matching official poster, fixed dark-mode contrast across HUD pills, Auth gates, Leaderboard rows, Lexicon chips, and mobile breakpoints, and aligned games.abhikism.com Arcade Hub with the Saul Bass noir aesthetic.",
+      "X_feature_additions": [],
+      "Y_bug_fixes": [
+        "Fixed postbox 0% base color override in updateScoreAndPostboxCompleteness() so the Victorian pillar box renders in shadowed Saul Bass woodcut crimson (#8E181E -> #C7242B) with linocut black plinth/collar instead of legacy stone-beige",
+        "Fixed white-on-cream contrast regressions on .back-songs-link, .modal-close-btn, .lb-rank-badge, .lb-tag-level, .lb-tag-score, and logged-in @username badges",
+        "Replaced legacy light card backgrounds (#FFFFFF / #F4FBF9 / #FAF7F2) in Leaderboard rows, Auth gates, Social input rows, Lexicon chips, and mobile instruction banner with high-contrast Saul Bass noir surfaces",
+        "Removed redundant outer mobile padding on .floating-word-slip so bilingual text stays centered beneath the origami envelope fold flap"
+      ],
+      "Z_additional": [
+        "Upgraded games.abhikism.com Arcade Hub to match the Saul Bass constructivist noir identity with High-Contrast toggle and v7.1.0 version filter pill"
+      ]
+    },
     {
       "version": "v7.0.0",
       "date": "2026-11-04",

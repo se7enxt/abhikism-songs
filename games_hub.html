@@ -4,50 +4,56 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>games.abhikism.com — #ABHIKISM Interactive Song Games Arcade</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&family=Noto+Serif+Bengali:wght@600;700;800&family=Questrial&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="Official #ABHIKISM Interactive Song Games Arcade. Play DaakBaksher Gaan (v7.1.0) in authentic Saul Bass constructivist linocut style.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Noto+Serif+Bengali:wght@600;700;800&family=Questrial&family=Syne:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-parchment: #F4EFE6;
-      --card-bg: #FFFFFF;
-      --ink-black: #1A1817;
-      --ink-charcoal: #3D3834;
-      --ink-wash: #6E665E;
-      --vermilion: #D91E18;
-      --vermilion-soft: #FDE8E7;
-      --teal-primary: #005A51;
-      --teal-soft: #E6F3F1;
-      --arcade-gold: #FF8A34;
+      --bg-void: #0E0F12;
+      --card-bg: #161821;
+      --card-elevated: #1D202B;
+      --ink-cream: #F5EFE1;
+      --ink-ochre: #E5CF98;
+      --ink-muted: #A9A499;
+      --saul-crimson: #C7242B;
+      --teal-primary: #008779;
       --neon-lime: #90FF6C;
+      --border-subtle: #2E3242;
       --font-display: 'Syne', sans-serif;
-      --font-bn: 'Noto Serif Bengali', serif;
-      --font-body: 'Questrial', sans-serif;
+      --font-body: 'Questrial', 'Hind Siliguri', sans-serif;
+      --font-bn: 'Noto Serif Bengali', 'Hind Siliguri', serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    body.theme-high-contrast {
+      --bg-void: #000000;
+      --card-bg: #0D0E12;
+      --card-elevated: #14161E;
+      --ink-cream: #FFFFFF;
+      --ink-ochre: #FFDE59;
+      --ink-muted: #DADADA;
+      --saul-crimson: #FF2222;
+      --border-subtle: #FFFFFF;
     }
-    html, body {
-      width: 100%;
-      max-width: 100vw;
-      overflow-x: hidden;
-      background: var(--bg-parchment);
-      color: var(--ink-black);
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-void);
+      color: var(--ink-cream);
       font-family: var(--font-body);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
     header {
-      background: var(--card-bg);
-      border-bottom: 3px solid var(--ink-black);
+      background: rgba(20, 21, 27, 0.96);
+      border-bottom: 2.5px solid var(--saul-crimson);
       padding: 16px 28px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 16px;
+      justify-content: space-between;
       flex-wrap: wrap;
+      gap: 14px;
     }
     .brand-group {
       display: flex;
@@ -58,45 +64,47 @@
       font-family: var(--font-display);
       font-size: 24px;
       font-weight: 800;
-      color: var(--teal-primary);
+      color: var(--ink-cream);
       letter-spacing: -0.5px;
       text-decoration: none;
     }
     .brand-sub {
       font-family: var(--font-mono);
       font-size: 11px;
-      background: var(--teal-soft);
-      color: var(--teal-primary);
+      background: rgba(199, 36, 43, 0.18);
+      color: var(--ink-ochre);
       padding: 3px 8px;
       border-radius: 4px;
-      border: 1px solid var(--teal-primary);
+      border: 1px solid var(--saul-crimson);
       font-weight: 700;
     }
     .header-links {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
       flex-wrap: wrap;
     }
     .header-link {
       font-family: var(--font-mono);
       font-size: 12px;
       font-weight: 700;
-      color: var(--ink-charcoal);
+      color: var(--ink-cream);
       text-decoration: none;
       padding: 6px 12px;
       border-radius: 6px;
-      border: 1.5px solid var(--ink-black);
-      background: #FFF;
+      border: 1.5px solid var(--border-subtle);
+      background: var(--card-elevated);
+      cursor: pointer;
       transition: all 0.15s ease;
     }
     .header-link:hover {
-      background: var(--neon-lime);
+      border-color: var(--saul-crimson);
+      background: #262938;
       transform: translateY(-1px);
     }
     .nav-bar {
-      background: var(--neon-lime);
-      border-bottom: 2px solid var(--ink-black);
+      background: #14151B;
+      border-bottom: 1.5px solid var(--border-subtle);
       padding: 10px 28px;
       font-weight: 700;
       display: flex;
@@ -105,20 +113,19 @@
       align-items: center;
     }
     .nav-bar a {
-      color: #000;
+      color: var(--ink-muted);
       text-decoration: none;
       padding: 5px 14px;
       border-radius: 6px;
       font-size: 13px;
       transition: all 0.15s ease;
     }
-    .nav-bar a.active {
-      background: var(--arcade-gold);
-      color: #FFF;
-      box-shadow: 2px 2px 0px var(--ink-black);
+    .nav-bar a.active, .nav-bar a:hover {
+      background: var(--saul-crimson);
+      color: #FFFFFF;
     }
     main {
-      max-width: 1060px;
+      max-width: 1080px;
       width: 100%;
       margin: 32px auto;
       padding: 0 20px;
@@ -129,10 +136,10 @@
     }
     .featured-hero-card {
       background: var(--card-bg);
-      border: 3px solid var(--ink-black);
-      border-radius: 18px;
+      border: 2.5px solid var(--ink-cream);
+      border-radius: 16px;
       padding: 32px;
-      box-shadow: 8px 8px 0px var(--ink-black);
+      box-shadow: 8px 8px 0px var(--saul-crimson);
       position: relative;
       overflow: hidden;
     }
@@ -144,8 +151,8 @@
       margin-bottom: 14px;
     }
     .badge-flagship {
-      background: var(--vermilion);
-      color: #FFF;
+      background: var(--saul-crimson);
+      color: #FFFFFF;
       font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 800;
@@ -158,8 +165,8 @@
       gap: 5px;
     }
     .badge-sub {
-      background: var(--teal-soft);
-      color: var(--teal-primary);
+      background: rgba(0, 135, 121, 0.16);
+      color: #64E5D4;
       font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 700;
@@ -171,7 +178,7 @@
       font-family: var(--font-bn);
       font-size: 36px;
       font-weight: 800;
-      color: var(--ink-black);
+      color: var(--ink-cream);
       margin: 8px 0 6px 0;
       line-height: 1.25;
     }
@@ -179,25 +186,26 @@
       font-family: var(--font-body);
       font-size: 16px;
       font-weight: 700;
-      color: var(--teal-primary);
+      color: var(--ink-ochre);
       margin-bottom: 14px;
     }
     .featured-desc {
-      color: var(--ink-charcoal);
+      color: var(--ink-muted);
       font-size: 15px;
       line-height: 1.65;
       margin-bottom: 22px;
-      max-width: 820px;
+      max-width: 840px;
     }
     .mechanics-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
       gap: 12px;
       margin-bottom: 24px;
     }
     .mechanic-item {
-      background: #FAF7F2;
-      border: 1.5px solid var(--ink-black);
+      background: var(--card-elevated);
+      border: 1.5px solid var(--border-subtle);
+      border-left: 4px solid var(--saul-crimson);
       border-radius: 10px;
       padding: 12px 14px;
     }
@@ -205,7 +213,7 @@
       font-family: var(--font-mono);
       font-size: 11.5px;
       font-weight: 700;
-      color: var(--ink-black);
+      color: var(--ink-ochre);
       margin-bottom: 4px;
       display: flex;
       align-items: center;
@@ -213,8 +221,9 @@
     }
     .mechanic-desc {
       font-size: 12px;
-      color: var(--ink-wash);
+      color: var(--ink-cream);
       line-height: 1.45;
+      opacity: 0.9;
     }
     .cta-row {
       display: flex;
@@ -226,46 +235,43 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: var(--vermilion);
+      background: var(--saul-crimson);
       color: #FFFFFF;
-      border: 2.5px solid var(--ink-black);
+      border: 2px solid var(--ink-cream);
       padding: 14px 28px;
       border-radius: 12px;
       font-family: var(--font-display);
       font-weight: 800;
       font-size: 17px;
       text-decoration: none;
-      box-shadow: 4px 4px 0px var(--ink-black);
+      box-shadow: 4px 4px 0px #000000;
       transition: all 0.15s ease;
     }
     .play-cta:hover {
-      background: #B81813;
+      background: #DF2931;
       transform: translate(-1px, -1px);
-      box-shadow: 6px 6px 0px var(--ink-black);
+      box-shadow: 6px 6px 0px #000000;
     }
     .secondary-cta {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: #FFF;
-      color: var(--ink-black);
-      border: 2px solid var(--ink-black);
+      background: var(--card-elevated);
+      color: var(--ink-cream);
+      border: 2px solid var(--border-subtle);
       padding: 12px 20px;
       border-radius: 10px;
       font-family: var(--font-mono);
       font-weight: 700;
       font-size: 13px;
       text-decoration: none;
-      box-shadow: 3px 3px 0px var(--ink-black);
       transition: all 0.15s ease;
     }
     .secondary-cta:hover {
-      background: var(--teal-soft);
+      border-color: var(--ink-ochre);
       transform: translate(-1px, -1px);
     }
-    .shelf-section {
-      margin-top: 8px;
-    }
+    .shelf-section { margin-top: 8px; }
     .shelf-header {
       display: flex;
       align-items: center;
@@ -276,7 +282,7 @@
       font-family: var(--font-display);
       font-size: 20px;
       font-weight: 800;
-      color: var(--ink-black);
+      color: var(--ink-cream);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -287,8 +293,8 @@
       gap: 16px;
     }
     .upcoming-card {
-      background: #FAF7F2;
-      border: 2px dashed #9E968D;
+      background: var(--card-bg);
+      border: 1.5px dashed var(--border-subtle);
       border-radius: 14px;
       padding: 20px;
       position: relative;
@@ -297,8 +303,9 @@
       font-family: var(--font-mono);
       font-size: 10px;
       font-weight: 700;
-      background: #E8E2D8;
-      color: #6E665E;
+      background: rgba(229, 207, 152, 0.14);
+      color: var(--ink-ochre);
+      border: 1px solid rgba(229, 207, 152, 0.35);
       padding: 3px 8px;
       border-radius: 4px;
       display: inline-block;
@@ -309,17 +316,17 @@
       font-family: var(--font-bn);
       font-size: 20px;
       font-weight: 700;
-      color: var(--ink-charcoal);
+      color: var(--ink-cream);
       margin-bottom: 6px;
     }
     .upcoming-sub {
       font-size: 12px;
-      color: var(--ink-wash);
+      color: var(--ink-muted);
       line-height: 1.5;
     }
     footer {
-      background: var(--card-bg);
-      border-top: 2px solid var(--ink-black);
+      background: #121318;
+      border-top: 2px solid var(--saul-crimson);
       padding: 20px 28px;
       display: flex;
       justify-content: space-between;
@@ -327,34 +334,15 @@
       flex-wrap: wrap;
       gap: 12px;
       font-size: 12px;
-      color: var(--ink-wash);
+      color: var(--ink-muted);
       margin-top: auto;
     }
     @media (max-width: 640px) {
-      header, .nav-bar, footer {
-        padding: 12px 16px;
-      }
-      main {
-        margin: 20px auto;
-        padding: 0 14px;
-      }
-      .featured-hero-card {
-        padding: 20px;
-        box-shadow: 5px 5px 0px var(--ink-black);
-      }
-      .featured-title {
-        font-size: 26px;
-      }
-      .play-cta {
-        font-size: 15px;
-        padding: 12px 20px;
-        width: 100%;
-        justify-content: center;
-      }
-      .secondary-cta {
-        width: 100%;
-        justify-content: center;
-      }
+      header, .nav-bar, footer { padding: 12px 16px; }
+      main { margin: 20px auto; padding: 0 14px; }
+      .featured-hero-card { padding: 20px; box-shadow: 5px 5px 0px var(--saul-crimson); }
+      .featured-title { font-size: 26px; }
+      .play-cta, .secondary-cta { width: 100%; justify-content: center; }
     }
   </style>
 </head>
@@ -365,6 +353,7 @@
       <span class="brand-sub">games.abhikism.com</span>
     </div>
     <div class="header-links">
+      <button type="button" class="header-link" id="hub-theme-toggle" onclick="toggleHubContrast()">◐ High-Contrast</button>
       <a href="https://songs.abhikism.com" class="header-link">🎵 songs.abhikism.com</a>
       <a href="https://user.abhikism.com" class="header-link">👤 Member Portal (user.abhikism.com)</a>
     </div>
@@ -381,15 +370,15 @@
       <div class="featured-hero-badge-strip">
         <span class="badge-flagship">★ FEATURED GAME #1</span>
         <span class="badge-sub">TRACK WKS-003</span>
-        <span class="badge-sub">BUILD v7.0.0</span>
-        <span class="badge-sub">2D SUMI-E WIND GAME</span>
+        <span class="badge-sub">BUILD v7.1.0</span>
+        <span class="badge-sub">SAUL BASS LINOCUT EDITION</span>
       </div>
 
       <h1 class="featured-title">ডাকবাক্সের গান — বাতাসের চিঠি</h1>
-      <div class="featured-subtitle">DaakBaksher Gaan: Letters in the Wind (2D Sumi-e Ink-Brush Game)</div>
+      <div class="featured-subtitle">DaakBaksher Gaan: Letters in the Wind (Saul Bass Constructivist Wind Game)</div>
 
       <p class="featured-desc">
-        A high-speed 2D ink-brush wind game set to the master recording of <em>DaakBaksher Gaan</em>. Gather the 125 canonical lyrical words floating across 5 automatic wind levels (5 → 15 → 25 → 50 → 125 words) and post them into the colonial postbox before time runs out. Beware of 250 decoy words that trigger escalating penalty deductions (up to 500%), master the wind speed, race the clock for the highest Arcade Speed Index score, and claim your verified 9:16 Listener Certificate with the authentic #ABHIKISM Hanko seal!
+        A high-speed 2D Saul Bass constructivist linocut wind game set to the continuous master recording of <em>DaakBaksher Gaan</em>. Gather the 125 canonical bilingual origami letters floating across 5 automatic wind levels (5 → 15 → 25 → 50 → 125 words) and post them into the Victorian pillar postbox over the papercut waves. Beware of 250 decoy slips that trigger escalating penalty deductions (up to 500%), race the clock for the highest Arcade Speed Index score, and claim your verified 9:16 Listener Certificate stamped with the official #ABHIKISM fingerprint Hanko seal!
       </p>
 
       <div class="mechanics-grid">
@@ -398,22 +387,22 @@
           <div class="mechanic-desc">Lv 1 (5w • 1.0x wind) to Lv 5 Master Cyclone (All 125 words • 2.75x wind speed).</div>
         </div>
         <div class="mechanic-item">
-          <div class="mechanic-title">⚠️ Decoy Penalty Progression</div>
-          <div class="mechanic-desc">Lv 1: 0% penalty • Lv 2: 20% (-20 pts) • Lv 3: 100% (-100 pts) • Lv 4: 200% (-200 pts) • Lv 5: 500% (-500 pts).</div>
+          <div class="mechanic-title">✉️ Bilingual Origami Slips</div>
+          <div class="mechanic-desc">Folded cream origami envelopes displaying both Bengali script and English romanization with uniform decoy styling.</div>
         </div>
         <div class="mechanic-item">
           <div class="mechanic-title">⚡ Arcade Speed Index Scoring</div>
-          <div class="mechanic-desc">Final Score = round((Raw Score ÷ Elapsed Seconds) × 100). Speed massively multiplies your score!</div>
+          <div class="mechanic-desc">Lv 1: 0% • Lv 2: 20% • Lv 3: 100% • Lv 4: 200% • Lv 5: 500% penalty; Final Score = round((Raw ÷ Seconds) × 100).</div>
         </div>
         <div class="mechanic-item">
           <div class="mechanic-title">📜 9:16 Certificate &amp; Leaderboard</div>
-          <div class="mechanic-desc">Authentic vermilion fingerprint Hanko seal, member leaderboard rankings, and 100% completeness gating.</div>
+          <div class="mechanic-desc">Official vermilion fingerprint Hanko seal, member leaderboard rankings, and 100% completeness gating.</div>
         </div>
       </div>
 
       <div class="cta-row">
         <a href="./daakbaksher-gaan/index.html" class="play-cta">
-          📮 Play DaakBaksher Gaan Game (v7.0.0) →
+          📮 Play DaakBaksher Gaan Game (v7.1.0) →
         </a>
         <a href="https://songs.abhikism.com/daakbaksher-gaan/" class="secondary-cta" target="_blank" rel="noopener">
           🎧 Song Info &amp; Streaming Platforms
@@ -450,5 +439,20 @@
     <div>© 2026 #ABHIKISM Interactive Games Arcade • Track WKS-003 • games.abhikism.com</div>
     <div>Zero-Client-Exposure Privacy Architecture • Fully Protected User Data</div>
   </footer>
+  <script>
+    (function() {
+      const saved = localStorage.getItem('abhikism_dbg_theme_mode');
+      const btn = document.getElementById('hub-theme-toggle');
+      if (saved === 'high-contrast') {
+        document.body.classList.add('theme-high-contrast');
+        if (btn) btn.textContent = '🌑 Classic Noir';
+      }
+      window.toggleHubContrast = function() {
+        const hc = document.body.classList.toggle('theme-high-contrast');
+        localStorage.setItem('abhikism_dbg_theme_mode', hc ? 'high-contrast' : 'classic-noir');
+        if (btn) btn.textContent = hc ? '🌑 Classic Noir' : '◐ High-Contrast';
+      };
+    })();
+  </script>
 </body>
 </html>
