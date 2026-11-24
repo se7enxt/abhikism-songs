@@ -501,9 +501,12 @@
       </div>
 
       <div id="hub-lb-protected" style="display:none;">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,135,121,0.14);border:1px solid var(--teal-primary);border-radius:8px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,135,121,0.14);border:1px solid var(--teal-primary);border-radius:8px;margin-bottom:8px;">
           <span style="font-size:12px;font-weight:700;color:#90FF6C;">✓ Viewing Unified Arcade Leaderboard as <code id="hub-lb-user">@member</code></span>
           <button type="button" onclick="hubLogout()" style="padding:4px 10px;border-radius:6px;border:1px solid var(--border-subtle);background:#0E0F12;color:var(--ink-cream);font-size:11px;font-weight:700;cursor:pointer;">Logout</button>
+        </div>
+        <div style="font-size:11px;color:var(--ink-muted);background:#0E0F12;border:1px solid var(--border-subtle);border-radius:7px;padding:6px 10px;margin-bottom:12px;">
+          🛡️ <strong style="color:var(--ink-cream);">Public Rankings Only:</strong> Open to any logged-in member even before playing. Shows only consented public handles, levels, timings &amp; scores — zero emails, phones, real names, or private data exposed.
         </div>
         <div id="hub-lb-game-tabs" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;"></div>
         <div id="hub-lb-game-cta" style="margin-bottom:12px;font-size:12px;color:var(--ink-muted);"></div>
@@ -802,7 +805,9 @@
         const fromSeed = (!hasLoadedCloud && gid === 'daakbaksher-gaan' && Array.isArray(HUB_SEED_LB)) ? HUB_SEED_LB : [];
         const rows = fromServer.length > 0 ? fromServer : fromSeed;
         if (rows.length === 0) {
-          box.innerHTML = `<div style="padding:16px;text-align:center;color:var(--ink-muted);font-size:12.5px;">No live scores posted yet — be the first champion on the board!</div>`;
+          box.innerHTML = hubState.loading
+            ? `<div style="padding:16px;text-align:center;color:var(--ink-ochre);font-size:12.5px;">⏳ Syncing live Official Leaderboard...</div>`
+            : `<div style="padding:16px;text-align:center;color:var(--ink-muted);font-size:12.5px;">No live scores posted yet — you are logged in and synced. Be the first champion on the board!</div>`;
           return;
         }
         box.innerHTML = rows.slice(0, 15).map((r, idx) => {
@@ -826,6 +831,8 @@
       }
 
       async function fetchHubLeaderboard(gid) {
+        hubState.loading = true;
+        renderHubRows();
         let gotSrv = false;
         try {
           const hdrs = hubState.token ? { 'X-Game-Session-Token': hubState.token } : {};
@@ -862,6 +869,7 @@
             }
           } catch (_) {}
         }
+        hubState.loading = false;
         renderHubGamesTabs();
       }
 
