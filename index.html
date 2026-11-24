@@ -4,14 +4,59 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>#ABHIKISM — Official Music Discography (songs.abhikism.com)</title>
-  <meta name="description" content="Official Universal Discography for #ABHIKISM. Stream all canonical works across Spotify, Apple Music, YouTube Music, and Amazon.">
+  <title>#ABHIKISM — Official Music Discography &amp; Interactive Games (songs.abhikism.com)</title>
+  <meta name="description" content="Official Universal Discography &amp; Interactive Song Games for #ABHIKISM. Stream 43 canonical works across Spotify, Apple Music, YouTube Music, and Amazon, and play interactive games at games.abhikism.com.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" id="canonical-link" href="https://songs.abhikism.com/">
   
-  <!-- OpenGraph Metadata -->
-  <meta property="og:type" content="music.song">
-  <meta property="og:title" id="og-title" content="#ABHIKISM — Official Music OneLink">
-  <meta property="og:description" id="og-desc" content="Stream on Spotify, Apple Music, YouTube Music, and Amazon.">
+  <!-- OpenGraph & Twitter Metadata -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="#ABHIKISM">
+  <meta property="og:url" id="og-url" content="https://songs.abhikism.com/">
+  <meta property="og:title" id="og-title" content="#ABHIKISM — Official Music Discography &amp; Games">
+  <meta property="og:description" id="og-desc" content="Stream all #ABHIKISM releases on Spotify, Apple Music, YouTube Music &amp; Amazon, and play interactive song games at games.abhikism.com.">
   <meta property="og:image" id="og-image" content="https://static.wixstatic.com/media/5a5f80_839a7a3b4a284ae3afa8caee1fd9ff8f~mv2.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" id="tw-title" content="#ABHIKISM — Official Music Discography &amp; Games">
+  <meta name="twitter:description" id="tw-desc" content="Stream #ABHIKISM across all music platforms and play interactive song games at games.abhikism.com.">
+  <meta name="twitter:image" id="tw-image" content="https://static.wixstatic.com/media/5a5f80_839a7a3b4a284ae3afa8caee1fd9ff8f~mv2.jpg">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "#ABHIKISM Official Discography",
+        "url": "https://songs.abhikism.com/",
+        "inLanguage": ["en", "bn", "hi", "mr"]
+      },
+      {
+        "@type": "MusicGroup",
+        "name": "#ABHIKISM",
+        "url": "https://abhikism.com/",
+        "sameAs": [
+          "https://abhikism.com/",
+          "https://songs.abhikism.com/",
+          "https://games.abhikism.com/",
+          "https://users.abhikism.com/"
+        ]
+      },
+      {
+        "@type": "VideoGame",
+        "name": "DaakBaksher Gaan: Letters in the Wind (ডাকবাক্সের গান)",
+        "url": "https://games.abhikism.com/daakbaksher-gaan/",
+        "image": "https://songs.abhikism.com/assets/artworks/daakbaksher-gaan.webp",
+        "gamePlatform": "Web Browser",
+        "isAccessibleForFree": true,
+        "isPartOf": {
+          "@type": "CollectionPage",
+          "name": "#ABHIKISM Interactive Games Arcade",
+          "url": "https://games.abhikism.com/"
+        }
+      }
+    ]
+  }
+  </script>
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -281,6 +326,150 @@
       background: #FF8A34;
       color: #ffffff;
       box-shadow: none;
+    }
+
+    a.mode-tab-btn.mode-tab-arcade {
+      text-decoration: none;
+      background: #14151B;
+      color: #F5EFE1;
+      border-left: 2px solid #ffffff;
+    }
+
+    a.mode-tab-btn.mode-tab-arcade:hover {
+      background: #C7242B;
+      color: #FFFFFF;
+    }
+
+    /* Featured Games Arcade Showcase Banner (Saul Bass Constructivist Noir) */
+    .featured-games-banner {
+      width: 100%;
+      margin: 18px 0 22px 0;
+      padding: 20px 22px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #14151B 0%, #1C1317 60%, #0E0F12 100%);
+      border: 2px solid #C7242B;
+      box-shadow: 5px 5px 0px #C7242B, 0 14px 36px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured-games-banner-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .featured-games-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: #C7242B;
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+
+    .featured-games-domain {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #E5CF98;
+      letter-spacing: 0.4px;
+    }
+
+    .featured-games-title {
+      font-family: 'Syne', var(--font-sans);
+      font-size: 20px;
+      font-weight: 800;
+      color: #F5EFE1;
+      line-height: 1.2;
+    }
+
+    .featured-games-desc {
+      font-size: 13px;
+      color: #D2CBBF;
+      line-height: 1.5;
+    }
+
+    .featured-games-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .featured-games-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 9px;
+      background: #C7242B;
+      color: #FFFFFF;
+      border: 1.5px solid #F5EFE1;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      box-shadow: 3px 3px 0px #000000;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .featured-games-btn-primary:hover {
+      background: #DF2B33;
+      transform: translate(-1px, -1px);
+    }
+
+    .featured-games-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 9px;
+      background: #008779;
+      color: #FFFFFF;
+      border: 1.5px solid #F5EFE1;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      box-shadow: 3px 3px 0px #000000;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .featured-games-btn-secondary:hover {
+      background: #00A392;
+      transform: translate(-1px, -1px);
+    }
+
+    .featured-games-btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 13px;
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #E5CF98;
+      border: 1px solid rgba(229, 207, 152, 0.45);
+      font-weight: 600;
+      font-size: 12px;
+      text-decoration: none;
+      transition: background 0.15s ease;
+    }
+
+    .featured-games-btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.14);
     }
 
     body.wix-embedded .site-header-upper {
@@ -1739,6 +1928,9 @@
         <button class="mode-tab-btn" id="tab-hub" onclick="switchView('hub')">
           Discography View
         </button>
+        <a href="https://games.abhikism.com/" class="mode-tab-btn mode-tab-arcade" id="tab-games" onclick="return openGamesArcadeHub(event)" title="Play #ABHIKISM Interactive Song Games &amp; Leaderboards (games.abhikism.com)">
+          🎮 Games Arcade ↗
+        </a>
       </nav>
     </div>
   </header>
@@ -1852,7 +2044,7 @@
 
           </div>
           <div id="song-game-cta-wrap" style="display:none; width:100%;">
-            <a id="btn-play-song-game" href="./games/daakbaksher-gaan/index.html" class="btn-song-game-cta" title="Play DaakBaksher Gaan 2D Wind &amp; Postbox Game">
+            <a id="btn-play-song-game" href="./games/daakbaksher-gaan/index.html" onclick="return openFeaturedGame(event)" class="btn-song-game-cta" title="Play DaakBaksher Gaan 2D Wind &amp; Postbox Game">
               <span>📮 Play Song Game — ডাকবাক্সের গান</span>
               <span class="btn-song-game-badge">Play Game ↗</span>
             </a>
@@ -1871,16 +2063,39 @@
         <button class="btn-action-tool" id="btn-copy-link" onclick="copyStoryLink()">
           <span>🔗</span> Copy Story Link
         </button>
-        <a href="./games/daakbaksher-gaan/index.html" class="btn-action-tool" id="btn-quick-play-dbg-game" style="text-decoration:none; border-color:rgba(217,30,24,0.5) !important;" title="Play DaakBaksher Gaan 2D Interactive Game">
+        <a href="./games/daakbaksher-gaan/index.html" onclick="return openFeaturedGame(event)" class="btn-action-tool" id="btn-quick-play-dbg-game" style="text-decoration:none; border-color:rgba(217,30,24,0.5) !important;" title="Play DaakBaksher Gaan 2D Interactive Game">
           <span>📮</span> Play Game (ডাকবাক্সের গান)
         </a>
-        <a href="./games/index.html" class="btn-action-tool" id="btn-open-arcade-hub" style="text-decoration:none; border-color:rgba(0,135,121,0.55) !important;" title="Explore #ABHIKISM Games Arcade &amp; Unified Leaderboard">
+        <a href="https://games.abhikism.com/" onclick="return openGamesArcadeHub(event)" class="btn-action-tool" id="btn-open-arcade-hub" style="text-decoration:none; border-color:rgba(0,135,121,0.55) !important;" title="Explore #ABHIKISM Games Arcade &amp; Unified Leaderboard">
           <span>🏆</span> Arcade Hub &amp; Leaderboards
         </a>
         <button class="btn-action-tool" id="btn-toggle-catalog" onclick="toggleCatalogDrawer()">
           <span>📚</span> Browse All Releases <span id="catalog-toggle-arrow">▾</span>
         </button>
       </div>
+
+      <!-- Featured #ABHIKISM Games Arcade Showcase Card (Single View) -->
+      <aside class="featured-games-banner" id="featured-games-spotlight" aria-label="#ABHIKISM Interactive Games Arcade">
+        <div class="featured-games-banner-top">
+          <span class="featured-games-pill">★ Featured Interactive Arcade</span>
+          <span class="featured-games-domain">games.abhikism.com</span>
+        </div>
+        <h2 class="featured-games-title">Play #ABHIKISM Song Games &amp; Climb the Live Leaderboard</h2>
+        <p class="featured-games-desc">
+          Start with <strong>ডাকবাক্সের গান (DaakBaksher Gaan)</strong> — a Saul Bass constructivist 2D wind &amp; postbox game with 5 automatic wind levels, unified cross-game leaderboards, and 9:16 Listener Certificates.
+        </p>
+        <div class="featured-games-actions">
+          <a href="https://games.abhikism.com/" onclick="return openGamesArcadeHub(event)" class="featured-games-btn-primary">
+            🎮 Open games.abhikism.com ↗
+          </a>
+          <a href="https://games.abhikism.com/daakbaksher-gaan/" onclick="return openFeaturedGame(event)" class="featured-games-btn-secondary">
+            📮 Play DaakBaksher Gaan →
+          </a>
+          <a href="https://users.abhikism.com/" class="featured-games-btn-ghost">
+            👤 Member &amp; Data Portal
+          </a>
+        </div>
+      </aside>
 
       <!-- Collapsible Drawer -->
       <section class="discography-card" id="discography-drawer">
@@ -1943,6 +2158,29 @@
           <button class="filter-chip" id="chip-anniversary" data-filter="anniversary" style="display:none;" onclick="setFilter('anniversary', this)">Anniversary Release</button>
         </div>
       </div>
+
+      <!-- Featured #ABHIKISM Games Arcade Showcase Banner (Discography Hub View) -->
+      <aside class="featured-games-banner" id="hub-featured-games-banner" aria-label="#ABHIKISM Interactive Games Arcade">
+        <div class="featured-games-banner-top">
+          <span class="featured-games-pill">★ Featured Interactive Arcade</span>
+          <span class="featured-games-domain">games.abhikism.com</span>
+        </div>
+        <h2 class="featured-games-title">Explore #ABHIKISM Interactive Song Games &amp; Unified Leaderboards</h2>
+        <p class="featured-games-desc">
+          Play <strong>ডাকবাক্সের গান (DaakBaksher Gaan)</strong> in Saul Bass constructivist linocut style, discover upcoming song games, and track live rankings across every #ABHIKISM title.
+        </p>
+        <div class="featured-games-actions">
+          <a href="https://games.abhikism.com/" onclick="return openGamesArcadeHub(event)" class="featured-games-btn-primary">
+            🎮 Visit games.abhikism.com ↗
+          </a>
+          <a href="https://games.abhikism.com/daakbaksher-gaan/" onclick="return openFeaturedGame(event)" class="featured-games-btn-secondary">
+            📮 Play DaakBaksher Gaan →
+          </a>
+          <a href="https://users.abhikism.com/" class="featured-games-btn-ghost">
+            👤 users.abhikism.com
+          </a>
+        </div>
+      </aside>
 
       <!-- Grid of all 42 songs -->
       <div class="repertoire-grid" id="repertoire-grid">
@@ -3938,6 +4176,23 @@
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
+    }
+
+    function isAbhikismProdHost() {
+      const h = (window.location.hostname || '').toLowerCase();
+      return h === 'songs.abhikism.com' || h === 'abhikism.com' || h.endsWith('.abhikism.com');
+    }
+
+    function openGamesArcadeHub(ev) {
+      const target = isAbhikismProdHost() ? 'https://games.abhikism.com/' : './games/index.html';
+      if (ev && ev.currentTarget) ev.currentTarget.setAttribute('href', target);
+      return true;
+    }
+
+    function openFeaturedGame(ev) {
+      const target = isAbhikismProdHost() ? 'https://games.abhikism.com/daakbaksher-gaan/' : './games/daakbaksher-gaan/index.html';
+      if (ev && ev.currentTarget) ev.currentTarget.setAttribute('href', target);
+      return true;
     }
 
     window.addEventListener('hashchange', () => {

@@ -3,8 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ডাকবাক্সের গান (DaakBaksher Gaan) — 2D Wind &amp; Postbox Game (v8.0.0) | #ABHIKISM</title>
-  <meta name="description" content="Catch the floating words of #ABHIKISM's DaakBaksher Gaan from the gusty Sumi-e ink wind and drop them into the pillar postbox across 5 automatic levels.">
+  <title>ডাকবাক্সের গান (DaakBaksher Gaan) — Interactive 2D Wind &amp; Postbox Game (v8.0.0) | #ABHIKISM Arcade</title>
+  <meta name="description" content="Play DaakBaksher Gaan (ডাকবাক্সের গান) — #ABHIKISM's interactive Saul Bass constructivist 2D wind &amp; postbox word game. Catch 125 Bengali &amp; Romanized lyric letters across 5 automatic wind levels, climb the unified arcade leaderboard, and earn your 9:16 Listener Certificate.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://games.abhikism.com/daakbaksher-gaan/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="#ABHIKISM Arcade">
+  <meta property="og:title" content="ডাকবাক্সের গান (DaakBaksher Gaan) — Interactive Wind Game | #ABHIKISM">
+  <meta property="og:description" content="Catch 125 floating Bengali lyric envelopes in the wind across 5 automatic levels, compete on the live #ABHIKISM Arcade Leaderboard, and claim your 9:16 Listener Certificate.">
+  <meta property="og:url" content="https://games.abhikism.com/daakbaksher-gaan/">
+  <meta property="og:image" content="https://songs.abhikism.com/assets/artworks/daakbaksher-gaan.webp">
+  <meta property="og:locale" content="bn_IN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ডাকবাক্সের গান (DaakBaksher Gaan) — Interactive Wind Game | #ABHIKISM">
+  <meta name="twitter:description" content="Play #ABHIKISM's interactive 2D Saul Bass wind &amp; postbox game set to DaakBaksher Gaan. 5 automatic levels &amp; unified arcade leaderboard.">
+  <meta name="twitter:image" content="https://songs.abhikism.com/assets/artworks/daakbaksher-gaan.webp">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "VideoGame",
+        "name": "DaakBaksher Gaan: Letters in the Wind (ডাকবাক্সের গান)",
+        "alternateName": "ডাকবাক্সের গান — বাতাসের চিঠি",
+        "url": "https://games.abhikism.com/daakbaksher-gaan/",
+        "image": "https://songs.abhikism.com/assets/artworks/daakbaksher-gaan.webp",
+        "description": "Interactive 2D Saul Bass constructivist wind and postbox lyric-catching browser game set to #ABHIKISM's Bengali song DaakBaksher Gaan.",
+        "genre": ["Music Game", "Word Game", "Arcade"],
+        "gamePlatform": ["Web Browser", "Mobile Web"],
+        "applicationCategory": "Game",
+        "operatingSystem": "Any",
+        "playMode": "SinglePlayer",
+        "inLanguage": ["bn", "en"],
+        "softwareVersion": "v8.0.0",
+        "isAccessibleForFree": true,
+        "author": {
+          "@type": "MusicGroup",
+          "name": "#ABHIKISM",
+          "url": "https://abhikism.com",
+          "sameAs": [
+            "https://abhikism.com",
+            "https://songs.abhikism.com",
+            "https://games.abhikism.com"
+          ]
+        },
+        "isPartOf": {
+          "@type": "CollectionPage",
+          "name": "#ABHIKISM Interactive Games Arcade",
+          "url": "https://games.abhikism.com/"
+        },
+        "about": {
+          "@type": "MusicRecording",
+          "name": "DaakBaksher Gaan",
+          "url": "https://songs.abhikism.com/daakbaksher-gaan"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "#ABHIKISM", "item": "https://abhikism.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Games Arcade", "item": "https://games.abhikism.com/" },
+          { "@type": "ListItem", "position": 3, "name": "DaakBaksher Gaan", "item": "https://games.abhikism.com/daakbaksher-gaan/" }
+        ]
+      }
+    ]
+  }
+  </script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📮</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1928,6 +1993,9 @@
       <a href="../../onelink.html#daakbaksher-gaan" class="back-songs-link" id="link-back-songs" onclick="return navigateBackToDiscography(event)" title="Back to #ABHIKISM Discography">
         ← #ABHIKISM
       </a>
+      <a href="https://games.abhikism.com/" class="back-songs-link" id="link-all-games" onclick="return navigateToGamesHub(event)" title="Explore All #ABHIKISM Interactive Games &amp; Leaderboards (games.abhikism.com)">
+        🎮 All Games
+      </a>
       <span class="hanko-seal-badge">ডাকবাক্স</span>
       <span class="version-badge" id="game-version-badge" onclick="openLeaderboardModal()" title="Semantic Game Version (X=Feature, Y=BugFix, Z=Additional) — Click to view Leaderboard &amp; Changelog">v8.0.0</span>
       <div class="game-title-block">
@@ -2516,9 +2584,12 @@
 
           <!-- Compact Inline Leaderboard Preview inside Completion Modal (Gated by Login) -->
           <div class="form-section-box" id="completion-leaderboard-preview-box" style="margin-bottom:0;">
-            <div class="form-section-title" style="justify-content:space-between;">
+            <div class="form-section-title" style="justify-content:space-between; flex-wrap:wrap; gap:6px;">
               <span>🏆 Top Wind Postbox Winners (v8.0.0)</span>
-              <button type="button" class="ink-btn" style="padding:2px 8px; font-size:10.5px;" onclick="openLeaderboardModal()">Full Leaderboard →</button>
+              <span style="display:inline-flex; gap:6px; align-items:center;">
+                <a href="https://games.abhikism.com/" class="ink-btn" onclick="return navigateToGamesHub(event)" style="padding:2px 8px; font-size:10.5px; text-decoration:none;">🎮 All Games</a>
+                <button type="button" class="ink-btn" style="padding:2px 8px; font-size:10.5px;" onclick="openLeaderboardModal()">Full Leaderboard →</button>
+              </span>
             </div>
             <div id="completion-lb-auth-notice" style="padding:10px; background:rgba(26,24,23,0.05); border:1px dashed var(--sumi-wash); border-radius:6px; font-size:11.5px; color:var(--sumi-charcoal); text-align:center;">
               🔒 Log in with your username &amp; password above to view the Official Leaderboard &amp; Winners.
@@ -2694,7 +2765,7 @@
     const GAME_VERSION = "v8.0.0";
     const GAME_VERSION_CHANGELOG = [{"version": "v8.0.0", "date": "2026-11-13", "summary": "Upgraded to the Unified Multi-Game #ABHIKISM Arcade Hub & Cross-Game Leaderboard architecture (Schema 3.0) with live-only game discovery switchers across the in-game Leaderboard modal and games.abhikism.com, consolidated multi-game telemetry, and hardened public read endpoints.", "X_feature_additions": ["Cross-Game Leaderboard Switcher (#lb-game-switcher-bar): Switch between live playable #ABHIKISM games directly inside the Leaderboard modal and launch any selected game or listen to its song", "Unified Games Arcade Hub Leaderboard (#arcade-unified-leaderboard-section): Authenticated cross-game leaderboard viewer on games.abhikism.com powered by shared registry and live cloud synchronization", "Multi-Game Telemetry Routing (Schema 3.0): Every Step 1, download, and Step 2 payload carries canonical game_id, game_title, song_id, and category metadata across local storage, DashboardServer, and Google Apps Script", "Hardened Public Read Endpoint: Cloud directory and leaderboard feeds expose only live games and strip private certificate IDs and Step 2 personal contact fields"], "Y_bug_fixes": ["Deduplicated localhost vs browser direct-webhook relays using server_relayed_webhook guards while preventing synthetic autotest IDs from reaching live cloud endpoints"], "Z_additional": ["Added v8.0.0 Leaderboard version filter pill and DBG-V80-SEED-L5 benchmark entry synchronized across version_manifest.json, games_registry.json, and all deployment mirrors"]}, {"version": "v7.1.0", "date": "2026-11-04", "summary": "Restored authentic Saul Bass linocut crimson postbox base silhouette matching official poster, fixed dark-mode contrast across HUD pills, Auth gates, Leaderboard rows, Lexicon chips, and mobile breakpoints, and aligned games.abhikism.com Arcade Hub with the Saul Bass noir aesthetic.", "X_feature_additions": [], "Y_bug_fixes": ["Fixed postbox 0% base color override in updateScoreAndPostboxCompleteness() so the Victorian pillar box renders in shadowed Saul Bass woodcut crimson (#8E181E -> #C7242B) with linocut black plinth/collar instead of legacy stone-beige", "Fixed white-on-cream contrast regressions on .back-songs-link, .modal-close-btn, .lb-rank-badge, .lb-tag-level, .lb-tag-score, and logged-in @username badges", "Replaced legacy light card backgrounds (#FFFFFF / #F4FBF9 / #FAF7F2) in Leaderboard rows, Auth gates, Social input rows, Lexicon chips, and mobile instruction banner with high-contrast Saul Bass noir surfaces", "Removed redundant outer mobile padding on .floating-word-slip so bilingual text stays centered beneath the origami envelope fold flap"], "Z_additional": ["Upgraded games.abhikism.com Arcade Hub to match the Saul Bass constructivist noir identity with High-Contrast toggle and v7.1.0 version filter pill"]}, {"version": "v7.0.0", "date": "2026-11-04", "summary": "Full Saul Bass constructivist linocut visual redesign matching official poster (Option 3), pure dark mode palette with high-contrast toggle, proportional responsive physics engine, angular papercut wave horizon, and Option 1 origami folded envelope word slips with unified bilingual typography.", "X_feature_additions": ["Saul Bass Constructivist Redesign: Complete visual overhaul matching official poster (ABHIKISM_VISUAL_PosterOpt3DaakBaksherGaanSaulBass_v2.0_20261013_FINAL.jpg) featuring inky void black (#0E0F12), Saul Bass crimson (#C7242B), aged woodblock cream (#F5EFE1), and warm ochre (#E5CF98)", "Linocut Victorian Pillar Postbox: Authentic Saul Bass silhouette with faceted dome cap, dentil trim collar, cream contour linocut outline (#F5EFE1), glowing letter cavity, and center enamel plaque", "Angular Horizon Waves: Multi-layered constructivist papercut wave silhouettes (#E5CF98 ochre, #C7242B crimson, and #0E0F12 inky silhouette with cream crest trim) anchoring the stage baseline", "Origami Folded Envelopes: Option 1 geometric folded cream paper slips with triangular fold flap, diagonal creases, and crimson corner fold accent", "Unified Bilingual Typography: Identical layout for both song words and decoy words (bold Bengali script + uppercase English romanization, zero decoy labeling)", "Saul Bass Dark Mode & High-Contrast Toggle: Permanent dark aesthetic with one-click toggle (#btn-theme-toggle) between Classic Saul Bass Noir and High-Contrast Graphic Noir"], "Y_bug_fixes": ["Eliminated awkward window resize jumping by removing abrupt (entity.x / prevW) * stageWidth coordinate recalculations and transitioning to smooth normalized vertical lane distribution (laneRatio)", "Implemented proportional postbox scaling using CSS clamp() (clamp(140px, 16vw, 195px)) to prevent collision with top HUD on small viewports", "Removed redundant single-script romanisation toggle button in favor of unified bilingual origami envelopes"], "Z_additional": ["Added v7.0.0 Leaderboard version filter pill, updated version badges across HUD and certificate canvas, and comprehensive test suite validation for v7.0.0"]}, {"version": "v6.1.0", "date": "2026-11-04", "summary": "Fixed broken canonical streaming links (verified Spotify track 5ZrfaZ8vM5pXGJaee4NKW1 & YouTube Music track mPZvSvhKr88) and eliminated mobile tab reload/crash triggers (throttled 60 FPS postMessage IPC to 250ms interval, removed top-navigation sandbox vulnerability, and removed getElementById monkey-patching).", "X_feature_additions": [], "Y_bug_fixes": ["Replaced placeholder/search DSP links with verified canonical URLs: Spotify (5ZrfaZ8vM5pXGJaee4NKW1), YouTube Music (mPZvSvhKr88), and YouTube Video (mPZvSvhKr88) across game dock, embed tray, and onelink discography", "Eliminated 60 FPS postMessage IPC flooding in requestAnimationFrame by moving syncYouTubeTelemetryTick to a throttled 250ms interval active only during YouTube playback", "Removed allow-top-navigation-by-user-activation sandbox permission from Apple Music embed iframe to prevent accidental top-level mobile page navigation and reloads", "Removed global document.getElementById monkey-patching to restore native DOM lookup performance in mobile WebKit/Blink"], "Z_additional": ["Added v6.1.0 Leaderboard version filter pill and updated all test suite assertions to v6.1.0 with canonical DSP track verification"]}, {"version": "v6.0.0", "date": "2026-11-03", "summary": "Level-based wrong word penalty progression (0%, 20%, 100%, 200%, 500%), time-scaled speed scoring (round((Raw Score / Seconds) * 100)), tightened authentic Hanko fingerprint seal, wax dot mark removal from envelope slips, username placeholder cleanup, authenticated-only version registry, and arcade portal launch for games.abhikism.com.", "X_feature_additions": ["Level-based wrong word penalties: Level 1 (0%), Level 2 (20% = 20 pts), Level 3 (100% = 100 pts), Level 4 (200% = 200 pts), Level 5 (500% = 500 pts)", "Arcade Speed Index scoring: Final Score = round((Raw Score / Elapsed Seconds) * 100), massively rewarding fast completions", "Launched games.abhikism.com Arcade Hub featuring Daakbaksher Gaan as the featured #1 game with level badges and direct play link"], "Y_bug_fixes": ["Tightened authentic Hanko double square frame (156px) around the #ABHIKISM fingerprint seal on the 9:16 certificate", "Removed wax seal dot mark from floating word envelope flaps for clean vector paper folds", "Changed username input placeholder to 'e.g. username' (replacing 'e.g. abhik_listener')", "Gated Semantic Versioning Registry so it is only visible to logged-in users inside the Leaderboard modal"], "Z_additional": ["Added v6.0.0 Leaderboard version filter pill and comprehensive automated test suite coverage for penalty progression and speed scoring"]}, {"version": "v5.0.0", "date": "2026-11-02", "summary": "UI refinements for Daakbaksher Gaan (postbox plaque cleaned up with centered percentage indicator, envelope-shaped floating word slips with postal flap styling), user self-service data viewing and soft-deletion portal (user.abhikism.com), and privacy hardening.", "X_feature_additions": ["Official #ABHIKISM fingerprint Hanko seal stamped on 9:16 Certificate of Authenticity", "User self-service data viewing and soft-deletion portal deployed at user.abhikism.com with active view filtering", "Envelope-shaped floating word slips with postal flap styling and WCAG touch compliance"], "Y_bug_fixes": ["Postbox plaque cleaned up: removed 'abhikism' and 'daakbaksho' text, centered completion percentage indicator"], "Z_additional": ["Added v5.0.0 Leaderboard version filter pill and extended 9-test automated test suite"]}, {"version": "v4.1.0", "date": "2026-11-01", "summary": "Fixed 0% completeness certificate bug by removing the 0 || targetWords fallback and strictly gating the 9:16 certificate preview, issue button, download button, and HUD certificate button behind 100% postbox completeness.", "X_feature_additions": [], "Y_bug_fixes": ["Fixed 0% completeness bug where 0 collected words fell back to targetWords (0 || 5 -> 5) and rendered a fake 100% Complete certificate preview", "Added syncCertificateCompletionGate() to hide the HUD 9:16 Certificate button (#btn-open-certificate), certificate canvas frame (.cert-canvas-frame), issue button (#btn-generate-cert), and download button (#btn-download-cert) whenever postbox completeness is below 100%", "Added locked certificate state card (#cert-incomplete-lock-card) in the modal when opened via Account Login at <100% completeness, and added hard guard in downloadCertificate9x16() and backend API against <100% completeness"], "Z_additional": ["Added v4.1.0 Leaderboard version filter pill and headless Chrome assertions for 0% vs 100% completeness certificate gating"]}, {"version": "v4.0.0", "date": "2026-11-01", "summary": "Added Username + Created Password Authentication gating social media profile links, voluntary personal info, and Leaderboard visibility; implemented mobile UI touch/viewport fixes (6-word compact density, 44px touch targets, single-row landscape dock) and Zero-Client-Exposure privacy hardening.", "X_feature_additions": ["Username + Created Password authentication system (registerUserAccount, loginUserAccount, submitUserAuth, logoutUserAccount) with salted SHA-256 / PBKDF2 password hashing", "Authenticated access gate for entering social media links (#cert-step1-box) and voluntary personal info (#cert-step2-voluntary-box) in the 9:16 Certificate modal", "Members-only Official Leaderboard gate (#leaderboard-auth-gate & /api/game-leaderboard) visible exclusively to logged-in users while displaying verified names and social profiles"], "Y_bug_fixes": ["Fixed mobile touch drag responsiveness with cached stage bounds, explicit releasePointerCapture, touch-action: none, and WCAG 44px touch targets", "Implemented Option A adaptive word density (6 concurrent words on compact mobile <=420px wide or <=480px tall, 10 on desktop/tablet) and clamped initial mobile spawn X inside visible bounds away from the postbox", "Fixed 844x390 landscape dock collision, 340x640 Completeness cell clipping, duplicate mobile HUD audio buttons, and repositioned #feedback-whisper to top of stage", "Remediated client bundle privacy by stripping all internal notification email addresses, third-party relay tokens, and cloud document IDs from client HTML/JS and API responses"], "Z_additional": ["Added v4.0.0 Leaderboard version filter pill, top HUD account status button (#btn-user-auth), and honeypot anti-spam protection"]}, {"version": "v3.1.0", "date": "2026-11-01", "summary": "Fixed backend notification links by binding canonical public URLs (https://songs.abhikism.com/daakbaksher-gaan/game/), blocking local loopback Referer leakage, and adding server-side relay synchronization.", "X_feature_additions": [], "Y_bug_fixes": ["Fixed broken local loopback link in notification dispatches by setting canonical game URLs (https://songs.abhikism.com/daakbaksher-gaan/game/) and blocking direct browser calls from 127.0.0.1/localhost/file:", "Added server-side authenticated notification relay and cloud sync so notifications arrive reliably"], "Z_additional": ["Added v3.1.0 Leaderboard version filter pill and clickable game_url / leaderboard_url links inside notification payloads"]}, {"version": "v3.0.0", "date": "2026-10-31", "summary": "YouTube Music embedded player looping by default with smart error detection fallback to Instant Web Audio, continuous autoplay by default, and exclusive Mute/Unmute + Play from Beginning (0:00) controls (zero Stop/Pause).", "X_feature_additions": ["YouTube Music embedded player (8K1B2qG3U7E) active and looping by default via YouTube IFrame API with automatic loop-on-end and auto-resume-on-pause enforcement", "Smart audio error detection (smartDetectAudioErrorAndFallback / window.triggerSmartAudioErrorFallback) detecting YT.Player onError events, iframe API script blocks, offline states, and watchdog timeouts to seamlessly switch to Instant Web Audio fallback (daakbaksher-gaan.m4a)", "Continuous default song playback with only Mute/Unmute (#btn-mute-toggle, #btn-dock-mute) and Play from Beginning 0:00 (#btn-restart-song, #btn-dock-restart) options and zero Stop/Pause controls"], "Y_bug_fixes": ["Prevented dual-audio track overlap by keeping Instant Web Audio fallback silenced while YouTube Music primary loop is active", "Added transparent click-shield over embedded YouTube surface and pause-interception guard on fallback Web Audio so playback can never be stopped"], "Z_additional": ["Added v3.0.0 Leaderboard version filter pill and updated version_manifest.json across all 14 deployment targets"]}, {"version": "v2.0.0", "date": "2026-10-31", "summary": "5 automatic wind levels (5->15->25->50->125 words), live HUD & certificate timer, official Leaderboard with version/level/timing tags, and Completeness telemetry.", "X_feature_additions": ["5-level automatic progression system (5 -> 15 -> 25 -> 50 -> 125 target words) with automatic windspeed scaling (1.0x -> 1.35x -> 1.75x -> 2.20x -> 2.75x) and zero manual controls", "Live high-precision game timer (#hud-timer, MM:SS.d) displayed in HUD and stamped on the 9:16 Story Certificate", "Leaderboard system (#leaderboard-modal & /api/game-leaderboard) with version winner tags, timing tags, and level info tags", "Mandatory semantic game versioning (vX.Y.Z) enforced at build time and displayed across HUD, 9:16 Certificate, Leaderboard, and server telemetry"], "Y_bug_fixes": ["Unified all progress UI and certificate wording around Complete / Completeness", "Cleaned up track metadata badges across game HUD, player dock, 9:16 certificate canvas, and arcade hub", "Enforced level-completion gate on advanceToNextLevel() and certificate issuance so levels and wind speeds cannot be manually skipped", "Added visibilitychange timer pause/resume lifecycle and fresh elapsed-time snapshot on final word drop", "Unified Leaderboard ranking comparator (Level DESC, Score DESC, Fastest Time ASC, Timestamp ASC, CertID ASC) and HTML-escaped player fields"], "Z_additional": ["Added level-advance workflow in completion modal and seeded canonical leaderboard winners across versions"]}, {"version": "v1.0.0", "date": "2026-10-31", "summary": "Initial 2D Sumi-e wind game with 125 canonical song words, 250 decoy words, Bengali <-> Roman toggle, and 9:16 certificate.", "X_feature_additions": ["Initial 2D Sumi-e wind game with 125 canonical song words and 250 decoy words", "Bengali <-> Roman Bengali live script toggle and 9:16 listener certificate with multi-platform social handle validation"], "Y_bug_fixes": [], "Z_additional": []}];
     const SEED_LEADERBOARD = [{"certificate_id": "DBG-V80-SEED-L5", "game_id": "daakbaksher-gaan", "game_title": "DaakBaksher Gaan", "song_id": "daakbaksher-gaan", "timestamp_utc": "2026-11-13T10:00:00Z", "username": "aheli_shantiniketan", "player_name": "Aheli Chowdhury", "social_platform": "Instagram", "social_link": "https://instagram.com/aheli_shantiniketan", "social_handle": "@aheli_shantiniketan", "game_version": "v8.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 165400, "completion_time_formatted": "02:45.4", "score": 19500, "completeness_pct": 100}, {"certificate_id": "DBG-V71-SEED-L5", "timestamp_utc": "2026-11-04T08:15:00Z", "username": "ritwick_shantiniketan", "player_name": "Ritwick Sen", "social_platform": "Instagram", "social_link": "https://instagram.com/ritwick_shantiniketan", "social_handle": "@ritwick_shantiniketan", "game_version": "v7.1.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 165400, "completion_time_formatted": "02:45.4", "score": 19500, "completeness_pct": 100}, {"certificate_id": "DBG-V70-SEED-L5", "timestamp_utc": "2026-11-04T02:00:00Z", "username": "ritwick_shantiniketan", "player_name": "Ritwick Sen", "social_platform": "Instagram", "social_link": "https://instagram.com/ritwick_shantiniketan", "social_handle": "@ritwick_shantiniketan", "game_version": "v7.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 165400, "completion_time_formatted": "02:45.4", "score": 19500, "completeness_pct": 100}, {"certificate_id": "DBG-V60-SEED-L5", "timestamp_utc": "2026-11-03T06:00:00Z", "username": "ritwick_shantiniketan", "player_name": "Ritwick Sen", "social_platform": "Instagram", "social_link": "https://instagram.com/ritwick_shantiniketan", "social_handle": "@ritwick_shantiniketan", "game_version": "v6.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 165400, "completion_time_formatted": "02:45.4", "score": 19500, "completeness_pct": 100}, {"certificate_id": "DBG-V50-SEED-L5", "timestamp_utc": "2026-11-02T06:00:00Z", "username": "ritwick_shantiniketan", "player_name": "Ritwick Sen", "social_platform": "Instagram", "social_link": "https://instagram.com/ritwick_shantiniketan", "social_handle": "@ritwick_shantiniketan", "game_version": "v5.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 172500, "completion_time_formatted": "02:52.5", "score": 18000, "completeness_pct": 100}, {"certificate_id": "DBG-V41-SEED-L5", "timestamp_utc": "2026-11-01T16:15:00Z", "username": "ritwick_shantiniketan", "player_name": "Ritwick Sen", "social_platform": "Instagram", "social_link": "https://instagram.com/ritwick_shantiniketan", "social_handle": "@ritwick_shantiniketan", "game_version": "v4.1.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 173800, "completion_time_formatted": "02:53.8", "score": 17850, "completeness_pct": 100}, {"certificate_id": "DBG-V40-SEED-L5", "timestamp_utc": "2026-11-01T12:00:00Z", "username": "anirban_shantiniketan", "player_name": "Anirban Chatterjee", "social_platform": "Instagram", "social_link": "https://instagram.com/anirban_shantiniketan", "social_handle": "@anirban_shantiniketan", "game_version": "v4.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 176400, "completion_time_formatted": "02:56.4", "score": 17680, "completeness_pct": 100}, {"certificate_id": "DBG-V31-SEED-L5", "timestamp_utc": "2026-11-01T05:30:00Z", "player_name": "Debolina Mukherjee", "social_platform": "Instagram", "social_link": "https://instagram.com/debolina_shantiniketan", "social_handle": "@debolina_shantiniketan", "game_version": "v3.1.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 182100, "completion_time_formatted": "03:02.1", "score": 17450, "completeness_pct": 100}, {"certificate_id": "DBG-V3-SEED-L5", "timestamp_utc": "2026-10-31T20:05:00Z", "player_name": "Subhajit Mukherjee", "social_platform": "Instagram", "social_link": "https://instagram.com/subhajit_kolkata", "social_handle": "@subhajit_kolkata", "game_version": "v3.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 188500, "completion_time_formatted": "03:08.5", "score": 17200, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L5", "timestamp_utc": "2026-10-31T18:10:00Z", "player_name": "Arindam Roy", "social_platform": "Instagram", "social_link": "https://instagram.com/arindam_kolkata", "social_handle": "@arindam_kolkata", "game_version": "v2.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 194400, "completion_time_formatted": "03:14.4", "score": 16850, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L4", "timestamp_utc": "2026-10-31T18:22:00Z", "player_name": "Sohini Chatterjee", "social_platform": "Instagram, X", "social_link": "https://instagram.com/sohini_music | https://x.com/sohini_c", "social_handle": "@sohini_music", "game_version": "v2.0.0", "level": 4, "target_words": 50, "words_collected": 50, "wind_speed": "2.20x", "completion_time_ms": 76800, "completion_time_formatted": "01:16.8", "score": 6400, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L3", "timestamp_utc": "2026-10-31T18:35:00Z", "player_name": "Ritam Sen", "social_platform": "X", "social_link": "https://x.com/ritam_verse", "social_handle": "@ritam_verse", "game_version": "v2.0.0", "level": 3, "target_words": 25, "words_collected": 25, "wind_speed": "1.75x", "completion_time_ms": 38200, "completion_time_formatted": "00:38.2", "score": 3100, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L2", "timestamp_utc": "2026-10-31T18:40:00Z", "player_name": "Ananya Bose", "social_platform": "Instagram", "social_link": "https://instagram.com/ananya_bose_art", "social_handle": "@ananya_bose_art", "game_version": "v2.0.0", "level": 2, "target_words": 15, "words_collected": 15, "wind_speed": "1.35x", "completion_time_ms": 21500, "completion_time_formatted": "00:21.5", "score": 1800, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L1", "timestamp_utc": "2026-10-31T18:45:00Z", "player_name": "Deborshi Mitra", "social_platform": "Reddit", "social_link": "https://reddit.com/u/deborshi_indie", "social_handle": "u/deborshi_indie", "game_version": "v2.0.0", "level": 1, "target_words": 5, "words_collected": 5, "wind_speed": "1.0x", "completion_time_ms": 8400, "completion_time_formatted": "00:08.4", "score": 580, "completeness_pct": 100}, {"certificate_id": "DBG-V1-SEED-WIN", "timestamp_utc": "2026-10-31T15:10:00Z", "player_name": "Poulomi Das", "social_platform": "Instagram", "social_link": "https://instagram.com/poulomi_kol", "social_handle": "@poulomi_kol", "game_version": "v1.0.0", "level": 2, "target_words": 15, "words_collected": 15, "wind_speed": "1.35x", "completion_time_ms": 24900, "completion_time_formatted": "00:24.9", "score": 1750, "completeness_pct": 100}];
-    const GAMES_REGISTRY = [{"game_id": "daakbaksher-gaan", "game_title": "DaakBaksher Gaan: Letters in the Wind", "game_title_bn": "ডাকবাক্সের গান — বাতাসের চিঠি", "category": "song", "song_id": "daakbaksher-gaan", "song_title": "DaakBaksher Gaan", "catalog_code": "WKS-003", "status": "live", "leaderboard_tab": "DaakBaksherGaan-GameLeaderboard", "current_version": "v8.0.0", "play_url": "https://songs.abhikism.com/daakbaksher-gaan/game/", "song_url": "https://songs.abhikism.com/daakbaksher-gaan/", "scoring_label": "Arcade Speed Index (PTS)", "updated_at": "2026-11-13"}, {"game_id": "aar-ektu-kheli", "game_title": "Aar Ektu Kheli", "game_title_bn": "আর একটু খেলি", "category": "song", "song_id": "aar-ektu-kheli", "song_title": "Aar Ektu Kheli", "catalog_code": "", "status": "coming_soon", "leaderboard_tab": "Leaderboard_aar-ektu-kheli", "current_version": "v1.0.0", "play_url": "https://games.abhikism.com/aar-ektu-kheli/", "song_url": "https://songs.abhikism.com/", "scoring_label": "Score (PTS)"}, {"game_id": "ami-raja", "game_title": "Ami Raja", "game_title_bn": "আমি রাজা", "category": "song", "song_id": "ami-raja", "song_title": "Ami Raja", "catalog_code": "", "status": "coming_soon", "leaderboard_tab": "Leaderboard_ami-raja", "current_version": "v1.0.0", "play_url": "https://games.abhikism.com/ami-raja/", "song_url": "https://songs.abhikism.com/", "scoring_label": "Score (PTS)"}, {"game_id": "hey-bhoboghurey", "game_title": "Hey Bhoboghurey", "game_title_bn": "হে ভবঘুরে", "category": "song", "song_id": "hey-bhoboghurey", "song_title": "Hey Bhoboghurey", "catalog_code": "", "status": "coming_soon", "leaderboard_tab": "Leaderboard_hey-bhoboghurey", "current_version": "v1.0.0", "play_url": "https://games.abhikism.com/hey-bhoboghurey/", "song_url": "https://songs.abhikism.com/", "scoring_label": "Score (PTS)"}];
+    const GAMES_REGISTRY = [{"game_id": "daakbaksher-gaan", "game_title": "DaakBaksher Gaan: Letters in the Wind", "game_title_bn": "ডাকবাক্সের গান — বাতাসের চিঠি", "category": "song", "song_id": "daakbaksher-gaan", "song_title": "DaakBaksher Gaan", "catalog_code": "WKS-003", "status": "live", "leaderboard_tab": "DaakBaksherGaan-GameLeaderboard", "current_version": "v8.0.0", "play_url": "https://games.abhikism.com/daakbaksher-gaan/", "song_url": "https://songs.abhikism.com/daakbaksher-gaan/", "scoring_label": "Arcade Speed Index (PTS)", "updated_at": "2026-11-13"}, {"game_id": "aar-ektu-kheli", "game_title": "Aar Ektu Kheli", "game_title_bn": "আর একটু খেলি", "category": "song", "song_id": "aar-ektu-kheli", "song_title": "Aar Ektu Kheli", "catalog_code": "", "status": "coming_soon", "leaderboard_tab": "Leaderboard_aar-ektu-kheli", "current_version": "v1.0.0", "play_url": "https://games.abhikism.com/aar-ektu-kheli/", "song_url": "https://songs.abhikism.com/", "scoring_label": "Score (PTS)"}, {"game_id": "ami-raja", "game_title": "Ami Raja", "game_title_bn": "আমি রাজা", "category": "song", "song_id": "ami-raja", "song_title": "Ami Raja", "catalog_code": "", "status": "coming_soon", "leaderboard_tab": "Leaderboard_ami-raja", "current_version": "v1.0.0", "play_url": "https://games.abhikism.com/ami-raja/", "song_url": "https://songs.abhikism.com/", "scoring_label": "Score (PTS)"}, {"game_id": "hey-bhoboghurey", "game_title": "Hey Bhoboghurey", "game_title_bn": "হে ভবঘুরে", "category": "song", "song_id": "hey-bhoboghurey", "song_title": "Hey Bhoboghurey", "catalog_code": "", "status": "coming_soon", "leaderboard_tab": "Leaderboard_hey-bhoboghurey", "current_version": "v1.0.0", "play_url": "https://games.abhikism.com/hey-bhoboghurey/", "song_url": "https://songs.abhikism.com/", "scoring_label": "Score (PTS)"}];
     const DEFAULT_CLOUD_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwETZpwdI0c7xguhbsMv27F-86LKlXi9xnH4WtC1WLROeUCzqhV_2ONZtIrU0lXWA_1Xw/exec";
 
     // Embedded 375-word pool (125 unique words from DaakBaksher Gaan + 250 non-song decoy words)
@@ -2887,6 +2958,32 @@
       if (linkEl) linkEl.setAttribute('href', targetHref);
       return true;
     }
+
+    function resolveGamesHubHref() {
+      const host = (window.location.hostname || '').toLowerCase();
+      const path = window.location.pathname || '';
+      if (host === 'games.abhikism.com') {
+        return '/';
+      }
+      if (host === 'songs.abhikism.com' || host.endsWith('.abhikism.com')) {
+        return 'https://games.abhikism.com/';
+      }
+      if (path.includes('/games/daakbaksher-gaan')) {
+        return '../index.html';
+      }
+      if (path.includes('/daakbaksher-gaan/game')) {
+        return '../../games/index.html';
+      }
+      return './games/index.html';
+    }
+
+    function navigateToGamesHub(ev) {
+      const targetEl = ev && ev.currentTarget ? ev.currentTarget : document.getElementById('link-all-games');
+      const targetHref = resolveGamesHubHref();
+      if (targetEl) targetEl.setAttribute('href', targetHref);
+      return true;
+    }
+    window.navigateToGamesHub = navigateToGamesHub;
 
     // Resize 2D Canvas & dynamically fit between top HUD and bottom dock (prevents overlap on <360px viewports)
     let stageWidth = window.innerWidth;
@@ -4327,8 +4424,8 @@
       Reddit: 'Reddit'
     };
     const PLATFORM_ORDER = ['Instagram', 'Facebook', 'X', 'LinkedIn', 'Reddit'];
-    const CANONICAL_GAME_URL = 'https://songs.abhikism.com/daakbaksher-gaan/game/';
-    const CANONICAL_LEADERBOARD_URL = 'https://songs.abhikism.com/daakbaksher-gaan/game/#leaderboard';
+    const CANONICAL_GAME_URL = 'https://games.abhikism.com/daakbaksher-gaan/';
+    const CANONICAL_LEADERBOARD_URL = 'https://games.abhikism.com/daakbaksher-gaan/#leaderboard';
 
     // Pure-JS synchronous SHA-256 (works identically on file://, http://, and https://)
     function sha256HexSync(asciiStr) {
@@ -6061,6 +6158,28 @@
         .replace(/'/g, '&#39;');
     }
 
+    function safeHttpUrl(raw, fallback = '') {
+      const s = String(raw || '').trim();
+      if (!s) return fallback;
+      if (/^https?:\/\/[^\s<>"'`]+$/i.test(s) || /^(?:\.\/|\.\.\/|\/)[^\s<>"'`]*$/.test(s)) {
+        return s;
+      }
+      return fallback;
+    }
+
+    function parsePublicSocialHandle(rawLink) {
+      const first = String(rawLink || '').split('|')[0].trim();
+      if (!first) return '@listener';
+      if (/^@[A-Za-z0-9_.\-]+$/.test(first)) return first;
+      const m = first.match(/^https?:\/\/(?:www\.)?(?:instagram\.com|x\.com|twitter\.com|facebook\.com|fb\.com)\/([A-Za-z0-9_.\-]+)/i);
+      if (m && m[1]) return '@' + m[1];
+      const rm = first.match(/^https?:\/\/(?:www\.)?reddit\.com\/(u\/[A-Za-z0-9_.\-]+)/i);
+      if (rm && rm[1]) return rm[1];
+      const lm = first.match(/^https?:\/\/(?:www\.)?linkedin\.com\/(in\/[A-Za-z0-9_.\-]+)/i);
+      if (lm && lm[1]) return lm[1];
+      return '@listener';
+    }
+
     function inferLevelFromTarget(targetWords) {
       const t = Number(targetWords) || 5;
       if (t >= 125) return 5;
@@ -6110,16 +6229,18 @@
       }
 
       if (actionsBox && activeGame) {
-        const playBtnHtml = (activeGame.game_id !== CURRENT_GAME_ID && activeGame.game_url)
-          ? `<a class="ink-btn" href="${escapeHtml(activeGame.game_url)}" style="padding:3px 9px; font-size:10.5px; text-decoration:none;">▶ Play ${escapeHtml(activeGame.game_title || '')}</a>`
+        const safePlayHref = safeHttpUrl(activeGame.play_url || activeGame.game_url, '');
+        const safeSongHref = safeHttpUrl(activeGame.song_url, '');
+        const playBtnHtml = (activeGame.game_id !== CURRENT_GAME_ID && safePlayHref)
+          ? `<a class="ink-btn" href="${escapeHtml(safePlayHref)}" style="padding:3px 9px; font-size:10.5px; text-decoration:none;">▶ Play ${escapeHtml(activeGame.game_title || '')}</a>`
           : '';
-        const songBtnHtml = activeGame.song_url
-          ? `<a class="ink-btn" href="${escapeHtml(activeGame.song_url)}" target="_blank" rel="noopener" style="padding:3px 9px; font-size:10.5px; text-decoration:none;">🎧 Song Info</a>`
+        const songBtnHtml = safeSongHref
+          ? `<a class="ink-btn" href="${escapeHtml(safeSongHref)}" target="_blank" rel="noopener" style="padding:3px 9px; font-size:10.5px; text-decoration:none;">🎧 Song Info</a>`
           : '';
         actionsBox.innerHTML = `
           ${playBtnHtml}
           ${songBtnHtml}
-          <a id="lb-hub-link" class="ink-btn" href="https://games.abhikism.com" target="_blank" rel="noopener" style="padding:3px 9px; font-size:10.5px; text-decoration:none;">🎮 All Games</a>
+          <a id="lb-hub-link" class="ink-btn" href="https://games.abhikism.com/" onclick="return navigateToGamesHub(event)" style="padding:3px 9px; font-size:10.5px; text-decoration:none;">🎮 All Games</a>
         `;
       }
     }
@@ -6164,9 +6285,9 @@
         const lvl = Number(loc.level) || inferLevelFromTarget(loc.target_words || loc.words_collected || 5);
         const lvlCfg = GAME_LEVELS[Math.min(4, Math.max(0, lvl - 1))];
         const profiles = Array.isArray(loc.social_profiles) ? loc.social_profiles : [];
-        const firstHandle = profiles.length > 0 ? profiles[0].handle : (loc.social_link || '@listener');
-        const uname = String(loc.username || '').trim();
-        const displayName = (loc.voluntary_name || '').trim() || (uname ? `@${uname}` : '') || firstHandle;
+        const firstHandle = profiles.length > 0 ? profiles[0].handle : parsePublicSocialHandle(loc.social_link);
+        const uname = String(loc.username || '').trim().replace(/^@+/, '');
+        const displayName = (uname ? `@${uname}` : '') || firstHandle;
         const timeMs = Number(loc.completion_time_ms) || 12000;
         const timeFmt = loc.completion_time_formatted || formatElapsedTime(timeMs);
         byCertId.set(loc.certificate_id, {
@@ -6314,9 +6435,9 @@
       const safeVer = escapeHtml(entry.game_version || GAME_VERSION);
       const safeLvl = Number(entry.level) || 1;
       const safeCertId = escapeHtml(entry.certificate_id || '');
-      const safeName = escapeHtml(entry.player_name || '@listener');
+      const safeName = escapeHtml(entry.player_name || (entry.username ? `@${String(entry.username).replace(/^@+/, '')}` : '@listener'));
       const safePlat = escapeHtml(entry.social_platform || 'Instagram');
-      const safeHandle = escapeHtml(entry.social_handle || '@listener');
+      const safeHandle = escapeHtml(entry.social_handle || parsePublicSocialHandle(entry.social_link));
       const safeLoc = entry.location ? escapeHtml(entry.location) : '';
       const safeTime = escapeHtml(entry.completion_time_formatted || '00:00.0');
       const safeTargetWords = Number(entry.target_words) || 5;
@@ -6983,10 +7104,10 @@
             const allEmailsToAdmin = (
               gameState.emailNotificationsSent.length === 3 &&
               gameState.emailNotificationsSent.every(e => (
-                e._url === 'https://songs.abhikism.com/daakbaksher-gaan/game/' &&
-                e._next === 'https://songs.abhikism.com/daakbaksher-gaan/game/' &&
-                e.game_url === 'https://songs.abhikism.com/daakbaksher-gaan/game/' &&
-                e.leaderboard_url === 'https://songs.abhikism.com/daakbaksher-gaan/game/#leaderboard' &&
+                e._url === CANONICAL_GAME_URL &&
+                e._next === CANONICAL_GAME_URL &&
+                e.game_url === CANONICAL_GAME_URL &&
+                e.leaderboard_url === CANONICAL_LEADERBOARD_URL &&
                 e.username === testUser &&
                 e.social_links.includes('https://instagram.com/abhikism_ig') &&
                 Boolean(e.consent_timestamp) &&
