@@ -1,0 +1,68 @@
+{
+  "schema_version": "3.0",
+  "hub_title": "#ABHIKISM Interactive Arcade Hub",
+  "games": [
+    {
+      "game_id": "daakbaksher-gaan",
+      "game_title": "DaakBaksher Gaan: Letters in the Wind",
+      "game_title_bn": "ডাকবাক্সের গান — বাতাসের চিঠি",
+      "category": "song",
+      "song_id": "daakbaksher-gaan",
+      "song_title": "DaakBaksher Gaan",
+      "catalog_code": "WKS-003",
+      "status": "live",
+      "leaderboard_tab": "DaakBaksherGaan-GameLeaderboard",
+      "current_version": "v8.0.0",
+      "play_url": "https://songs.abhikism.com/daakbaksher-gaan/game/",
+      "song_url": "https://songs.abhikism.com/daakbaksher-gaan/",
+      "scoring_label": "Arcade Speed Index (PTS)",
+      "updated_at": "2026-11-13"
+    },
+    {
+      "game_id": "aar-ektu-kheli",
+      "game_title": "Aar Ektu Kheli",
+      "game_title_bn": "আর একটু খেলি",
+      "category": "song",
+      "song_id": "aar-ektu-kheli",
+      "song_title": "Aar Ektu Kheli",
+      "catalog_code": "",
+      "status": "coming_soon",
+      "leaderboard_tab": "Leaderboard_aar-ektu-kheli",
+      "current_version": "v1.0.0",
+      "play_url": "https://games.abhikism.com/aar-ektu-kheli/",
+      "song_url": "https://songs.abhikism.com/",
+      "scoring_label": "Score (PTS)"
+    },
+    {
+      "game_id": "ami-raja",
+      "game_title": "Ami Raja",
+      "game_title_bn": "আমি রাজা",
+      "category": "song",
+      "song_id": "ami-raja",
+      "song_title": "Ami Raja",
+      "catalog_code": "",
+      "status": "coming_soon",
+      "leaderboard_tab": "Leaderboard_ami-raja",
+      "current_version": "v1.0.0",
+      "play_url": "https://games.abhikism.com/ami-raja/",
+      "song_url": "https://songs.abhikism.com/",
+      "scoring_label": "Score (PTS)"
+    },
+    {
+      "game_id": "hey-bhoboghurey",
+      "game_title": "Hey Bhoboghurey",
+      "game_title_bn": "হে ভবঘুরে",
+      "category": "song",
+      "song_id": "hey-bhoboghurey",
+      "song_title": "Hey Bhoboghurey",
+      "catalog_code": "",
+      "status": "coming_soon",
+      "leaderboard_tab": "Leaderboard_hey-bhoboghurey",
+      "current_version": "v1.0.0",
+      "play_url": "https://games.abhikism.com/hey-bhoboghurey/",
+      "song_url": "https://songs.abhikism.com/",
+      "scoring_label": "Score (PTS)"
+    }
+  ],
+  "updated_at": "2026-11-13"
+}

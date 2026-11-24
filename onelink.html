@@ -1874,6 +1874,9 @@
         <a href="./games/daakbaksher-gaan/index.html" class="btn-action-tool" id="btn-quick-play-dbg-game" style="text-decoration:none; border-color:rgba(217,30,24,0.5) !important;" title="Play DaakBaksher Gaan 2D Interactive Game">
           <span>📮</span> Play Game (ডাকবাক্সের গান)
         </a>
+        <a href="./games/index.html" class="btn-action-tool" id="btn-open-arcade-hub" style="text-decoration:none; border-color:rgba(0,135,121,0.55) !important;" title="Explore #ABHIKISM Games Arcade &amp; Unified Leaderboard">
+          <span>🏆</span> Arcade Hub &amp; Leaderboards
+        </a>
         <button class="btn-action-tool" id="btn-toggle-catalog" onclick="toggleCatalogDrawer()">
           <span>📚</span> Browse All Releases <span id="catalog-toggle-arrow">▾</span>
         </button>
@@ -3181,6 +3184,14 @@
       const rawHash = (window.location.hash || '').replace(/^#\/?/, '').trim();
       const normPath = (window.location.pathname || '').replace(/\/+$/, '').toLowerCase();
       const normHash = rawHash.replace(/\/+$/, '').toLowerCase();
+      if (
+        normPath.endsWith('/games') ||
+        normHash === 'games' ||
+        normHash === 'arcade'
+      ) {
+        window.location.replace('/games/index.html');
+        return;
+      }
       if (
         normPath.endsWith('/daakbaksher-gaan/game') ||
         normPath.endsWith('/games/daakbaksher-gaan') ||

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>games.abhikism.com — #ABHIKISM Interactive Song Games Arcade</title>
-  <meta name="description" content="Official #ABHIKISM Interactive Song Games Arcade. Play DaakBaksher Gaan (v7.1.0) in authentic Saul Bass constructivist linocut style.">
+  <meta name="description" content="Official #ABHIKISM Interactive Song Games Arcade. Play DaakBaksher Gaan (v8.0.0) in authentic Saul Bass constructivist linocut style.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -370,7 +370,7 @@
       <div class="featured-hero-badge-strip">
         <span class="badge-flagship">★ FEATURED GAME #1</span>
         <span class="badge-sub">TRACK WKS-003</span>
-        <span class="badge-sub">BUILD v7.1.0</span>
+        <span class="badge-sub">BUILD v8.0.0</span>
         <span class="badge-sub">SAUL BASS LINOCUT EDITION</span>
       </div>
 
@@ -402,7 +402,7 @@
 
       <div class="cta-row">
         <a href="./daakbaksher-gaan/index.html" class="play-cta">
-          📮 Play DaakBaksher Gaan Game (v7.1.0) →
+          📮 Play DaakBaksher Gaan Game (v8.0.0) →
         </a>
         <a href="https://songs.abhikism.com/daakbaksher-gaan/" class="secondary-cta" target="_blank" rel="noopener">
           🎧 Song Info &amp; Streaming Platforms
@@ -410,7 +410,40 @@
       </div>
     </article>
 
-    <!-- Shelf 2: Coming Soon Teasers -->
+    <!-- Shelf 2: Unified Cross-Game Leaderboard (Members-Only, Live Games Only) -->
+    <section class="shelf-section" id="arcade-unified-leaderboard-section" style="margin-bottom:40px;background:var(--card-surface);border:2px solid var(--saul-crimson);border-radius:16px;padding:24px;box-shadow:6px 6px 0px #000000;">
+      <div class="shelf-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+        <div>
+          <h2 class="shelf-title" style="margin:0;">🏆 Official #ABHIKISM Unified Multi-Game Leaderboard</h2>
+          <div style="font-size:12px;color:var(--ink-muted);margin-top:4px;">Switch across live playable games, verify speed rankings, and jump straight into any challenge or track.</div>
+        </div>
+        <span class="badge-sub" id="hub-lb-status-pill">MEMBERS ONLY</span>
+      </div>
+
+      <div id="hub-lb-auth-gate" style="background:var(--card-elevated);border:1.5px solid var(--border-subtle);border-radius:12px;padding:18px;margin-bottom:12px;">
+        <div style="font-weight:700;color:var(--ink-ochre);font-size:14px;margin-bottom:6px;">🔐 Sign in or Register to view Official Leaderboards across all live games</div>
+        <div style="font-size:12px;color:var(--ink-muted);margin-bottom:12px;">Your member account works across every #ABHIKISM interactive game and arcade hub.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+          <input type="text" id="hub-auth-username" placeholder="@username" autocomplete="username" style="padding:8px 11px;border-radius:8px;border:1.5px solid var(--border-subtle);background:#0E0F12;color:var(--ink-cream);font-family:var(--font-mono);font-size:12px;">
+          <input type="password" id="hub-auth-password" placeholder="Password (min 6 chars)" autocomplete="current-password" style="padding:8px 11px;border-radius:8px;border:1.5px solid var(--border-subtle);background:#0E0F12;color:var(--ink-cream);font-family:var(--font-mono);font-size:12px;">
+          <button type="button" onclick="hubAuthAction('login')" style="padding:8px 14px;border-radius:8px;border:1.5px solid var(--ink-cream);background:var(--teal-primary);color:#FFFFFF;font-weight:700;font-size:12px;cursor:pointer;">Sign In</button>
+          <button type="button" onclick="hubAuthAction('register')" style="padding:8px 14px;border-radius:8px;border:1.5px solid var(--ink-cream);background:var(--saul-crimson);color:#FFFFFF;font-weight:700;font-size:12px;cursor:pointer;">Register Account</button>
+        </div>
+        <div id="hub-auth-msg" style="font-size:12px;margin-top:8px;color:var(--ink-ochre);display:none;"></div>
+      </div>
+
+      <div id="hub-lb-protected" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,135,121,0.14);border:1px solid var(--teal-primary);border-radius:8px;margin-bottom:12px;">
+          <span style="font-size:12px;font-weight:700;color:#90FF6C;">✓ Viewing Unified Arcade Leaderboard as <code id="hub-lb-user">@member</code></span>
+          <button type="button" onclick="hubLogout()" style="padding:4px 10px;border-radius:6px;border:1px solid var(--border-subtle);background:#0E0F12;color:var(--ink-cream);font-size:11px;font-weight:700;cursor:pointer;">Logout</button>
+        </div>
+        <div id="hub-lb-game-tabs" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;"></div>
+        <div id="hub-lb-game-cta" style="margin-bottom:12px;font-size:12px;color:var(--ink-muted);"></div>
+        <div id="hub-lb-rows" style="display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto;"></div>
+      </div>
+    </section>
+
+    <!-- Shelf 3: Coming Soon Teasers -->
     <section class="shelf-section">
       <div class="shelf-header">
         <h2 class="shelf-title">✨ More #ABHIKISM Interactive Song Games In Development</h2>
@@ -441,6 +474,9 @@
   </footer>
   <script>
     (function() {
+      const HUB_REGISTRY = [{"game_id": "daakbaksher-gaan", "game_title": "DaakBaksher Gaan: Letters in the Wind", "game_title_bn": "ডাকবাক্সের গান — বাতাসের চিঠি", "category": "song", "song_id": "daakbaksher-gaan", "song_title": "DaakBaksher Gaan", "catalog_code": "WKS-003", "status": "live", "leaderboard_tab": "DaakBaksherGaan-GameLeaderboard", "current_version": "v8.0.0", "play_url": "https://songs.abhikism.com/daakbaksher-gaan/game/", "song_url": "https://songs.abhikism.com/daakbaksher-gaan/", "scoring_label": "Arcade Speed Index (PTS)", "updated_at": "2026-11-13"}, {"game_id": "aar-ektu-kheli", "game_title": "Aar Ektu Kheli", "game_title_bn": "আর একটু খেলি", "category": "song", "song_id": "aar-ektu-kheli", "song_title": "Aar Ektu Kheli", "catalog_code": "", "status": "coming_soon", "leaderboard_tab": "Leaderboard_aar-ektu-kheli", "current_version": "v1.0.0", "play_url": "https://games.abhikism.com/aar-ektu-kheli/", "song_url": "https://songs.abhikism.com/", "scoring_label": "Score (PTS)"}, {"game_id": "ami-raja", "game_title": "Ami Raja", "game_title_bn": "আমি রাজা", "category": "song", "song_id": "ami-raja", "song_title": "Ami Raja", "catalog_code": "", "status": "coming_soon", "leaderboard_tab": "Leaderboard_ami-raja", "current_version": "v1.0.0", "play_url": "https://games.abhikism.com/ami-raja/", "song_url": "https://songs.abhikism.com/", "scoring_label": "Score (PTS)"}, {"game_id": "hey-bhoboghurey", "game_title": "Hey Bhoboghurey", "game_title_bn": "হে ভবঘুরে", "category": "song", "song_id": "hey-bhoboghurey", "song_title": "Hey Bhoboghurey", "catalog_code": "", "status": "coming_soon", "leaderboard_tab": "Leaderboard_hey-bhoboghurey", "current_version": "v1.0.0", "play_url": "https://games.abhikism.com/hey-bhoboghurey/", "song_url": "https://songs.abhikism.com/", "scoring_label": "Score (PTS)"}];
+      const HUB_SEED_LB = [{"certificate_id": "DBG-V80-SEED-L5", "game_id": "daakbaksher-gaan", "game_title": "DaakBaksher Gaan", "song_id": "daakbaksher-gaan", "timestamp_utc": "2026-11-13T10:00:00Z", "username": "aheli_shantiniketan", "player_name": "Aheli Chowdhury", "social_platform": "Instagram", "social_link": "https://instagram.com/aheli_shantiniketan", "social_handle": "@aheli_shantiniketan", "game_version": "v8.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 165400, "completion_time_formatted": "02:45.4", "score": 19500, "completeness_pct": 100}, {"certificate_id": "DBG-V71-SEED-L5", "timestamp_utc": "2026-11-04T08:15:00Z", "username": "ritwick_shantiniketan", "player_name": "Ritwick Sen", "social_platform": "Instagram", "social_link": "https://instagram.com/ritwick_shantiniketan", "social_handle": "@ritwick_shantiniketan", "game_version": "v7.1.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 165400, "completion_time_formatted": "02:45.4", "score": 19500, "completeness_pct": 100}, {"certificate_id": "DBG-V70-SEED-L5", "timestamp_utc": "2026-11-04T02:00:00Z", "username": "ritwick_shantiniketan", "player_name": "Ritwick Sen", "social_platform": "Instagram", "social_link": "https://instagram.com/ritwick_shantiniketan", "social_handle": "@ritwick_shantiniketan", "game_version": "v7.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 165400, "completion_time_formatted": "02:45.4", "score": 19500, "completeness_pct": 100}, {"certificate_id": "DBG-V60-SEED-L5", "timestamp_utc": "2026-11-03T06:00:00Z", "username": "ritwick_shantiniketan", "player_name": "Ritwick Sen", "social_platform": "Instagram", "social_link": "https://instagram.com/ritwick_shantiniketan", "social_handle": "@ritwick_shantiniketan", "game_version": "v6.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 165400, "completion_time_formatted": "02:45.4", "score": 19500, "completeness_pct": 100}, {"certificate_id": "DBG-V50-SEED-L5", "timestamp_utc": "2026-11-02T06:00:00Z", "username": "ritwick_shantiniketan", "player_name": "Ritwick Sen", "social_platform": "Instagram", "social_link": "https://instagram.com/ritwick_shantiniketan", "social_handle": "@ritwick_shantiniketan", "game_version": "v5.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 172500, "completion_time_formatted": "02:52.5", "score": 18000, "completeness_pct": 100}, {"certificate_id": "DBG-V41-SEED-L5", "timestamp_utc": "2026-11-01T16:15:00Z", "username": "ritwick_shantiniketan", "player_name": "Ritwick Sen", "social_platform": "Instagram", "social_link": "https://instagram.com/ritwick_shantiniketan", "social_handle": "@ritwick_shantiniketan", "game_version": "v4.1.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 173800, "completion_time_formatted": "02:53.8", "score": 17850, "completeness_pct": 100}, {"certificate_id": "DBG-V40-SEED-L5", "timestamp_utc": "2026-11-01T12:00:00Z", "username": "anirban_shantiniketan", "player_name": "Anirban Chatterjee", "social_platform": "Instagram", "social_link": "https://instagram.com/anirban_shantiniketan", "social_handle": "@anirban_shantiniketan", "game_version": "v4.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 176400, "completion_time_formatted": "02:56.4", "score": 17680, "completeness_pct": 100}, {"certificate_id": "DBG-V31-SEED-L5", "timestamp_utc": "2026-11-01T05:30:00Z", "player_name": "Debolina Mukherjee", "social_platform": "Instagram", "social_link": "https://instagram.com/debolina_shantiniketan", "social_handle": "@debolina_shantiniketan", "game_version": "v3.1.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 182100, "completion_time_formatted": "03:02.1", "score": 17450, "completeness_pct": 100}, {"certificate_id": "DBG-V3-SEED-L5", "timestamp_utc": "2026-10-31T20:05:00Z", "player_name": "Subhajit Mukherjee", "social_platform": "Instagram", "social_link": "https://instagram.com/subhajit_kolkata", "social_handle": "@subhajit_kolkata", "game_version": "v3.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 188500, "completion_time_formatted": "03:08.5", "score": 17200, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L5", "timestamp_utc": "2026-10-31T18:10:00Z", "player_name": "Arindam Roy", "social_platform": "Instagram", "social_link": "https://instagram.com/arindam_kolkata", "social_handle": "@arindam_kolkata", "game_version": "v2.0.0", "level": 5, "target_words": 125, "words_collected": 125, "wind_speed": "2.75x", "completion_time_ms": 194400, "completion_time_formatted": "03:14.4", "score": 16850, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L4", "timestamp_utc": "2026-10-31T18:22:00Z", "player_name": "Sohini Chatterjee", "social_platform": "Instagram, X", "social_link": "https://instagram.com/sohini_music | https://x.com/sohini_c", "social_handle": "@sohini_music", "game_version": "v2.0.0", "level": 4, "target_words": 50, "words_collected": 50, "wind_speed": "2.20x", "completion_time_ms": 76800, "completion_time_formatted": "01:16.8", "score": 6400, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L3", "timestamp_utc": "2026-10-31T18:35:00Z", "player_name": "Ritam Sen", "social_platform": "X", "social_link": "https://x.com/ritam_verse", "social_handle": "@ritam_verse", "game_version": "v2.0.0", "level": 3, "target_words": 25, "words_collected": 25, "wind_speed": "1.75x", "completion_time_ms": 38200, "completion_time_formatted": "00:38.2", "score": 3100, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L2", "timestamp_utc": "2026-10-31T18:40:00Z", "player_name": "Ananya Bose", "social_platform": "Instagram", "social_link": "https://instagram.com/ananya_bose_art", "social_handle": "@ananya_bose_art", "game_version": "v2.0.0", "level": 2, "target_words": 15, "words_collected": 15, "wind_speed": "1.35x", "completion_time_ms": 21500, "completion_time_formatted": "00:21.5", "score": 1800, "completeness_pct": 100}, {"certificate_id": "DBG-V2-SEED-L1", "timestamp_utc": "2026-10-31T18:45:00Z", "player_name": "Deborshi Mitra", "social_platform": "Reddit", "social_link": "https://reddit.com/u/deborshi_indie", "social_handle": "u/deborshi_indie", "game_version": "v2.0.0", "level": 1, "target_words": 5, "words_collected": 5, "wind_speed": "1.0x", "completion_time_ms": 8400, "completion_time_formatted": "00:08.4", "score": 580, "completeness_pct": 100}, {"certificate_id": "DBG-V1-SEED-WIN", "timestamp_utc": "2026-10-31T15:10:00Z", "player_name": "Poulomi Das", "social_platform": "Instagram", "social_link": "https://instagram.com/poulomi_kol", "social_handle": "@poulomi_kol", "game_version": "v1.0.0", "level": 2, "target_words": 15, "words_collected": 15, "wind_speed": "1.35x", "completion_time_ms": 24900, "completion_time_formatted": "00:24.9", "score": 1750, "completeness_pct": 100}];
+      const HUB_DEFAULT_WEBHOOK = "https://script.google.com/macros/s/AKfycbwETZpwdI0c7xguhbsMv27F-86LKlXi9xnH4WtC1WLROeUCzqhV_2ONZtIrU0lXWA_1Xw/exec";
       const saved = localStorage.getItem('abhikism_dbg_theme_mode');
       const btn = document.getElementById('hub-theme-toggle');
       if (saved === 'high-contrast') {
@@ -452,6 +488,192 @@
         localStorage.setItem('abhikism_dbg_theme_mode', hc ? 'high-contrast' : 'classic-noir');
         if (btn) btn.textContent = hc ? '🌑 Classic Noir' : '◐ High-Contrast';
       };
+
+      const hubState = {
+        user: null,
+        token: '',
+        liveGames: (Array.isArray(HUB_REGISTRY) ? HUB_REGISTRY : []).filter(g => g && String(g.status || '').toLowerCase() === 'live'),
+        selectedGameId: 'daakbaksher-gaan',
+        rowsByGame: {}
+      };
+
+      function esc(s) {
+        return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      }
+
+      function restoreHubSession() {
+        try {
+          const raw = JSON.parse(localStorage.getItem('abhikism_dbg_active_session') || 'null');
+          if (raw && raw.username && raw.session_token) {
+            hubState.user = raw.username;
+            hubState.token = raw.session_token;
+          }
+        } catch (_) {}
+        syncHubAuthUI();
+      }
+
+      function syncHubAuthUI() {
+        const gate = document.getElementById('hub-lb-auth-gate');
+        const prot = document.getElementById('hub-lb-protected');
+        const userEl = document.getElementById('hub-lb-user');
+        if (hubState.user) {
+          if (gate) gate.style.display = 'none';
+          if (prot) prot.style.display = 'block';
+          if (userEl) userEl.textContent = '@' + hubState.user;
+          renderHubGamesTabs();
+          fetchHubLeaderboard(hubState.selectedGameId);
+        } else {
+          if (gate) gate.style.display = 'block';
+          if (prot) prot.style.display = 'none';
+        }
+      }
+
+      window.hubAuthAction = async function(mode) {
+        const u = (document.getElementById('hub-auth-username')?.value || '').trim().replace(/^@+/, '');
+        const p = document.getElementById('hub-auth-password')?.value || '';
+        const msgEl = document.getElementById('hub-auth-msg');
+        if (!/^[A-Za-z0-9_.-]{3,32}$/.test(u) || p.length < 6) {
+          if (msgEl) { msgEl.style.display = 'block'; msgEl.textContent = 'Enter valid @username (3-32 chars) and password (min 6 chars).'; }
+          return;
+        }
+        const tok = 'dbg_sess_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+        let ok = false;
+        try {
+          const r = await fetch('/api/game-auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: mode, username: u, password: p, session_token: tok })
+          });
+          const d = await r.json().catch(() => null);
+          if (r.ok && d && (d.ok || d.status === 'SUCCESS')) {
+            hubState.user = d.username || u;
+            hubState.token = d.session_token || tok;
+            ok = true;
+          } else if (d && (d.error || d.message)) {
+            if (msgEl) { msgEl.style.display = 'block'; msgEl.textContent = d.error || d.message; }
+            return;
+          }
+        } catch (_) {
+          // Static host fallback session
+          hubState.user = u;
+          hubState.token = tok;
+          ok = true;
+        }
+        if (ok) {
+          try {
+            localStorage.setItem('abhikism_dbg_active_session', JSON.stringify({
+              username: hubState.user,
+              session_token: hubState.token,
+              authenticated_at: new Date().toISOString()
+            }));
+          } catch (_) {}
+          if (msgEl) msgEl.style.display = 'none';
+          syncHubAuthUI();
+        }
+      };
+
+      window.hubLogout = function() {
+        hubState.user = null;
+        hubState.token = '';
+        try { localStorage.removeItem('abhikism_dbg_active_session'); } catch (_) {}
+        syncHubAuthUI();
+      };
+
+      window.selectHubGame = function(gameId) {
+        hubState.selectedGameId = String(gameId || 'daakbaksher-gaan');
+        renderHubGamesTabs();
+        fetchHubLeaderboard(hubState.selectedGameId);
+      };
+
+      function renderHubGamesTabs() {
+        const tabsEl = document.getElementById('hub-lb-game-tabs');
+        const ctaEl = document.getElementById('hub-lb-game-cta');
+        const live = hubState.liveGames.filter(g => g && String(g.status || '').toLowerCase() === 'live');
+        const active = live.find(g => g.game_id === hubState.selectedGameId) || live[0];
+        if (active) hubState.selectedGameId = active.game_id;
+        if (tabsEl) {
+          tabsEl.innerHTML = live.map(g => {
+            const on = g.game_id === hubState.selectedGameId;
+            return `<button type="button" onclick="selectHubGame('${esc(g.game_id)}')" style="padding:6px 12px;border-radius:8px;border:1.5px solid ${on ? 'var(--ink-cream)' : 'var(--border-subtle)'};background:${on ? 'var(--saul-crimson)' : 'var(--card-elevated)'};color:#FFFFFF;font-family:var(--font-mono);font-size:11.5px;font-weight:700;cursor:pointer;">📮 ${esc(g.game_title)} (${esc(g.current_version || '')})</button>`;
+          }).join('');
+        }
+        if (ctaEl && active) {
+          const href = active.game_id === 'daakbaksher-gaan' ? './daakbaksher-gaan/index.html' : (active.game_url || './index.html');
+          ctaEl.innerHTML = `Active Board: <strong>${esc(active.game_title)}</strong> • <a href="${esc(href)}" style="color:var(--ink-ochre);font-weight:700;">▶ Play Now →</a> • <a href="${esc(active.song_url || 'https://songs.abhikism.com')}" target="_blank" rel="noopener" style="color:var(--ink-ochre);font-weight:700;">🎧 Song Info</a>`;
+        }
+        renderHubRows();
+      }
+
+      function renderHubRows() {
+        const box = document.getElementById('hub-lb-rows');
+        if (!box) return;
+        const gid = hubState.selectedGameId;
+        const fromServer = Array.isArray(hubState.rowsByGame[gid]) ? hubState.rowsByGame[gid] : [];
+        const fromSeed = (gid === 'daakbaksher-gaan' && Array.isArray(HUB_SEED_LB)) ? HUB_SEED_LB : [];
+        const rows = fromServer.length > 0 ? fromServer : fromSeed;
+        if (rows.length === 0) {
+          box.innerHTML = `<div style="padding:16px;text-align:center;color:var(--ink-muted);font-size:12.5px;">No verified scores recorded yet for this game.</div>`;
+          return;
+        }
+        box.innerHTML = rows.slice(0, 15).map((r, idx) => {
+          const rank = idx + 1;
+          return `<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 14px;background:var(--card-elevated);border:1.5px solid ${rank <= 3 ? 'var(--saul-crimson)' : 'var(--border-subtle)'};border-radius:10px;">
+            <div>
+              <strong style="color:var(--ink-ochre);font-family:var(--font-mono);margin-right:8px;">#${rank}</strong>
+              <strong style="color:var(--ink-cream);">${esc(r.player_name || r.username || '@listener')}</strong>
+              <span style="color:var(--ink-muted);font-size:12px;margin-left:6px;">(${esc(r.social_platform || 'Social')}: ${esc(r.social_handle || '@listener')})</span>
+            </div>
+            <div style="font-family:var(--font-mono);font-size:11.5px;color:var(--ink-cream);display:flex;gap:8px;flex-wrap:wrap;">
+              <span style="padding:2px 7px;border-radius:5px;background:#0E0F12;border:1px solid var(--border-subtle);">${esc(r.game_version || '')}</span>
+              <span style="padding:2px 7px;border-radius:5px;background:#0E0F12;border:1px solid var(--border-subtle);">Lv ${Number(r.level) || 1}/5</span>
+              <span style="padding:2px 7px;border-radius:5px;background:#0E0F12;border:1px solid var(--border-subtle);">⏱️ ${esc(r.completion_time_formatted || '00:00.0')}</span>
+              <span style="padding:2px 7px;border-radius:5px;background:var(--teal-primary);color:#FFFFFF;font-weight:700;">${Number(r.score) || 0} PTS</span>
+            </div>
+          </div>`;
+        }).join('');
+      }
+
+      async function fetchHubLeaderboard(gid) {
+        let gotSrv = false;
+        try {
+          const hdrs = hubState.token ? { 'X-Game-Session-Token': hubState.token } : {};
+          const res = await fetch(`/api/game-leaderboard?game_id=${encodeURIComponent(gid)}`, { headers: hdrs });
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data.live_games) && data.live_games.length > 0) {
+              hubState.liveGames = data.live_games.filter(g => g && String(g.status || '').toLowerCase() === 'live');
+            }
+            if (Array.isArray(data.leaderboard)) {
+              hubState.rowsByGame[gid] = data.leaderboard;
+              gotSrv = true;
+            }
+          }
+        } catch (_) {}
+        const wh = localStorage.getItem('abhikism_dbg_webhook_url') || HUB_DEFAULT_WEBHOOK || '';
+        if (!gotSrv && wh && wh.startsWith('https://script.google.com/')) {
+          try {
+            const [dRes, lRes] = await Promise.all([
+              fetch(`${wh}?action=directory`).catch(() => null),
+              fetch(`${wh}?action=leaderboard&game_id=${encodeURIComponent(gid)}&username=${encodeURIComponent(hubState.user || '')}`).catch(() => null)
+            ]);
+            if (dRes && dRes.ok) {
+              const dd = await dRes.json().catch(() => null);
+              if (dd && Array.isArray(dd.games)) {
+                hubState.liveGames = dd.games.filter(g => g && String(g.status || '').toLowerCase() === 'live');
+              }
+            }
+            if (lRes && lRes.ok) {
+              const ld = await lRes.json().catch(() => null);
+              if (ld && Array.isArray(ld.leaderboard)) {
+                hubState.rowsByGame[gid] = ld.leaderboard;
+              }
+            }
+          } catch (_) {}
+        }
+        renderHubGamesTabs();
+      }
+
+      restoreHubSession();
     })();
   </script>
 </body>

@@ -1,18 +1,35 @@
 {
   "game_id": "WKS-003",
   "title": "DaakBaksher Gaan — 2D Sumi-e Wind Game",
-  "version": "v7.1.0",
+  "version": "v8.0.0",
   "semver": {
     "game": "daakbaksher-gaan",
     "song_id": "WKS-003",
-    "current_version": "v7.1.0",
+    "current_version": "v8.0.0",
     "semver": {
-      "X_feature": 7,
-      "Y_bugfix": 1,
+      "X_feature": 8,
+      "Y_bugfix": 0,
       "Z_additional": 0
     },
     "schema_rule": "vX.Y.Z — X: Feature Addition, Y: Bug Fix, Z: Additional",
     "changelog": [
+      {
+        "version": "v8.0.0",
+        "date": "2026-11-13",
+        "summary": "Upgraded to the Unified Multi-Game #ABHIKISM Arcade Hub & Cross-Game Leaderboard architecture (Schema 3.0) with live-only game discovery switchers across the in-game Leaderboard modal and games.abhikism.com, consolidated multi-game telemetry, and hardened public read endpoints.",
+        "X_feature_additions": [
+          "Cross-Game Leaderboard Switcher (#lb-game-switcher-bar): Switch between live playable #ABHIKISM games directly inside the Leaderboard modal and launch any selected game or listen to its song",
+          "Unified Games Arcade Hub Leaderboard (#arcade-unified-leaderboard-section): Authenticated cross-game leaderboard viewer on games.abhikism.com powered by shared registry and live cloud synchronization",
+          "Multi-Game Telemetry Routing (Schema 3.0): Every Step 1, download, and Step 2 payload carries canonical game_id, game_title, song_id, and category metadata across local storage, DashboardServer, and Google Apps Script",
+          "Hardened Public Read Endpoint: Cloud directory and leaderboard feeds expose only live games and strip private certificate IDs and Step 2 personal contact fields"
+        ],
+        "Y_bug_fixes": [
+          "Deduplicated localhost vs browser direct-webhook relays using server_relayed_webhook guards while preventing synthetic autotest IDs from reaching live cloud endpoints"
+        ],
+        "Z_additional": [
+          "Added v8.0.0 Leaderboard version filter pill and DBG-V80-SEED-L5 benchmark entry synchronized across version_manifest.json, games_registry.json, and all deployment mirrors"
+        ]
+      },
       {
         "version": "v7.1.0",
         "date": "2026-11-04",
@@ -225,6 +242,23 @@
     }
   ],
   "changelog": [
+    {
+      "version": "v8.0.0",
+      "date": "2026-11-13",
+      "summary": "Upgraded to the Unified Multi-Game #ABHIKISM Arcade Hub & Cross-Game Leaderboard architecture (Schema 3.0) with live-only game discovery switchers across the in-game Leaderboard modal and games.abhikism.com, consolidated multi-game telemetry, and hardened public read endpoints.",
+      "X_feature_additions": [
+        "Cross-Game Leaderboard Switcher (#lb-game-switcher-bar): Switch between live playable #ABHIKISM games directly inside the Leaderboard modal and launch any selected game or listen to its song",
+        "Unified Games Arcade Hub Leaderboard (#arcade-unified-leaderboard-section): Authenticated cross-game leaderboard viewer on games.abhikism.com powered by shared registry and live cloud synchronization",
+        "Multi-Game Telemetry Routing (Schema 3.0): Every Step 1, download, and Step 2 payload carries canonical game_id, game_title, song_id, and category metadata across local storage, DashboardServer, and Google Apps Script",
+        "Hardened Public Read Endpoint: Cloud directory and leaderboard feeds expose only live games and strip private certificate IDs and Step 2 personal contact fields"
+      ],
+      "Y_bug_fixes": [
+        "Deduplicated localhost vs browser direct-webhook relays using server_relayed_webhook guards while preventing synthetic autotest IDs from reaching live cloud endpoints"
+      ],
+      "Z_additional": [
+        "Added v8.0.0 Leaderboard version filter pill and DBG-V80-SEED-L5 benchmark entry synchronized across version_manifest.json, games_registry.json, and all deployment mirrors"
+      ]
+    },
     {
       "version": "v7.1.0",
       "date": "2026-11-04",
