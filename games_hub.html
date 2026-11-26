@@ -490,13 +490,18 @@
 
       <div id="hub-lb-auth-gate" style="background:var(--card-elevated);border:1.5px solid var(--border-subtle);border-radius:12px;padding:18px;margin-bottom:12px;">
         <div style="font-weight:700;color:var(--ink-ochre);font-size:14px;margin-bottom:6px;">🔐 Sign in or Register to view Official Leaderboards across all live games</div>
-        <div style="font-size:12px;color:var(--ink-muted);margin-bottom:12px;">Your member account works across every #ABHIKISM interactive game and arcade hub.</div>
+        <div style="font-size:12px;color:var(--ink-muted);margin-bottom:12px;">Your member account (username + email) works across every #ABHIKISM game, leaderboard, and users.abhikism.com — your email stays strictly private and is used only for game updates &amp; new launches.</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
           <input type="text" id="hub-auth-username" placeholder="@username" autocomplete="username" style="padding:8px 11px;border-radius:8px;border:1.5px solid var(--border-subtle);background:#0E0F12;color:var(--ink-cream);font-family:var(--font-mono);font-size:12px;">
+          <input type="email" id="hub-auth-email" placeholder="you@example.com (required)" autocomplete="email" style="padding:8px 11px;border-radius:8px;border:1.5px solid var(--border-subtle);background:#0E0F12;color:var(--ink-cream);font-family:var(--font-mono);font-size:12px;min-width:210px;">
           <input type="password" id="hub-auth-password" placeholder="Password (min 6 chars)" autocomplete="current-password" style="padding:8px 11px;border-radius:8px;border:1.5px solid var(--border-subtle);background:#0E0F12;color:var(--ink-cream);font-family:var(--font-mono);font-size:12px;">
           <button type="button" onclick="hubAuthAction('login')" style="padding:8px 14px;border-radius:8px;border:1.5px solid var(--ink-cream);background:var(--teal-primary);color:#FFFFFF;font-weight:700;font-size:12px;cursor:pointer;">Sign In</button>
           <button type="button" onclick="hubAuthAction('register')" style="padding:8px 14px;border-radius:8px;border:1.5px solid var(--ink-cream);background:var(--saul-crimson);color:#FFFFFF;font-weight:700;font-size:12px;cursor:pointer;">Register Account</button>
         </div>
+        <label style="display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--ink-muted);margin-top:8px;cursor:pointer;">
+          <input type="checkbox" id="hub-auth-updates-optin" checked style="accent-color:var(--teal-primary);">
+          <span>Notify me by email about #ABHIKISM game updates &amp; new games</span>
+        </label>
         <div id="hub-auth-msg" style="font-size:12px;margin-top:8px;color:var(--ink-ochre);display:none;"></div>
       </div>
 
@@ -671,10 +676,16 @@
 
       window.hubAuthAction = async function(mode) {
         const u = (document.getElementById('hub-auth-username')?.value || '').trim().replace(/^@+/, '');
+        const em = (document.getElementById('hub-auth-email')?.value || '').trim().toLowerCase();
         const p = document.getElementById('hub-auth-password')?.value || '';
+        const optIn = Boolean(document.getElementById('hub-auth-updates-optin')?.checked);
         const msgEl = document.getElementById('hub-auth-msg');
         if (!/^[A-Za-z0-9_.-]{3,32}$/.test(u) || p.length < 6) {
           if (msgEl) { msgEl.style.display = 'block'; msgEl.textContent = 'Enter valid @username (3-32 chars) and password (min 6 chars).'; }
+          return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) {
+          if (msgEl) { msgEl.style.display = 'block'; msgEl.textContent = 'A valid email address is required so we can notify you about #ABHIKISM game updates & new launches.'; }
           return;
         }
         const userKey = u.toLowerCase();
@@ -685,7 +696,7 @@
           const r = await fetch('/api/game-auth', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: mode, username: u, password: p, session_token: tok })
+            body: JSON.stringify({ action: mode, username: u, email: em, updates_opt_in: optIn, password: p, session_token: tok })
           });
           const d = await r.json().catch(() => null);
           if (d && typeof d === 'object') {
@@ -702,50 +713,34 @@
         } catch (_) {}
 
         if (!ok && !serverRespondedJson) {
-          // Static host fallback (GitHub Pages returns HTTP 404/405 for /api/game-auth) — share salted local credentials with games under games.abhikism.com
-          let usersMap = {};
-          try { usersMap = JSON.parse(localStorage.getItem('abhikism_dbg_users') || '{}') || {}; } catch (_) {}
-          const existing = usersMap[userKey];
-          if (mode === 'register') {
-            if (existing) {
-              if (msgEl) { msgEl.style.display = 'block'; msgEl.textContent = `Username @${existing.username} is already set on this browser. Click Sign In with your password.`; }
-              return;
-            }
-            const salt = hubSha256HexSync(`salt:${userKey}:${Date.now()}`).slice(0, 24);
-            usersMap[userKey] = {
-              username: u,
-              salt,
-              password_hash: hubSha256HexSync(`${salt}:${p}:abhikism_dbg_v4`),
-              created_at: new Date().toISOString()
-            };
-            try { localStorage.setItem('abhikism_dbg_users', JSON.stringify(usersMap)); } catch (_) {}
-            hubState.user = u;
-            hubState.token = tok;
-            ok = true;
-          } else {
-            if (existing) {
-              const cand = hubSha256HexSync(`${existing.salt}:${p}:abhikism_dbg_v4`);
-              if (cand !== existing.password_hash) {
-                if (msgEl) { msgEl.style.display = 'block'; msgEl.textContent = `Incorrect password for @${existing.username}.`; }
-                return;
+          // Live cloud auth via Apps Script v4.0 (Registered_Users + hardened @admin security)
+          const wh = localStorage.getItem('abhikism_dbg_webhook_url') || HUB_DEFAULT_WEBHOOK || '';
+          if (wh && wh.startsWith('https://script.google.com/')) {
+            try {
+              const cr = await fetch(wh, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                  action: mode === 'register' ? 'auth_register' : 'auth_login',
+                  username: u,
+                  email: em,
+                  password: p,
+                  updates_opt_in: optIn,
+                  source_origin: window.location.hostname || 'games.abhikism.com'
+                })
+              });
+              const cd = await cr.json().catch(() => null);
+              if (cd && typeof cd === 'object') {
+                if (cd.ok) {
+                  hubState.user = cd.username || u;
+                  hubState.token = cd.session_token || tok;
+                  ok = true;
+                } else {
+                  if (msgEl) { msgEl.style.display = 'block'; msgEl.textContent = cd.error || cd.message || 'Authentication failed.'; }
+                  return;
+                }
               }
-              hubState.user = existing.username;
-              hubState.token = tok;
-              ok = true;
-            } else {
-              // First sign-in on this device/browser: initialize local member profile cleanly
-              const salt = hubSha256HexSync(`salt:${userKey}:${Date.now()}`).slice(0, 24);
-              usersMap[userKey] = {
-                username: u,
-                salt,
-                password_hash: hubSha256HexSync(`${salt}:${p}:abhikism_dbg_v4`),
-                created_at: new Date().toISOString()
-              };
-              try { localStorage.setItem('abhikism_dbg_users', JSON.stringify(usersMap)); } catch (_) {}
-              hubState.user = u;
-              hubState.token = tok;
-              ok = true;
-            }
+            } catch (_) {}
           }
         }
         if (ok) {
@@ -758,6 +753,9 @@
           } catch (_) {}
           if (msgEl) msgEl.style.display = 'none';
           syncHubAuthUI();
+        } else if (msgEl) {
+          msgEl.style.display = 'block';
+          msgEl.textContent = 'Unable to reach cloud auth service. Please check your connection and try again.';
         }
       };
 

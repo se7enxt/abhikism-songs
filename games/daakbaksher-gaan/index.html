@@ -2453,10 +2453,18 @@
                   <input type="text" id="cert-auth-username" class="field-input" placeholder="e.g. username" autocomplete="username">
                 </div>
                 <div class="field-group" style="margin-bottom:6px;">
+                  <label class="field-label" for="cert-auth-email">Email Address (Required for game updates &amp; login)</label>
+                  <input type="email" id="cert-auth-email" class="field-input" placeholder="you@example.com" autocomplete="email">
+                </div>
+                <div class="field-group" style="margin-bottom:6px; grid-column: 1 / -1;">
                   <label class="field-label" for="cert-auth-password">Password (minimum 6 characters)</label>
                   <input type="password" id="cert-auth-password" class="field-input" placeholder="Create or enter password" autocomplete="current-password">
                 </div>
               </div>
+              <label style="display:flex;align-items:flex-start;gap:7px;font-size:11px;color:var(--sumi-wash);margin:4px 0 6px;cursor:pointer;">
+                <input type="checkbox" id="cert-auth-updates-optin" checked style="margin-top:2px;accent-color:var(--brand-teal);">
+                <span>Email me updates on #ABHIKISM games &amp; new launches (your email is kept strictly private and never shown on the leaderboard).</span>
+              </label>
               <div id="cert-auth-msg" style="font-size:11.5px; font-weight:700; margin:6px 0; display:none;"></div>
               <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
                 <button type="button" class="ink-btn teal-btn" id="btn-cert-auth-submit" onclick="submitUserAuth('auto', 'cert')">
@@ -2719,10 +2727,18 @@
             <input type="text" id="lb-auth-username" class="field-input" placeholder="e.g. username" autocomplete="username">
           </div>
           <div class="field-group" style="margin-bottom:6px;">
+            <label class="field-label" for="lb-auth-email">Email Address (Required)</label>
+            <input type="email" id="lb-auth-email" class="field-input" placeholder="you@example.com" autocomplete="email">
+          </div>
+          <div class="field-group" style="margin-bottom:6px; grid-column: 1 / -1;">
             <label class="field-label" for="lb-auth-password">Password (min 6 chars)</label>
             <input type="password" id="lb-auth-password" class="field-input" placeholder="Create or enter password" autocomplete="current-password">
           </div>
         </div>
+        <label style="display:flex;align-items:flex-start;gap:7px;font-size:11px;color:var(--sumi-wash);margin:4px 0 6px;cursor:pointer;">
+          <input type="checkbox" id="lb-auth-updates-optin" checked style="margin-top:2px;accent-color:var(--brand-teal);">
+          <span>Email me updates on #ABHIKISM games &amp; new launches (kept strictly private; never shown to other players).</span>
+        </label>
         <div id="lb-auth-msg" style="font-size:11.5px; font-weight:700; margin:6px 0; display:none;"></div>
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
           <button type="button" class="ink-btn teal-btn" id="btn-lb-auth-submit" onclick="submitUserAuth('auto', 'leaderboard')">
@@ -4777,22 +4793,31 @@
     }
     window.isUserAuthenticated = isUserAuthenticated;
 
-    function validateAuthCredentials(rawUsername, rawPassword) {
+    function isValidAuthEmail(rawEmail) {
+      const e = String(rawEmail || '').trim().toLowerCase();
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+    }
+
+    function validateAuthCredentials(rawUsername, rawPassword, rawEmail, requireEmail = true) {
       const uname = String(rawUsername || '').trim().replace(/^@+/, '');
       const pwd = String(rawPassword || '');
+      const email = String(rawEmail || '').trim().toLowerCase();
       if (!uname) {
         return { valid: false, error: 'Please enter a username (3–32 characters).' };
       }
       if (!/^[A-Za-z0-9_.-]{3,32}$/.test(uname)) {
         return { valid: false, error: 'Username must be 3–32 characters (letters, numbers, _, ., or -).' };
       }
+      if (requireEmail && !isValidAuthEmail(email)) {
+        return { valid: false, error: 'A valid email address is required to sign in or register so we can notify you about game updates and new releases.' };
+      }
       if (!pwd || pwd.length < 6) {
         return { valid: false, error: 'Password must be at least 6 characters long.' };
       }
-      return { valid: true, username: uname, userKey: uname.toLowerCase(), password: pwd };
+      return { valid: true, username: uname, userKey: uname.toLowerCase(), email, password: pwd };
     }
 
-    function setAuthenticatedSession(username, sessionToken) {
+    function setAuthenticatedSession(username, sessionToken, emailMasked = '') {
       const tok = sessionToken || `dbg_sess_${sha256HexSync(`${username}:${Date.now()}:${Math.random()}`).slice(0, 32)}`;
       gameState.isAuthenticated = true;
       gameState.loggedInUser = username;
@@ -4800,6 +4825,7 @@
       try {
         localStorage.setItem('abhikism_dbg_active_session', JSON.stringify({
           username,
+          email_masked: emailMasked || '',
           session_token: tok,
           authenticated_at: new Date().toISOString()
         }));
@@ -4808,7 +4834,7 @@
       return tok;
     }
 
-    async function syncServerAuth(action, username, password, sessionToken) {
+    async function syncServerAuth(action, username, password, sessionToken, email = '', updatesOptIn = true) {
       try {
         const res = await fetch('/api/game-auth', {
           method: 'POST',
@@ -4816,6 +4842,8 @@
           body: JSON.stringify({
             action,
             username,
+            email,
+            updates_opt_in: Boolean(updatesOptIn),
             password,
             session_token: sessionToken
           })
@@ -4827,22 +4855,63 @@
       }
     }
 
-    async function registerUserAccount(rawUsername, rawPassword) {
-      const check = validateAuthCredentials(rawUsername, rawPassword);
-      if (!check.valid) return { ok: false, error: check.error };
-      const users = getLocalRegisteredUsers();
-      if (users[check.userKey]) {
-        return { ok: false, error: `Username @${check.username} is already registered. Please click Sign In with your password.` };
+    async function syncCloudAuth(mode, username, email, password, updatesOptIn = true) {
+      if (IS_AUTOTEST_ENV) return { reachable: false, ok: false, data: null };
+      const wh = (typeof getSavedWebhookUrl === 'function') ? getSavedWebhookUrl() : DEFAULT_CLOUD_WEBHOOK_URL;
+      if (!wh || !wh.startsWith('https://script.google.com/')) {
+        return { reachable: false, ok: false, data: null };
       }
+      const actionMap = { register: 'auth_register', login: 'auth_login', auto: 'auth_auto' };
+      try {
+        const res = await fetch(wh, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: actionMap[mode] || 'auth_auto',
+            username,
+            email,
+            password,
+            updates_opt_in: Boolean(updatesOptIn),
+            source_origin: window.location.hostname || 'games.abhikism.com'
+          })
+        });
+        const data = await res.json().catch(() => null);
+        return { reachable: Boolean(data), ok: Boolean(data && data.ok), data };
+      } catch (_) {
+        return { reachable: false, ok: false, data: null };
+      }
+    }
+
+    async function registerUserAccount(rawUsername, rawPassword, rawEmail = '', updatesOptIn = true) {
+      const requireEmail = !(IS_AUTOTEST_ENV && !rawEmail);
+      const check = validateAuthCredentials(rawUsername, rawPassword, rawEmail, requireEmail);
+      if (!check.valid) return { ok: false, error: check.error };
       const sessionToken = `dbg_sess_${sha256HexSync(`${check.userKey}:${Date.now()}:${Math.random()}`).slice(0, 32)}`;
-      const srv = await syncServerAuth('register', check.username, check.password, sessionToken);
+      const srv = await syncServerAuth('register', check.username, check.password, sessionToken, check.email, updatesOptIn);
       if (srv.reachable && !srv.ok && srv.data && (srv.data.error || srv.data.message)) {
         return { ok: false, error: srv.data.error || srv.data.message };
+      }
+      if (!srv.data) {
+        const cloud = await syncCloudAuth('register', check.username, check.email, check.password, updatesOptIn);
+        if (cloud.reachable) {
+          if (!cloud.ok) {
+            return { ok: false, error: (cloud.data && (cloud.data.error || cloud.data.message)) || 'Registration failed.' };
+          }
+          const cTok = (cloud.data && cloud.data.session_token) ? cloud.data.session_token : sessionToken;
+          setAuthenticatedSession(cloud.data.username || check.username, cTok, cloud.data.email_masked || '');
+          return { ok: true, action: 'registered', username: cloud.data.username || check.username, session_token: cTok };
+        }
+      }
+      const users = getLocalRegisteredUsers();
+      if (users[check.userKey]) {
+        return { ok: false, error: `Username @${check.username} is already registered. Please click Sign In with your email and password.` };
       }
       const salt = sha256HexSync(`salt:${check.userKey}:${Date.now()}`).slice(0, 24);
       const passwordHash = hashPasswordWithSalt(check.password, salt);
       users[check.userKey] = {
         username: check.username,
+        email: check.email,
+        updates_opt_in: Boolean(updatesOptIn),
         salt,
         password_hash: passwordHash,
         created_at: new Date().toISOString()
@@ -4854,61 +4923,48 @@
     }
     window.registerUserAccount = registerUserAccount;
 
-    async function loginUserAccount(rawUsername, rawPassword) {
-      const check = validateAuthCredentials(rawUsername, rawPassword);
+    async function loginUserAccount(rawUsername, rawPassword, rawEmail = '', updatesOptIn = true) {
+      const requireEmail = !(IS_AUTOTEST_ENV && !rawEmail);
+      const check = validateAuthCredentials(rawUsername, rawPassword, rawEmail, requireEmail);
       if (!check.valid) return { ok: false, error: check.error };
-      const users = getLocalRegisteredUsers();
-      const existing = users[check.userKey];
       const sessionToken = `dbg_sess_${sha256HexSync(`${check.userKey}:${Date.now()}:${Math.random()}`).slice(0, 32)}`;
 
+      // Check local DashboardServer first when running locally
+      const srv = await syncServerAuth('login', check.username, check.password, sessionToken, check.email, updatesOptIn);
+      if (srv.reachable && srv.ok && srv.data && (srv.data.ok || srv.data.status === 'SUCCESS')) {
+        const finalToken = srv.data.session_token || sessionToken;
+        setAuthenticatedSession(srv.data.username || check.username, finalToken);
+        return { ok: true, action: 'logged_in', username: srv.data.username || check.username, session_token: finalToken };
+      }
+      if (srv.reachable && srv.data && (srv.data.error || srv.data.message)) {
+        return { ok: false, error: srv.data.error || srv.data.message };
+      }
+
+      // On public web (GitHub Pages), verify live via Apps Script v4.0 cloud auth (Registered_Users + hardened @admin protection)
+      if (!srv.data) {
+        const cloud = await syncCloudAuth('login', check.username, check.email, check.password, updatesOptIn);
+        if (cloud.reachable) {
+          if (!cloud.ok) {
+            return { ok: false, error: (cloud.data && (cloud.data.error || cloud.data.message)) || 'Invalid username, email, or password.' };
+          }
+          const cTok = (cloud.data && cloud.data.session_token) ? cloud.data.session_token : sessionToken;
+          setAuthenticatedSession(cloud.data.username || check.username, cTok, cloud.data.email_masked || '');
+          return { ok: true, action: 'logged_in', username: cloud.data.username || check.username, session_token: cTok };
+        }
+      }
+
+      // Offline / autotest local fallback
+      const users = getLocalRegisteredUsers();
+      const existing = users[check.userKey];
       if (existing) {
         const candidateHash = hashPasswordWithSalt(check.password, existing.salt);
         if (candidateHash !== existing.password_hash) {
           return { ok: false, error: `Incorrect password for @${existing.username}.` };
         }
-        const srv = await syncServerAuth('auto', existing.username, check.password, sessionToken);
-        const finalToken = (srv.ok && srv.data && srv.data.session_token) ? srv.data.session_token : sessionToken;
-        setAuthenticatedSession(existing.username, finalToken);
-        return { ok: true, action: 'logged_in', username: existing.username, session_token: finalToken };
+        setAuthenticatedSession(existing.username, sessionToken);
+        return { ok: true, action: 'logged_in', username: existing.username, session_token: sessionToken };
       }
-
-      // Check backend server if user is registered server-side
-      const srv = await syncServerAuth('login', check.username, check.password, sessionToken);
-      if (srv.reachable && srv.ok && srv.data && (srv.data.ok || srv.data.status === 'SUCCESS')) {
-        const salt = sha256HexSync(`salt:${check.userKey}:${Date.now()}`).slice(0, 24);
-        users[check.userKey] = {
-          username: srv.data.username || check.username,
-          salt,
-          password_hash: hashPasswordWithSalt(check.password, salt),
-          created_at: new Date().toISOString()
-        };
-        saveLocalRegisteredUsers(users);
-        const finalToken = srv.data.session_token || sessionToken;
-        setAuthenticatedSession(srv.data.username || check.username, finalToken);
-        return { ok: true, action: 'logged_in', username: srv.data.username || check.username, session_token: finalToken };
-      }
-
-      // If a real backend server responded with a structured JSON rejection, surface that error cleanly
-      if (srv.reachable && srv.data && (srv.data.error || srv.data.message)) {
-        return { ok: false, error: srv.data.error || srv.data.message };
-      }
-
-      // Static-host fallback (GitHub Pages returns HTML 404/405 for /api/game-auth):
-      // Allow signing in cleanly on any new phone/browser to view the public Leaderboard without requiring prior play
-      if (!srv.data) {
-        const salt = sha256HexSync(`salt:${check.userKey}:${Date.now()}`).slice(0, 24);
-        users[check.userKey] = {
-          username: check.username,
-          salt,
-          password_hash: hashPasswordWithSalt(check.password, salt),
-          created_at: new Date().toISOString()
-        };
-        saveLocalRegisteredUsers(users);
-        setAuthenticatedSession(check.username, sessionToken);
-        return { ok: true, action: 'logged_in', username: check.username, session_token: sessionToken };
-      }
-
-      return { ok: false, error: `No account found for @${check.username}. Click Register Account to create your password.` };
+      return { ok: false, error: `No account found for @${check.username}. Click Create New Account to register with your email and password.` };
     }
     window.loginUserAccount = loginUserAccount;
 
@@ -4930,47 +4986,52 @@
 
       const isLb = (contextPrefix === 'lb' || contextPrefix === 'leaderboard');
       const userEl = document.getElementById(isLb ? 'lb-auth-username' : 'cert-auth-username');
+      const emailEl = document.getElementById(isLb ? 'lb-auth-email' : 'cert-auth-email');
       const passEl = document.getElementById(isLb ? 'lb-auth-password' : 'cert-auth-password');
+      const optEl = document.getElementById(isLb ? 'lb-auth-updates-optin' : 'cert-auth-updates-optin');
       const msgEl = document.getElementById(isLb ? 'lb-auth-msg' : 'cert-auth-msg')
         || document.getElementById(isLb ? 'lb-auth-status-msg' : 'cert-auth-status-msg');
       const rawUser = userEl ? userEl.value : '';
+      const rawEmail = emailEl ? emailEl.value : '';
       const rawPass = passEl ? passEl.value : '';
+      const updatesOptIn = optEl ? Boolean(optEl.checked) : true;
 
       let res;
       if (mode === 'register') {
-        res = await registerUserAccount(rawUser, rawPass);
+        res = await registerUserAccount(rawUser, rawPass, rawEmail, updatesOptIn);
       } else if (mode === 'login') {
-        res = await loginUserAccount(rawUser, rawPass);
+        res = await loginUserAccount(rawUser, rawPass, rawEmail, updatesOptIn);
       } else {
-        const check = validateAuthCredentials(rawUser, rawPass);
+        const requireEmail = !(IS_AUTOTEST_ENV && !rawEmail);
+        const check = validateAuthCredentials(rawUser, rawPass, rawEmail, requireEmail);
         if (!check.valid) {
           res = { ok: false, error: check.error };
         } else {
-          const users = getLocalRegisteredUsers();
-          if (users[check.userKey]) {
-            res = await loginUserAccount(rawUser, rawPass);
+          const sessionToken = `dbg_sess_${sha256HexSync(`${check.userKey}:${Date.now()}:${Math.random()}`).slice(0, 32)}`;
+          const srv = await syncServerAuth('auto', check.username, check.password, sessionToken, check.email, updatesOptIn);
+          if (srv.reachable && srv.ok && srv.data && (srv.data.ok || srv.data.status === 'SUCCESS')) {
+            const finalToken = srv.data.session_token || sessionToken;
+            setAuthenticatedSession(srv.data.username || check.username, finalToken);
+            res = { ok: true, action: srv.data.action || 'logged_in', username: srv.data.username || check.username, session_token: finalToken };
+          } else if (srv.reachable && !srv.ok && srv.data && (srv.data.error || srv.data.message)) {
+            res = { ok: false, error: srv.data.error || srv.data.message };
           } else {
-            const sessionToken = `dbg_sess_${sha256HexSync(`${check.userKey}:${Date.now()}:${Math.random()}`).slice(0, 32)}`;
-            const srv = await syncServerAuth('auto', check.username, check.password, sessionToken);
-            if (srv.reachable && !srv.ok && srv.data && (srv.data.error || srv.data.message)) {
-              res = { ok: false, error: srv.data.error || srv.data.message };
+            const cloud = await syncCloudAuth('auto', check.username, check.email, check.password, updatesOptIn);
+            if (cloud.reachable) {
+              if (!cloud.ok) {
+                res = { ok: false, error: (cloud.data && (cloud.data.error || cloud.data.message)) || 'Authentication failed.' };
+              } else {
+                const cTok = (cloud.data && cloud.data.session_token) ? cloud.data.session_token : sessionToken;
+                setAuthenticatedSession(cloud.data.username || check.username, cTok, cloud.data.email_masked || '');
+                res = { ok: true, action: cloud.data.action || 'logged_in', username: cloud.data.username || check.username, session_token: cTok };
+              }
             } else {
-              const salt = sha256HexSync(`salt:${check.userKey}:${Date.now()}`).slice(0, 24);
-              users[check.userKey] = {
-                username: check.username,
-                salt,
-                password_hash: hashPasswordWithSalt(check.password, salt),
-                created_at: new Date().toISOString()
-              };
-              saveLocalRegisteredUsers(users);
-              const finalToken = (srv.ok && srv.data && srv.data.session_token) ? srv.data.session_token : sessionToken;
-              setAuthenticatedSession(check.username, finalToken);
-              res = {
-                ok: true,
-                action: (srv.ok && srv.data && srv.data.action) ? srv.data.action : 'registered',
-                username: check.username,
-                session_token: finalToken
-              };
+              const users = getLocalRegisteredUsers();
+              if (users[check.userKey]) {
+                res = await loginUserAccount(rawUser, rawPass, rawEmail, updatesOptIn);
+              } else {
+                res = await registerUserAccount(rawUser, rawPass, rawEmail, updatesOptIn);
+              }
             }
           }
         }
@@ -7301,8 +7362,10 @@
 
             // Register a new user via Leaderboard modal button signature submitUserAuth('register', 'leaderboard')
             const testUser = `keeper_${Date.now().toString(36).slice(-5)}`;
+            const testEmail = `${testUser}@example.com`;
             const testPass = 'Postbox#2026!';
             document.getElementById('lb-auth-username').value = testUser;
+            if (document.getElementById('lb-auth-email')) document.getElementById('lb-auth-email').value = testEmail;
             document.getElementById('lb-auth-password').value = testPass;
             const regRes = await submitUserAuth('register', 'leaderboard');
             const registeredUnlockedOk = (
@@ -7332,11 +7395,12 @@
               document.getElementById('cert-social-input-Instagram')?.disabled === true &&
               document.getElementById('cert-step1-box')?.getAttribute('data-auth-locked') === 'true'
             );
-            const wrongPassRes = await loginUserAccount(testUser, 'WrongPassword123');
+            const wrongPassRes = await loginUserAccount(testUser, 'WrongPassword123', testEmail);
             const wrongPassRejected = (wrongPassRes.ok === false && gameState.isAuthenticated === false);
 
             // Log back in via Certificate modal button signature submitUserAuth('login', 'cert')
             document.getElementById('cert-auth-username').value = testUser;
+            if (document.getElementById('cert-auth-email')) document.getElementById('cert-auth-email').value = testEmail;
             document.getElementById('cert-auth-password').value = testPass;
             const loginRes = await submitUserAuth('login', 'cert');
 
